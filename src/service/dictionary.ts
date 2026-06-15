@@ -8,7 +8,7 @@ type DictionaryTranslation = {
     lang: string,
     sense_index: string | undefined
 }
-type DictionaryEntry = {
+export type DictionaryEntry = {
     word: string;
     pos: string;
     translations: DictionaryTranslation[] | undefined;
@@ -51,13 +51,13 @@ function processLine(line: string): DictionaryEntry | undefined{
     }
 }
 
-class Dictionary {
+export class Dictionary {
     // uniqueWordsInCards: Set<string>;
     _data: DictionaryEntry[];
 
     constructor(data: DictionaryEntry[]) {
         this._data = data;
-        console.log("dictionary length", this._data.length)
+        //console.log("dictionary length", this._data.length)
    
     }
     static async create(){
@@ -65,11 +65,20 @@ class Dictionary {
         return new Dictionary(data);
     }
     findByWord(word: string){
-        this._data.map((entry)=>{
-            
+        return this._data.filter((entry)=>{
+          return (word === entry.word)
         })
+    }
+    findExactTranslations(word: string){
+      return this.findByWord(word).filter((entry)=>{
+          if (entry.translations)
+            return true
+          
+      })  
     }
 
 }
 
-await Dictionary.create();
+// const dictionary = await Dictionary.create();
+// console.log(dictionary.findByWord("casa").length);
+// console.log(dictionary.findExactTranslations("tracion"))
