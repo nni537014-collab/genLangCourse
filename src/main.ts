@@ -1,3 +1,5 @@
+import { clearPreviousGeneratedData } from "./service/utils.ts"
+
 class CourseCreator {
     constructor(){
 
@@ -19,6 +21,9 @@ class DataExtenderImage{
 
 class DataExtenderAudio{
   constructor(){
-    
+
   }
 }
+
+
+clearPreviousGeneratedData();
