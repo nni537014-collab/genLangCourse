@@ -1,0 +1,23 @@
+{
+  "name": "genlangcourse",
+  "version": "1.0.0",
+  "description": "generates language learning materials in h5p format",
+  "homepage": "https://github.com/nni537014-collab/genLangCourse#readme",
+  "bugs": {
+    "url": "https://github.com/nni537014-collab/genLangCourse/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nni537014-collab/genLangCourse.git"
+  },
+  "license": "ISC",
+  "author": "",
+  "type": "module",
+  "main": "src/main.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "devDependencies": {
+    "@types/node": "^24.13.2"
+  }
+}
