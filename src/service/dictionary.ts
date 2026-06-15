@@ -1,73 +1,75 @@
 import { createReadStream } from "fs";
 import { getAssetDictionaryPath } from "./utils.ts"
 import readline from "readline";
-class Dictionary {
-    uniqueWordsInCards: Set<string>;
-    constructor() {
-        this.uniqueWordsInCards = new Set<string>;
 
-        const rl = readline.createInterface({
-            input: createReadStream(getAssetDictionaryPath()),
-            crlfDelay: Infinity
+type DictionaryTranslation = {
+    word: string,
+    lang_code: string,
+    lang: string,
+    sense_index: string | undefined
+}
+type DictionaryEntry = {
+    word: string;
+    pos: string;
+    translations: DictionaryTranslation[] | undefined;
+}
+export const loadFromDisk = async (): Promise<DictionaryEntry[]> => {
+    const ret: DictionaryEntry[] = [];
+
+    const rl = readline.createInterface({
+        input: createReadStream(getAssetDictionaryPath()),
+        crlfDelay: Infinity
+    });
+
+    return new Promise((resolve, reject) => {
+        rl.on("line", line => {
+            const parsed = processLine(line);
+            if (parsed) ret.push(parsed);
         });
-        rl.on("line", this.processLine);
 
-        rl.on("close", this.processClose);
-        // this._data =   
-    }
-    processLine(line: string) {
-        //remove empty lines
-        if (!line.trim()) return;
+        rl.on("close", () => resolve(ret));
+        rl.on("error", reject);
+    });
+};
+function processLine(line: string): DictionaryEntry | undefined{
+    //remove empty lines
+    if (!line.trim()) return;
 
-        try {
-            const obj = JSON.parse(line);
-            console.log(obj); process.exit();
-            if (this.uniqueWordsInCards.has(obj.word)) {
-                //adding all jsonl info of words that 
-                // intersect sets to array
-                // jsonlWordsInCards.push(obj);
-            } else {
-
-            }
-
-        //     // duplicates + uniqueWordsInJSONL should equal entriesInJsonl
-        //     if (uniqueWordsInJSONL.has(obj.word)) ++duplicatedWordsInJSONL;
-        //     uniqueWordsInJSONL.add(obj.word);
-        //     ++entriesInJsonl;
-
-        //     let matched = false;
-        //     wordTypeCounts.forEach(wordPosCount => {
-        //         if (wordPosCount.wordType === obj.pos) {
-        //             wordPosCount.count++;
-        //             matched = true;
-        //         }
-        //     })
-        //     if (!matched && obj.pos) {
-        //         wordTypeCounts.push({
-        //             wordType: obj.pos,
-        //             count: 1
-        //         })
-        //     }
-        //     let en = [];
-        //     if (obj.translations && Array.isArray(obj.translations)) {
-        //         en = obj.translations.filter((val: any) => (val.lang_code === "en"))
-        //     }
-        //     if (en.length === 0) return;
-
-        //     // if (dictionaryEsEn.includes(obj.word)) return;
-        //     dictionaryEsEn.push({
-        //         word: obj.word,
-        //         translation: en,
-        //     });
-
-
-         } catch (err) {
-             console.error("Bad JSON:", err);
-         }
-    }
-    processClose() {
-
+    try {
+        const obj = JSON.parse(line);
+        //@todo validate
+        return {
+          word: obj.word,
+          pos: obj.pos,
+          translations: obj.translations
+        }
+        return obj;
+       
+    } catch (err) {
+        console.error("Bad JSON:", err);
+        return undefined;
     }
 }
 
-new Dictionary();
+class Dictionary {
+    // uniqueWordsInCards: Set<string>;
+    _data: DictionaryEntry[];
+
+    constructor(data: DictionaryEntry[]) {
+        this._data = data;
+        console.log("dictionary length", this._data.length)
+   
+    }
+    static async create(){
+        const data = await loadFromDisk();
+        return new Dictionary(data);
+    }
+    findByWord(word: string){
+        this._data.map((entry)=>{
+            
+        })
+    }
+
+}
+
+await Dictionary.create();
