@@ -52,7 +52,7 @@ class PairsWordExpander {
     getTranslatedWords(words: string[]) {
         let ret: DictionaryEntry[] = [];
         const firstMatches = words.map((word, i) => {
-          const translations = this.dictionary.findExactTranslations(word);
+            const translations = this.dictionary.findExactTranslations(word, "en-EN");
           console.log("word", word, "translations length", translations.length);
 
           if(translations){
@@ -64,4 +64,8 @@ class PairsWordExpander {
 }
 
 const pwe = await PairsWordExpander.create();
-console.log(pwe.getTranslatedWords(["hola", "amigo"]));
+pwe.getTranslatedWords(["hola", "amigo"]).map((entry)=>{
+    entry.translations?.map((trans)=> {
+        console.log(trans);
+    })
+})

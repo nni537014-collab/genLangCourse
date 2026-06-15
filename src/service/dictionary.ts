@@ -69,12 +69,21 @@ export class Dictionary {
           return (word === entry.word)
         })
     }
-    findExactTranslations(word: string){
-      return this.findByWord(word).filter((entry)=>{
+    findExactTranslations(word: string, lang_code: string | undefined){
+      const translations = this.findByWord(word).filter((entry)=>{
           if (entry.translations)
+
             return true
           
-      })  
+      })
+      if(lang_code){    
+        translations.map((entry, i, data) => {
+          entry.translations = entry.translations?.filter((dictionaryTranslation)=>{
+           return (dictionaryTranslation.lang_code === lang_code)
+          })
+        })
+      }
+      return translations;
     }
 
 }
