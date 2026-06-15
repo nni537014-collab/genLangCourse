@@ -19,8 +19,7 @@ class pairsWordExpander{
    expandTranslationPair(tp: TranslationPair, i: number, data: TranslationPair[]){
      //get words from translation
      const words = this.getWords(tp.translation);
-     //check if word in wordset
-     //add word to wordset
+     const translatedWords: TranslationPair[] = this.getTranslatedWords(words);
      //get translation for word
      //if translation for word add to 
      const prependlist: TranslationPair[] = [];
@@ -39,6 +38,12 @@ class pairsWordExpander{
 
         }
     })
+
     return words;
+   }
+   getTranslatedWords(words: string[]){
+     const firstMatches = words.map((word, i)=>{
+       
+     })
    }
 }

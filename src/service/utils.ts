@@ -1,12 +1,17 @@
 import { rmSync } from "fs"
 import path from "path"
-import { outDirName, assetsDirName, pairsFileName } from "../config.ts"
+import {
+    outDirName,
+    assetsDirName,
+    pairsFileName,
+    dictionaryPath
+} from "../config.ts"
 
-export const clearPreviousGeneratedData  =() =>{
+export const clearPreviousGeneratedData = () => {
     return rmSync(getOutPath(), { recursive: true, force: true })
 }
-export const getAssetPairsPath = ()=> {
-  return path.join(getAssetsPath(), "")
+export const getAssetPairsPath = () => {
+    return path.join(getAssetsPath(), pairsFileName);
 }
 
 const getOutPath = () => {
@@ -15,6 +20,9 @@ const getOutPath = () => {
 const getAssetsPath = () => {
     return path.join(getBasePath(), assetsDirName)
 }
-const getBasePath = ()=> {
+export const getAssetDictionaryPath = () => {
+    return path.join(getAssetsPath(), dictionaryPath); 
+}
+const getBasePath = () => {
     return path.resolve(__dirname, "../../");
 }

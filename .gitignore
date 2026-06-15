@@ -1,6 +1,6 @@
 # Node modules
 node_modules/
-
+assets/dictionary/es-extract.jsonl
 # Build output
 dist/
 out/
