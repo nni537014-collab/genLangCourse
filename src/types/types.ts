@@ -10,8 +10,13 @@ export type DictionaryEntry = {
     pos: string;
     lang_code?: string;
     senses?: any[];
+    tags?: string[];
     translations: DictionaryTranslation[] | undefined;
 }
+export type SenseBase = {
+    form_of: string[],
+}
+export type Sense = SenseBase & any;
 export type TranslationPair = {
     source: string;
     translation: string;

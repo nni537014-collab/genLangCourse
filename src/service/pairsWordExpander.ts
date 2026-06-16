@@ -58,6 +58,8 @@ export class PairsWordExpander {
 
             if (translations) {
                 ret.push(...translations);
+            } else {
+               this.dictionary.findFormOf(word); 
             }
         })
         return ret;
