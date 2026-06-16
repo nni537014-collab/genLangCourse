@@ -1,19 +1,11 @@
 import { createReadStream } from "fs";
 import { getAssetDictionaryPath } from "./utils.ts"
 import readline from "readline";
+import type {
+    DictionaryEntry,
+} from "./../types/types.ts"
 
-type DictionaryTranslation = {
-    word: string,
-    lang_code: string,
-    lang: string,
-    sense_index: string | undefined
-}
-export type DictionaryEntry = {
-    word: string;
-    pos: string;
-    translations: DictionaryTranslation[] | undefined;
-}
-export const loadFromDisk = async (): Promise<DictionaryEntry[]> => {
+export const loadFromDisk = async (langCode: string): Promise<DictionaryEntry[]> => {
     const ret: DictionaryEntry[] = [];
 
     const rl = readline.createInterface({
@@ -24,27 +16,44 @@ export const loadFromDisk = async (): Promise<DictionaryEntry[]> => {
     return new Promise((resolve, reject) => {
         rl.on("line", line => {
             const parsed = processLine(line);
-            if (parsed) ret.push(parsed);
+            if (parsed && parsed.lang_code === langCode) ret.push(parsed);
         });
 
         rl.on("close", () => resolve(ret));
         rl.on("error", reject);
     });
 };
-function processLine(line: string): DictionaryEntry | undefined{
+
+
+function processFilteredLine(line: string): DictionaryEntry | undefined {
     //remove empty lines
     if (!line.trim()) return;
 
     try {
         const obj = JSON.parse(line);
+       
+        //@todo validate
+        return obj;
+
+    } catch (err) {
+        console.error("Bad JSON:", err);
+        return undefined;
+    }
+}
+function processLine(line: string): DictionaryEntry | undefined {
+    //remove empty lines
+    if (!line.trim()) return;
+
+    try {
+        const obj = JSON.parse(line);
+       
         //@todo validate
         return {
-          word: obj.word,
-          pos: obj.pos,
-          translations: obj.translations
+            word: obj.word,
+            pos: obj.pos,
+            senses: Array.isArray(obj.senses) ? obj.senses : undefined,
+            translations:  Array.isArray(obj.translations) ? obj.translations : undefined 
         }
-        return obj;
-       
     } catch (err) {
         console.error("Bad JSON:", err);
         return undefined;
@@ -54,40 +63,63 @@ function processLine(line: string): DictionaryEntry | undefined{
 export class Dictionary {
     // uniqueWordsInCards: Set<string>;
     _data: DictionaryEntry[];
-
-    constructor(data: DictionaryEntry[]) {
+    langCode: string;
+    constructor(langCode: string, data: DictionaryEntry[]) {
         this._data = data;
+        this.langCode = langCode;
         //console.log("dictionary length", this._data.length)
-   
-    }
-    static async create(){
-        const data = await loadFromDisk();
-        return new Dictionary(data);
-    }
-    findByWord(word: string){
-        return this._data.filter((entry)=>{
-          return (word === entry.word)
-        })
-    }
-    findExactTranslations(word: string, lang_code: string | undefined){
-      const translations = this.findByWord(word).filter((entry)=>{
-          if (entry.translations)
 
-            return true
-          
-      })
-      if(lang_code){    
-        translations.map((entry, i, data) => {
-          entry.translations = entry.translations?.filter((dictionaryTranslation)=>{
-           return (dictionaryTranslation.lang_code === lang_code)
-          })
+    }
+    static async create(langCode: string) {
+        const data = await loadFromDisk(langCode);
+        return new Dictionary(langCode, data);
+    }
+    seekExtraDetail(entry: DictionaryEntry) {
+
+    }
+    async loadWordDetailFromDisk(word: string | string[]): Promise<DictionaryEntry[]> {
+        if(typeof word === "string") word = [word];
+        const ret: DictionaryEntry[] = [];
+        const rl = readline.createInterface({
+            input: createReadStream(getAssetDictionaryPath()),
+            crlfDelay: Infinity
+        });
+
+        return new Promise((resolve, reject) => {
+            rl.on("line", line => {
+                const parsed = processFilteredLine(line);
+                
+                if (parsed &&
+                    parsed.lang_code === this.langCode &&
+                    word.includes(parsed.word))
+                    ret.push(parsed);
+            });
+
+            rl.on("close", () => resolve(ret));
+            rl.on("error", reject);
+        });
+    };
+    findByWord(word: string) {
+        return this._data.filter((entry) => {
+            return (word === entry.word)
         })
-      }
-      return translations;
+    }
+    findExactTranslations(word: string, lang_code: string | undefined) {
+        const translations = this.findByWord(word).filter((entry) => {
+            if (entry.translations)
+
+                return true
+
+        })
+        if (lang_code) {
+            translations.map((entry, i, data) => {
+                entry.translations = entry.translations?.filter((dictionaryTranslation) => {
+                    return (dictionaryTranslation.lang_code === lang_code)
+                })
+            })
+        }
+        return translations;
     }
 
 }
 
-// const dictionary = await Dictionary.create();
-// console.log(dictionary.findByWord("casa").length);
-// console.log(dictionary.findExactTranslations("tracion"))

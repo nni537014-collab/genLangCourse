@@ -1,6 +1,6 @@
 import type { TranslationPair } from "../types/types.ts";
-import  { Dictionary,} from "./dictionary.ts"
-import type {  DictionaryEntry } from "./dictionary.ts"
+import { Dictionary, } from "./dictionary.ts"
+import type { DictionaryEntry } from "./../types/types.ts"
 function splitAndClean(input: string): string[] {
     return input
         .trim()
@@ -10,15 +10,15 @@ function splitAndClean(input: string): string[] {
         .filter(Boolean);                     // remove empty strings
 }
 
-class PairsWordExpander {
+export class PairsWordExpander {
     _words: Set<string>;
     dictionary: Dictionary;
     constructor(dictionary: Dictionary) {
         this._words = new Set<string>
         this.dictionary = dictionary;
     }
-    static async create() {
-        const dictionary = await Dictionary.create();
+    static async create(langCode: string) {
+        const dictionary = await Dictionary.create(langCode);
         return new PairsWordExpander(dictionary);
     }
     expand(base: TranslationPair[]) {
@@ -27,7 +27,7 @@ class PairsWordExpander {
     expandTranslationPair(tp: TranslationPair, i: number, data: TranslationPair[]) {
         //get words from translation
         const words = this.getWords(tp.translation);
-        const translatedWords: TranslationPair[] = this.getTranslatedWords(words);
+        const translatedWords = this.getTranslatedWords(words);
         //get translation for word
         //if translation for word add to 
         const prependlist: TranslationPair[] = [];
@@ -52,20 +52,15 @@ class PairsWordExpander {
     getTranslatedWords(words: string[]) {
         let ret: DictionaryEntry[] = [];
         const firstMatches = words.map((word, i) => {
+            //@todo remove strings
             const translations = this.dictionary.findExactTranslations(word, "en-EN");
-          console.log("word", word, "translations length", translations.length);
+            console.log("word", word, "translations length", translations.length);
 
-          if(translations){
-            ret.push(...translations);
-          }
+            if (translations) {
+                ret.push(...translations);
+            }
         })
         return ret;
     }
 }
 
-const pwe = await PairsWordExpander.create();
-pwe.getTranslatedWords(["hola", "amigo"]).map((entry)=>{
-    entry.translations?.map((trans)=> {
-        console.log(trans);
-    })
-})

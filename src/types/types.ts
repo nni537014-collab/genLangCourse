@@ -1,3 +1,17 @@
+
+export type DictionaryTranslation = {
+    word: string,
+    lang_code: string,
+    lang: string,
+    sense_index: string | undefined
+}
+export type DictionaryEntry = {
+    word: string;
+    pos: string;
+    lang_code?: string;
+    senses?: any[];
+    translations: DictionaryTranslation[] | undefined;
+}
 export type TranslationPair = {
     source: string;
     translation: string;
