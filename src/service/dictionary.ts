@@ -36,7 +36,12 @@ function processLine(line: string): DictionaryEntry | undefined {
 
     try {
         const obj = JSON.parse(line);
-
+        if(!obj.translations){
+           const [hasFormOf, formOf] = Dictionary.hasFormOf(obj);
+           if(hasFormOf && obj.pos === "verb"){
+             console.log("form of", obj.word, formOf);
+           } 
+        }
         //@todo validate
         return {
             word: obj.word,
@@ -101,7 +106,7 @@ export class Dictionary {
             return undefined;
         }
     }
-    hasFormOf(entry: DictionaryEntry){
+    static hasFormOf(entry: DictionaryEntry): (string | boolean)[]{
         let hasFormOf = false;
         let formFound = "";
         if(entry.tags?.includes("form-of"))
@@ -114,7 +119,7 @@ export class Dictionary {
                 })
             }
         })
-        return {hasFormOf, formFound};
+        return [hasFormOf, formFound];
     }
     findByWord(word: string) {
         return this._data.filter((entry) => {
