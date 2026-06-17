@@ -1,17 +1,20 @@
 import { createReadStream } from "fs";
 import { getAssetDictionaryPath } from "./utils.ts"
-import readline from "readline";
+import { createInterface } from "readline";
 import type {
     DictionaryEntry,
 } from "./../types/types.ts"
 
-export const loadFromDisk = async (langCode: string): Promise<DictionaryEntry[]> => {
-    const ret: DictionaryEntry[] = [];
-
-    const rl = readline.createInterface({
+const readlineCreateInterface = () => {
+    return createInterface({
         input: createReadStream(getAssetDictionaryPath()),
         crlfDelay: Infinity
     });
+}
+export const loadFromDisk = async (langCode: string): Promise<DictionaryEntry[]> => {
+    const ret: DictionaryEntry[] = [];
+
+    const rl = readlineCreateInterface();
 
     return new Promise((resolve, reject) => {
         rl.on("line", line => {
@@ -36,12 +39,12 @@ function processLine(line: string): DictionaryEntry | undefined {
 
     try {
         const obj = JSON.parse(line);
-        if(!obj.translations){
-           const [hasFormOf, formOf] = Dictionary.hasFormOf(obj);
-           if(hasFormOf && obj.pos === "verb"){
-             console.log("form of", obj.word, formOf);
-           } 
-        }
+        // if(!obj.translations){
+        //    const [hasFormOf, formOf] = Dictionary.hasFormOf(obj);
+        //    if(hasFormOf && obj.pos === "verb"){
+        //      console.log("form of", obj.word, formOf);
+        //    } 
+        // }
         //@todo validate
         return {
             word: obj.word,
@@ -49,7 +52,7 @@ function processLine(line: string): DictionaryEntry | undefined {
             lang_code: obj.lang_code,
             senses: Array.isArray(obj.senses) ? obj.senses : undefined,
             translations: Array.isArray(obj.translations) ? obj.translations : undefined,
-            tags: Array.isArray(obj.tags) ? obj.tags : undefined        
+            tags: Array.isArray(obj.tags) ? obj.tags : undefined
         }
     } catch (err) {
         console.error("Bad JSON:", err);
@@ -72,28 +75,25 @@ export class Dictionary {
         return new Dictionary(langCode, data);
     }
 
-    async loadWordDetailFromDisk(word: string | string[]): Promise<DictionaryEntry[]> {
-        if (typeof word === "string") word = [word];
-        const ret: DictionaryEntry[] = [];
-        const rl = readline.createInterface({
-            input: createReadStream(getAssetDictionaryPath()),
-            crlfDelay: Infinity
-        });
+    // async loadWordDetailFromDisk(word: string | string[]): Promise<DictionaryEntry[]> {
+    //     if (typeof word === "string") word = [word];
+    //     const ret: DictionaryEntry[] = [];
+    //     const rl = readlineCreateInterface();
+    //     return new Promise((resolve, reject) => {
+    //         rl.on("line", line => {
+    //             const parsed = processLine(line);
+    //             if (parsed &&
+    //                 parsed.lang_code === this.langCode) {
+    //                 ret.push(parsed);
+    //                 // console.log("line added");
+    //             }
+    //         });
 
-        return new Promise((resolve, reject) => {
-            rl.on("line", line => {
-                const parsed = this.processLine(line);
 
-                if (parsed &&
-                    parsed.lang_code === this.langCode &&
-                    word.includes(parsed.word))
-                    ret.push(parsed);
-            });
-
-            rl.on("close", () => resolve(ret));
-            rl.on("error", reject);
-        });
-    };
+    //         rl.on("close", () => resolve(ret));
+    //         rl.on("error", reject);
+    //     });
+    // }
     processLine(line: string): DictionaryEntry | undefined {
         //remove empty lines
         if (!line.trim()) return;
@@ -106,14 +106,15 @@ export class Dictionary {
             return undefined;
         }
     }
-    static hasFormOf(entry: DictionaryEntry): (string | boolean)[]{
+    //@todo return formFound[]?
+    static hasFormOf(entry: DictionaryEntry): (string | boolean)[] {
         let hasFormOf = false;
         let formFound = "";
-        if(entry.tags?.includes("form-of"))
+        if (entry.tags?.includes("form-of"))
             hasFormOf = true;
-        entry.senses?.map((sense)=>{
-            if(sense.form_of){
-                sense.form_of.map((formOf: {word: string})=>{
+        entry.senses?.map((sense) => {
+            if (sense.form_of) {
+                sense.form_of.map((formOf: { word: string }) => {
                     hasFormOf = true;
                     formFound = formOf.word;
                 })
@@ -142,13 +143,57 @@ export class Dictionary {
         }
         return translations;
     }
-    async findFormOf(word: string){
-        const wordDetails = await this.loadWordDetailFromDisk(word);
-        wordDetails.map((wordDetail)=>{
-            if(this.hasFormOf(wordDetail)){
-
-            }
+    async findFormOf(word: string) {
+        const wordDetails = await this.findByWord(word);
+        let ret: string[] = [];
+        wordDetails.map((wordDetail) => {
+            const [hasFormOf, formFound] = Dictionary.hasFormOf(wordDetail);
+            if (hasFormOf && typeof formFound === "string")
+                ret.push(formFound);
         });
+        return ret;
+    }
+    isVerb(wordUnderTest: DictionaryEntry) {
+        // if(typeof wordUnderTest === "string"){
+        //   const details = await this.loadWordDetailFromDisk(wordUnderTest)        
+        //   if(details){
+        //     details.map((entry)=>{
+        //         this.isVerb(entry);
+        //     })
+        //   }
+        // }
+        return (wordUnderTest.pos === "verb")
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+}
     }
 }
 

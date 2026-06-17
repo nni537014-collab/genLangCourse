@@ -53,15 +53,8 @@ export class PairsWordExpander {
         let ret: DictionaryEntry[] = [];
         const firstMatches = words.map((word, i) => {
             //@todo remove strings
-            const translations = this.dictionary.findExactTranslations(word, "en-EN");
-            console.log("word", word, "translations length", translations.length);
-
-            if (translations) {
-                ret.push(...translations);
-            } else {
-               this.dictionary.findFormOf(word); 
-            }
-        })
+            ret.push(...this.dictionary.findExactTranslations(word, "en-EN"));
+         })
         return ret;
     }
 }
