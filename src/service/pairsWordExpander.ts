@@ -49,13 +49,9 @@ export class PairsWordExpander {
 
         return words;
     }
-    getTranslatedWords(words: string[]) {
-        let ret: DictionaryEntry[] = [];
-        const firstMatches = words.map((word, i) => {
-            //@todo remove strings
-            ret.push(...this.dictionary.findExactTranslations(word, "en-EN"));
-         })
-        return ret;
+    getTranslatedWord(word: string) {
+      return this.dictionary.findExactTranslations(word, "en-EN");
+
     }
 }
 
