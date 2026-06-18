@@ -1,4 +1,4 @@
-import type { TranslationPair } from "../types/types.ts";
+import type { DictionaryTranslation, TranslationPair } from "../types/types.ts";
 import { Dictionary, } from "./dictionary.ts"
 import type { DictionaryEntry } from "./../types/types.ts"
 function splitAndClean(input: string): string[] {
@@ -21,47 +21,53 @@ export class PairsWordExpander {
         const dictionary = await Dictionary.create(langCode);
         return new PairsWordExpander(dictionary);
     }
-    expand(base: TranslationPair[]) {
-        return base.map(this.expandTranslationPair);
+    expand(data: TranslationPair[]) {
+        for(let i = 0; i < data.length; i++){
+            const tp = data[i];
+            if(!tp) continue;
+            this.expandTranslationPair({tp, i, data});
+        }
     }
-    expandTranslationPair(tp: TranslationPair, i: number, data: TranslationPair[]) {
+    expandTranslationPair(p: {tp: TranslationPair, i: number, data: TranslationPair[]}) {
         //get words from translation
-        const words = this.getWords(tp.translation);
+        const words = this.getWords(p.tp.translation);
+        const addTranslationPairs: TranslationPair[] = [];
         const translations: Record<string, DictionaryEntry[]> = {};
-        words.map((word)=>{ 
+        words.map((word) => {
             const recordDetails = this.getTranslatedWord(word);
-            if(recordDetails)
+            if (recordDetails){
                 translations[word] = recordDetails;
-            else {
+                this.addTranslationPair(recordDetails, addTranslationPairs);
+            //@todo - have translations - use one to create tp
+            } else {
                 const entries = this.dictionary.findByWord(word);
                 let verb: DictionaryEntry | undefined;
-                for(let entry of entries){
-                    if(this.dictionary.isVerb(entry))
+                for (let entry of entries) {
+                    if (this.dictionary.isVerb(entry))
                         verb = entry;
                 }
-                if(verb){
+                if (verb) {
                     const [hasFormOf, formFound] = Dictionary.hasFormOf(verb);
-                    if(typeof formFound === "string" 
-                        && formFound.length > 0){
-                        if(this._words.has(formFound)) return; //@todo check return
+                    if (typeof formFound === "string"
+                        && formFound.length > 0) {
+                        if (this._words.has(formFound)) return; //@todo check return
                         this._words.add(formFound);
                         const recordDetails = this.getTranslatedWord(formFound);
-                        if(recordDetails){
-                            const rec = recordDetails[0];
-                            if(rec && rec.translations){
-                                const trans = rec.translations[0];
-                                if(trans){
-                                    const altLangWord = trans.word;
-                                }
-                            }
-                            const altLangWord = recordDetails[0]?.translations[0]?.word;
-                            if(altLangWord){
-                                console.log(altLangWord.length)
-                            }
+                        if (recordDetails) {
+                            this.addTranslationPair(recordDetails, addTranslationPairs);
+
+                            // //@todo - have translations - use one to create tp
+                            // const rec = recordDetails[0];
+                            // if(rec && rec.translations){
+                            //     const trans = rec.translations[0];
+                            //     if(trans){
+                            //         const altLangWord = trans.word;
+                            //     }
+                            // }
                         }
                     }
                 }
-            } 
+            }
 
             //@todo if no translations - find if word has "formOf"
             // if so find if formOf word has translations
@@ -74,6 +80,26 @@ export class PairsWordExpander {
         // const prependlist: TranslationPair[] = [];
         // data.splice(i, 0, ...prependlist)
         // prependlist.length
+    }
+    addTranslationPair(recordDetails: DictionaryEntry[], addTranslationPairs: TranslationPair[]) {
+
+        if (!) return
+        const recordDetail = recordDetails.pop();
+
+        let trans: DictionaryTranslation | undefined;
+        let word: string | undefined
+        if (recordDetail) {
+            trans = recordDetail.translations?.pop();
+            word = recordDetail.word;
+        }
+
+        if (trans && word) {
+            addTranslationPairs.push({
+                source: trans.word,
+                translation: word
+            })
+            //@todo need index to position new element
+        }
     }
     getWords(translation: string) {
         const words = splitAndClean(translation);
@@ -90,8 +116,8 @@ export class PairsWordExpander {
 
         return words;
     }
-    getTranslatedWord(word: string, langCode:string = "en-EN") {
-      return this.dictionary.findExactTranslations(word, langCode);
+    getTranslatedWord(word: string, langCode: string = "en-EN") {
+        return this.dictionary.findExactTranslations(word, langCode);
 
     }
 }
