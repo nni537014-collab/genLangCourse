@@ -128,10 +128,8 @@ export class Dictionary {
         })
     }
     findExactTranslations(word: string, lang_code: string | undefined) {
-        const translations = this.findByWord(word).filter((entry) => {
-            if (entry.translations)
-                return true
-        })
+        const translations = this.findByWord(word)
+        
         if (lang_code) {
             translations.map((entry, i, data) => {
                 entry.translations = entry.translations?.filter((dictionaryTranslation) => {
@@ -139,7 +137,12 @@ export class Dictionary {
                 })
             })
         }
-        return translations;
+        const ret = translations.filter((entry) => {
+            if (entry.translations)
+                return true
+        })
+        // console.log(`found ${ret.length} translations for word: ${word}`);
+        return ret;
     }
     async findFormOf(word: string) {
         const wordDetails = await this.findByWord(word);
@@ -154,36 +157,34 @@ export class Dictionary {
     isVerb(wordUnderTest: DictionaryEntry) {
         return (wordUnderTest.pos === "verb")
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }
-    }
-}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

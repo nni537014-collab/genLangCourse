@@ -22,25 +22,42 @@ export class PairsWordExpander {
         return new PairsWordExpander(dictionary);
     }
     expand(data: TranslationPair[]) {
+        const initialDataLength = data.length;
+        console.log(`Initial data length: ${initialDataLength}`)
         for(let i = 0; i < data.length; i++){
             const tp = data[i];
             if(!tp) continue;
-            this.expandTranslationPair({tp, i, data});
+            const newTPs: TranslationPair[] = this.expandTranslationPair(tp);
+            data.splice(i, 0, ...newTPs);
+            i += newTPs.length;
+            // console.log(`${newTPs.length} added`) 
         }
+        console.log("words size: ",this._words.size)
+        console.log(`add ${data.length - initialDataLength} translations`)
     }
-    expandTranslationPair(p: {tp: TranslationPair, i: number, data: TranslationPair[]}) {
+    expandTranslationPair(tp: TranslationPair) {
         //get words from translation
-        const words = this.getWords(p.tp.translation);
-        const addTranslationPairs: TranslationPair[] = [];
-        const translations: Record<string, DictionaryEntry[]> = {};
+        const words = this.getWords(tp.translation);
+        // console.log(`getting translations for ${words.length} words`);
+        const translationPairs: TranslationPair[] = [];
+        // const translations: Record<string, DictionaryEntry[]> = {};
         words.map((word) => {
             const recordDetails = this.getTranslatedWord(word);
-            if (recordDetails){
-                translations[word] = recordDetails;
-                this.addTranslationPair(recordDetails, addTranslationPairs);
+            if (recordDetails.length > 0){
+
+                // translations[word] = recordDetails;
+                // console.log("adding translation for", word, recordDetails)
+                // recordDetails.map((detail)=>{
+                //     detail.translations?.map((translation)=>{
+                //         console.log(translation)
+                //     })
+                // })
+                this.addTranslationPair(recordDetails, translationPairs);
             //@todo - have translations - use one to create tp
             } else {
-                const entries = this.dictionary.findByWord(word);
+                // console.log("finally"); process.exit();
+                console.log("translations not found for word", word);
+                const entries = this.dictionary.findByWord(word.toLowerCase());
                 let verb: DictionaryEntry | undefined;
                 for (let entry of entries) {
                     if (this.dictionary.isVerb(entry))
@@ -50,23 +67,16 @@ export class PairsWordExpander {
                     const [hasFormOf, formFound] = Dictionary.hasFormOf(verb);
                     if (typeof formFound === "string"
                         && formFound.length > 0) {
+                            console.log("form found", formFound);
                         if (this._words.has(formFound)) return; //@todo check return
                         this._words.add(formFound);
                         const recordDetails = this.getTranslatedWord(formFound);
                         if (recordDetails) {
-                            this.addTranslationPair(recordDetails, addTranslationPairs);
-
-                            // //@todo - have translations - use one to create tp
-                            // const rec = recordDetails[0];
-                            // if(rec && rec.translations){
-                            //     const trans = rec.translations[0];
-                            //     if(trans){
-                            //         const altLangWord = trans.word;
-                            //     }
-                            // }
+                            this.addTranslationPair(recordDetails, translationPairs);
                         }
                     }
                 }
+
             }
 
             //@todo if no translations - find if word has "formOf"
@@ -74,49 +84,44 @@ export class PairsWordExpander {
             // if so add formOf word to _words and add translations 
         })
         //@todo add translations to data;
-        return translations;
-        //get translation for word
-        //if translation for word add to 
-        // const prependlist: TranslationPair[] = [];
-        // data.splice(i, 0, ...prependlist)
-        // prependlist.length
-    }
-    addTranslationPair(recordDetails: DictionaryEntry[], addTranslationPairs: TranslationPair[]) {
+        return translationPairs;
 
-        if (!) return
+    }
+    addTranslationPair(recordDetails: DictionaryEntry[], translationPairs: TranslationPair[]) {
+
         const recordDetail = recordDetails.pop();
 
-        let trans: DictionaryTranslation | undefined;
-        let word: string | undefined
+        let trans: string | undefined;
+        let word: string | undefined;
         if (recordDetail) {
-            trans = recordDetail.translations?.pop();
+            trans = recordDetail.translations?.map(x => x.word).join(", ");
             word = recordDetail.word;
         }
 
         if (trans && word) {
-            addTranslationPairs.push({
-                source: trans.word,
+            translationPairs.push({
+                source: trans,
                 translation: word
             })
             //@todo need index to position new element
+        } else {
+            console.warn("error", recordDetails, recordDetail, "error end")
         }
     }
     getWords(translation: string) {
         const words = splitAndClean(translation);
-        words.filter(word => {
+        return words.filter(word => {
             if (this._words.has(word)) {
                 return false
-
             } else {
                 this._words.add(word);
                 return true;
-
             }
         })
-
-        return words;
+     
     }
-    getTranslatedWord(word: string, langCode: string = "en-EN") {
+    //@todo remove string
+    getTranslatedWord(word: string, langCode: string = "en") {
         return this.dictionary.findExactTranslations(word, langCode);
 
     }

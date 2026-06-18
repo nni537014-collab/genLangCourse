@@ -1,10 +1,12 @@
 import { readFileSync } from "fs";
 import type { TranslationPair } from "../types/types.ts";
 import { getAssetPairsPath } from "./utils.ts";
-
-class Pairs {
+import { PairsWordExpander } from "./pairsWordExpander.ts"
+export class Pairs {
     _pairs: TranslationPair[];
-    constructor() {
+    _expander: PairsWordExpander;
+    constructor(expander: PairsWordExpander) {
+        this._expander = expander;
         this._pairs = this.loadPairs();
     }
     loadPairs() {
@@ -30,6 +32,7 @@ class Pairs {
                 pair.source.length > 0 &&
                 pair.translation.length > 0
             )
+        this._expander.expand(ret);
         return ret;
     }
     getPairs(){
