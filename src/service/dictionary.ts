@@ -130,9 +130,7 @@ export class Dictionary {
     findExactTranslations(word: string, lang_code: string | undefined) {
         const translations = this.findByWord(word).filter((entry) => {
             if (entry.translations)
-
                 return true
-
         })
         if (lang_code) {
             translations.map((entry, i, data) => {
@@ -154,14 +152,6 @@ export class Dictionary {
         return ret;
     }
     isVerb(wordUnderTest: DictionaryEntry) {
-        // if(typeof wordUnderTest === "string"){
-        //   const details = await this.loadWordDetailFromDisk(wordUnderTest)        
-        //   if(details){
-        //     details.map((entry)=>{
-        //         this.isVerb(entry);
-        //     })
-        //   }
-        // }
         return (wordUnderTest.pos === "verb")
     }
 
