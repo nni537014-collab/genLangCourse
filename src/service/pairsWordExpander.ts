@@ -47,7 +47,17 @@ export class PairsWordExpander {
                         this._words.add(formFound);
                         const recordDetails = this.getTranslatedWord(formFound);
                         if(recordDetails){
-                            recordDetails[0]?.translations[0]?.word
+                            const rec = recordDetails[0];
+                            if(rec && rec.translations){
+                                const trans = rec.translations[0];
+                                if(trans){
+                                    const altLangWord = trans.word;
+                                }
+                            }
+                            const altLangWord = recordDetails[0]?.translations[0]?.word;
+                            if(altLangWord){
+                                console.log(altLangWord.length)
+                            }
                         }
                     }
                 }
