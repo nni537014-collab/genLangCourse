@@ -29,11 +29,33 @@ class DataExtenderAudio {
 
 
 clearPreviousGeneratedData();
-// const dictionary = await Dictionary.create("es");
-const expander = await PairsWordExpander.create("es");
-const pairs = new Pairs(expander);
-console.log(pairs.getPairs());
-console.log("pairs length:", pairs.getPairs().length)
+const MODES = {
+  find: "find",
+  run: "run"
+
+  
+} as const;
+type Modes = typeof MODES[keyof typeof MODES]
+const mode = MODES.run as Modes;
+switch (mode) {
+  case MODES.find: {
+    const dictionary = await Dictionary.create("es");
+    console.log(dictionary.findByWord("extranjeras"));
+    console.log(dictionary.findByWord("extranjera"));
+    process.exit();
+    break;
+  }
+  case MODES.run: {
+    const expander = await PairsWordExpander.create("es");
+    const pairs = new Pairs(expander);
+    console.log(pairs.getPairs());
+    console.log("pairs length:", pairs.getPairs().length);
+
+  }
+
+}
+
+
 //  dictionary.findByWord("casa").map((entry)=>{
 //   if(entry.pos === "verb"){
 //     console.log(entry);

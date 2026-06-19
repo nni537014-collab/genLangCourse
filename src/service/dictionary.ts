@@ -4,6 +4,7 @@ import { createInterface } from "readline";
 import type {
     DictionaryEntry,
 } from "./../types/types.ts"
+import { totalmem } from "os";
 
 const readlineCreateInterface = () => {
     return createInterface({
@@ -106,21 +107,40 @@ export class Dictionary {
             return undefined;
         }
     }
+    static hasTranslations(toTest: DictionaryEntry | DictionaryEntry[]) {
+        if (!Array.isArray(toTest)) {
+            toTest = [toTest];
+        }
+        for (let entry of toTest) {
+            if (Array.isArray(entry.translations)
+                && entry.translations.length > 0) {
+                return true;
+            } 
+        }
+        return false;
+    }
     //@todo return formFound[]?
-    static hasFormOf(entry: DictionaryEntry): (string | boolean)[] {
+    static hasFormOf(entry: DictionaryEntry): [boolean, Set<string>] {
         let hasFormOf = false;
-        let formFound = "";
-        if (entry.tags?.includes("form-of"))
-            hasFormOf = true;
+        let formsFound: string[] = [];
+        let forms = new Set<string>;
+        //@todo 
+        if (entry.formof) {
+            console.log(entry, "formof exiting")
+            process.exit()
+        }
+        // if (entry.tags?.includes("form-of"))
+        //     hasFormOf = true;
         entry.senses?.map((sense) => {
             if (sense.form_of) {
                 sense.form_of.map((formOf: { word: string }) => {
                     hasFormOf = true;
-                    formFound = formOf.word;
+                    forms.add(formOf.word)
+                    // formsFound.push(formOf.word);
                 })
             }
         })
-        return [hasFormOf, formFound];
+        return [(forms.size > 0), forms];
     }
     findByWord(word: string) {
         return this._data.filter((entry) => {
@@ -129,7 +149,7 @@ export class Dictionary {
     }
     findExactTranslations(word: string, lang_code: string | undefined) {
         const translations = this.findByWord(word)
-        
+
         if (lang_code) {
             translations.map((entry, i, data) => {
                 entry.translations = entry.translations?.filter((dictionaryTranslation) => {
