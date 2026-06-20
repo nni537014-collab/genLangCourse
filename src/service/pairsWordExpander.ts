@@ -34,28 +34,29 @@ export class PairsWordExpander {
             i += newTPs.length;
             // console.log(`${newTPs.length} added`) 
         }
-        data.forEach((tp, i, data)=>{
-            
-            data.forEach((tpToTest, j) => {
-                if(tpToTest.translation === tp.translation 
-                    && tpToTest.source === tp.source
-                    && i !== j
-                ){
-                    //absolute duplicate
-                     //remove one with higher index
-                }
-                 if(tpToTest.translation === tp.translation 
-                    && tpToTest.source !== tp.source
-                ){
-                    //partial duplicate
-                    //keep one with longer source
-                }
-                    
-            })
-        })
+
+        const seen = new Map<string, number>();
+        let writeIndex = 0;
+
+        for (let i = 0; i < data.length; i++) {
+            const tp = data[i];
+            if (!tp) continue;
+
+            const key = `${tp.source}::${tp.translation}`;
+
+            if (!seen.has(key)) {
+                seen.set(key, i);
+                data[writeIndex++] = tp;
+            }
+        }
+        data.length = writeIndex;
+
         console.log("words size: ", this._words.size);
         console.log(`add ${data.length - initialDataLength} translations`);
         console.log("untranslated words size: ", this._untranslatedWords.size);
+        this._untranslatedWords.forEach((word) => {
+            console.log(word);
+        })
     }
     expandTranslationPair(tp: TranslationPair) {
         //get words from translation
@@ -124,7 +125,9 @@ export class PairsWordExpander {
                         const modified = needToModify.slice(0, -1);
 
                         expandedWords[i] = expandWord(modified);
-                    } else if (needToModify !== modifiedReflexiveStripped) {
+                    }
+                    if (!expandedWords[i] &&
+                        needToModify !== modifiedReflexiveStripped) {
                         expandedWords[i] = expandWord(modifiedReflexiveStripped);
                     }
                     //remove trailing "s" - 

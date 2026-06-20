@@ -2,14 +2,72 @@ import { readFileSync } from "fs";
 import type { TranslationPair } from "../types/types.ts";
 import { getAssetPairsPath } from "./utils.ts";
 import { PairsWordExpander } from "./pairsWordExpander.ts"
+import path from "path";
+import { fileURLToPath } from 'node:url';
+
+// 1. Convert the current ES module URL to a standard file path
+const __filename = fileURLToPath(import.meta.url);
+// 2. Extract the directory name from the file path
+const __dirname = path.dirname(__filename);
+export const loadStyle = {
+    LOAD_INITIAL: "LOAD_INITIAL",
+    LOAD_FROM_DISK: "LOAD_FROM_DISK"
+} as const;
+export type LoadStyle = typeof loadStyle[keyof typeof loadStyle]
+
+export type PairsFileWriterConfig = {
+    dir?: string;
+    name?: string;
+}
+export class PairsFileWriter {
+    _writePath: string;
+    constructor(config: PairsFileWriterConfig) {
+        const {
+            dir = "tmp",
+            name = "pairs.json"
+        } = config;
+        if (config.dir && config.name)
+            this._writePath = path.join(__dirname, config.dir, config.name);
+        else 
+            throw new Error("bad config");
+    }
+}
 export class Pairs {
     _pairs: TranslationPair[];
     _expander: PairsWordExpander;
-    constructor(expander: PairsWordExpander) {
+    constructor(expander: PairsWordExpander, load: LoadStyle) {
         this._expander = expander;
-        this._pairs = this.loadPairs();
+
+        switch (load) {
+            case loadStyle.LOAD_INITIAL:
+                this._pairs = this.loadRawPairs();
+                this.writePairsToDisk()
+                //@todo 
+                //stringify
+                // write to disk
+                break;
+            case loadStyle.LOAD_FROM_DISK:
+                this._pairs = this.loadCreatedPairs()
+            default:
+                this._pairs = this.loadRawPairs();
+        }
+
+
+
     }
-    loadPairs() {
+    writePairsToDisk() {
+        try {
+            JSON.stringify(this._pairs);
+        } catch (error) {
+
+        }
+        throw new Error("Method not implemented.");
+    }
+    loadCreatedPairs(): TranslationPair[] {
+        throw new Error("Method not implemented.");
+    }
+
+    loadRawPairs() {
         // read whole file as UTF‑8 text
         const raw = readFileSync(getAssetPairsPath(), "utf8");
 
@@ -35,7 +93,7 @@ export class Pairs {
         this._expander.expand(ret);
         return ret;
     }
-    getPairs(){
+    getPairs() {
         return this._pairs;
     }
 }

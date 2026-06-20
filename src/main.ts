@@ -33,22 +33,39 @@ const MODES = {
   find: "find",
   run: "run"
 
-  
+
 } as const;
+type WordSearchItem = {word: string; logTranslations?: boolean}
+type WordSearchList = WordSearchItem[];
 type Modes = typeof MODES[keyof typeof MODES]
-const mode = MODES.run as Modes;
+const mode = MODES.find as Modes;
+
+const words: WordSearchList = [
+  {word:"sonreír", logTranslations: true},
+  {word: "sonreir", logTranslations: true}
+]
 switch (mode) {
   case MODES.find: {
     const dictionary = await Dictionary.create("es");
-    console.log(dictionary.findByWord("extranjeras"));
-    console.log(dictionary.findByWord("extranjera"));
-    process.exit();
+    words.forEach((wordSearchItem) => {
+      const results = dictionary.findByWord(wordSearchItem.word);
+      console.log(results);
+      console.log(`finished logging word: ${wordSearchItem.word}`)
+      if(wordSearchItem.logTranslations){
+          results.forEach((entry)=>{
+            entry.translations?.forEach((trans)=>{
+              console.log(trans);
+            })
+          })
+          
+      }
+    })
     break;
   }
   case MODES.run: {
     const expander = await PairsWordExpander.create("es");
     const pairs = new Pairs(expander);
-    console.log(pairs.getPairs());
+    //console.log(pairs.getPairs());
     console.log("pairs length:", pairs.getPairs().length);
 
   }
