@@ -32,7 +32,7 @@ export class PairsFileReaderWriter {
         else 
             throw new Error("bad config");
     }
-    write(pairs: TranslationPair[]){
+    writeJSON(pairs: TranslationPair[]){
         let success = true;
         try {
            writeFileSync(this._writePath, JSON.stringify(pairs), 'utf-8')
@@ -41,7 +41,7 @@ export class PairsFileReaderWriter {
         }
         return success;
     }
-    read():[boolean, TranslationPair[]] {
+    readJSON():[boolean, TranslationPair[]] {
         let success = true;
         let pairs: TranslationPair[] = [];
         try {
@@ -51,6 +51,33 @@ export class PairsFileReaderWriter {
             success = false;
         }
         return [success, pairs];
+    }
+    readTxt(){
+        // read whole file as UTF‑8 text
+        const raw = readFileSync(getAssetPairsPath(), "utf8");
+
+        // split into lines (handles Windows + Linux newlines)
+        const lines = raw.split(/\r?\n/);
+
+        // skip first 2 lines
+        const data = lines.slice(2)
+            .filter(Boolean);
+
+        const ret = data.map<TranslationPair>((line: string) => {
+            const [source, translation] = line.split("\t");
+
+            return {
+                source: source?.trim() ?? "",
+                translation: translation?.trim() ?? ""
+            };
+        })
+            .filter(pair =>
+                pair.source.length > 0 &&
+                pair.translation.length > 0
+            )
+
+         return ret;   
+        
     }
 }
 export class Pairs {
@@ -89,10 +116,10 @@ export class Pairs {
 
     }
     writePairsToDisk(pairs: TranslationPair[]) {
-        return this._readerWriter.write(pairs);
+        return this._readerWriter.writeJSON(pairs);
     }
     loadCreatedPairs(): TranslationPair[] | undefined {
-        const [success, pairs] = this._readerWriter.read();
+        const [success, pairs] = this._readerWriter.readJSON();
         if(success){
             return pairs;
         }
@@ -100,28 +127,8 @@ export class Pairs {
     }
 
     loadRawPairs() {
-        // read whole file as UTF‑8 text
-        const raw = readFileSync(getAssetPairsPath(), "utf8");
 
-        // split into lines (handles Windows + Linux newlines)
-        const lines = raw.split(/\r?\n/);
-
-        // skip first 2 lines
-        const data = lines.slice(2)
-            .filter(Boolean);
-
-        const ret = data.map<TranslationPair>((line: string) => {
-            const [source, translation] = line.split("\t");
-
-            return {
-                source: source?.trim() ?? "",
-                translation: translation?.trim() ?? ""
-            };
-        })
-            .filter(pair =>
-                pair.source.length > 0 &&
-                pair.translation.length > 0
-            )
+        const ret = this._readerWriter.readTxt();
         this._expander.expand(ret);
         return ret;
     }
