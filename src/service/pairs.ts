@@ -53,8 +53,11 @@ export class PairsFileReaderWriter {
         return [success, pairs];
     }
     readTxt(){
+        let success = true;
         // read whole file as UTF‑8 text
-        const raw = readFileSync(getAssetPairsPath(), "utf8");
+        let pairs: TranslationPair[] = [];
+        try{
+            const raw = readFileSync(getAssetPairsPath(), "utf8");
 
         // split into lines (handles Windows + Linux newlines)
         const lines = raw.split(/\r?\n/);
@@ -63,7 +66,7 @@ export class PairsFileReaderWriter {
         const data = lines.slice(2)
             .filter(Boolean);
 
-        const ret = data.map<TranslationPair>((line: string) => {
+        pairs = data.map<TranslationPair>((line: string) => {
             const [source, translation] = line.split("\t");
 
             return {
@@ -75,8 +78,10 @@ export class PairsFileReaderWriter {
                 pair.source.length > 0 &&
                 pair.translation.length > 0
             )
-
-         return ret;   
+         } catch (error){
+             success = false;
+         }
+         return [success, pairs];   
         
     }
 }
@@ -128,9 +133,9 @@ export class Pairs {
 
     loadRawPairs() {
 
-        const ret = this._readerWriter.readTxt();
-        this._expander.expand(ret);
-        return ret;
+        const pairs = this._readerWriter.readTxt();
+        this._expander.expand(pairs);
+        return pairs;
     }
     getPairs() {
         return this._pairs;
