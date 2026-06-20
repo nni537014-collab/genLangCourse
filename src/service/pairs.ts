@@ -4,6 +4,7 @@ import { getAssetPairsPath } from "./utils.ts";
 import { PairsWordExpander } from "./pairsWordExpander.ts"
 import path from "path";
 import { fileURLToPath } from 'node:url';
+import { writeFileSync } from "fs"
 
 // 1. Convert the current ES module URL to a standard file path
 const __filename = fileURLToPath(import.meta.url);
@@ -19,7 +20,7 @@ export type PairsFileWriterConfig = {
     dir?: string;
     name?: string;
 }
-export class PairsFileWriter {
+export class PairsFileReaderWriter {
     _writePath: string;
     constructor(config: PairsFileWriterConfig) {
         const {
@@ -30,6 +31,26 @@ export class PairsFileWriter {
             this._writePath = path.join(__dirname, config.dir, config.name);
         else 
             throw new Error("bad config");
+    }
+    write(pairs: TranslationPair[]){
+        let success = true;
+        try {
+           writeFileSync(this._writePath, JSON.stringify(pairs), 'utf-8')
+        } catch (error) {
+           success = false;
+        }
+        return success;
+    }
+    read():[boolean, TranslationPair[]] {
+        let success = true;
+        let pairs: TranslationPair[] = [];
+        try {
+            pairs = JSON.parse(readFileSync(this._writePath, 'utf8'));
+        } catch (error) {
+            //@todo error logging
+            success = false;
+        }
+        return [success, pairs];
     }
 }
 export class Pairs {
