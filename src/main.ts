@@ -1,7 +1,7 @@
 import { clearPreviousGeneratedData } from "./service/utils.ts"
 import { Dictionary } from "./service/dictionary.ts"
 import { PairsWordExpander } from "./service/pairsWordExpander.ts"
-import { Pairs } from "./service/pairs.ts"
+import { loadStyle, Pairs, PairsFileReaderWriter } from "./service/pairs.ts"
 class CourseCreator {
   constructor() {
 
@@ -38,7 +38,7 @@ const MODES = {
 type WordSearchItem = {word: string; logTranslations?: boolean}
 type WordSearchList = WordSearchItem[];
 type Modes = typeof MODES[keyof typeof MODES]
-const mode = MODES.find as Modes;
+const mode = MODES.run as Modes;
 
 const words: WordSearchList = [
   {word:"sonreír", logTranslations: true},
@@ -64,7 +64,12 @@ switch (mode) {
   }
   case MODES.run: {
     const expander = await PairsWordExpander.create("es");
-    const pairs = new Pairs(expander);
+    const pairs = new Pairs(expander, 
+      loadStyle.LOAD_INITIAL, 
+      new PairsFileReaderWriter({
+        dir: "tmp",
+        name: "pairs.json"
+      }));
     //console.log(pairs.getPairs());
     console.log("pairs length:", pairs.getPairs().length);
 
