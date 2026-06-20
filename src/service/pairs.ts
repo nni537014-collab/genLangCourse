@@ -56,36 +56,47 @@ export class PairsFileReaderWriter {
 export class Pairs {
     _pairs: TranslationPair[];
     _expander: PairsWordExpander;
-    constructor(expander: PairsWordExpander, load: LoadStyle) {
+    _readerWriter: PairsFileReaderWriter;
+    constructor(expander: PairsWordExpander, load: LoadStyle, readerWriter: PairsFileReaderWriter) {
+        // loads pairs and writes to disk
+        const loadInitial = ()=> {
+            const rawPairs = this.loadRawPairs();
+            this.writePairsToDisk(rawPairs);
+            return rawPairs;
+        }
         this._expander = expander;
-
+        this._readerWriter = readerWriter;
         switch (load) {
             case loadStyle.LOAD_INITIAL:
-                this._pairs = this.loadRawPairs();
-                this.writePairsToDisk()
+                
+                this._pairs = loadInitial(); 
+                // this.writePairsToDisk();
                 //@todo 
                 //stringify
                 // write to disk
                 break;
             case loadStyle.LOAD_FROM_DISK:
-                this._pairs = this.loadCreatedPairs()
+                const pairs = this.loadCreatedPairs(); 
+                if(pairs)
+                    this._pairs = pairs;
+                else
+                    this._pairs = loadInitial();
             default:
-                this._pairs = this.loadRawPairs();
+                this._pairs = loadInitial();
         }
 
 
 
     }
-    writePairsToDisk() {
-        try {
-            JSON.stringify(this._pairs);
-        } catch (error) {
-
-        }
-        throw new Error("Method not implemented.");
+    writePairsToDisk(pairs: TranslationPair[]) {
+        return this._readerWriter.write(pairs);
     }
-    loadCreatedPairs(): TranslationPair[] {
-        throw new Error("Method not implemented.");
+    loadCreatedPairs(): TranslationPair[] | undefined {
+        const [success, pairs] = this._readerWriter.read();
+        if(success){
+            return pairs;
+        }
+        return;
     }
 
     loadRawPairs() {
