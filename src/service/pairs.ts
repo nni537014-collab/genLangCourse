@@ -22,7 +22,7 @@ export type PairsFileWriterConfig = {
 }
 export class PairsFileReaderWriter {
     _writePath: string;
-    constructor(config: PairsFileWriterConfig) {
+    constructor(config: PairsFileWriterConfig = {}) {
         const {
             dir = "tmp",
             name = "pairs.json"
