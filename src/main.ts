@@ -10,6 +10,10 @@ import type { TranslationPair } from "./types/types.ts";
 interface contentGenerator {
   generate(base: TranslationPair[]): boolean;
 }
+interface subContentGenerator{
+  getActionLibrary(): string;
+}
+
 /**
  * @todo move somewhere, types or config? 
  */
@@ -19,12 +23,40 @@ type courseGenConfig = {
   chunkSize: number;
 }
 class CoursePresentationGenerator implements contentGenerator {
-  generate(base: Pairs) {
+
+  supportedActionLibraryRenderers: string[];
+  constructor(){
+    this.supportedActionLibraryRenderers = [];
+  }
+  generate(base: TranslationPair[]) {
+
     //get template
-    //trasverse template for know generatable types
+    const templ = this.loadTemplate();
+    if(!templ.presentation) throw new Error("bad template - no presentation in template");
+
+    if (!Array.isArray(templ.presentation.slides))
+       throw Error("bad template - no slides in json")
+
+    const slides = templ.presentation.slides as any[];
+    slides.forEach( slide => {
+      if(!Array.isArray(slide)) throw new Error("bad template - no elements array")
+
+      slide.forEach( element => {
+        if(typeof element?.action !== "object" &&
+          typeof element.action?.library !== "string"
+        ) throw new Error("bad templ");
+
+
+      })
+    })
+  
+      //trasverse template for know generatable types
     //generate for base data
 
     return false;
+  }
+  loadTemplate() {
+    return JSON.parse("");
   }
 }
 /**
