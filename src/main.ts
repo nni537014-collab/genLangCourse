@@ -2,32 +2,91 @@ import { clearPreviousGeneratedData } from "./service/utils.ts"
 import { Dictionary } from "./service/dictionary.ts"
 import { PairsWordExpander } from "./service/pairsWordExpander.ts"
 import { loadStyle, Pairs, PairsFileReaderWriter } from "./service/pairs.ts"
+import type { TranslationPair } from "./types/types.ts";
 
- 
-interface contentGenerator   {
-   generate():boolean;  
+/**
+ * @todo move somewhere, types? 
+ */
+interface contentGenerator {
+  generate(base: TranslationPair[]): boolean;
 }
-
+/**
+ * @todo move somewhere, types or config? 
+ */
 type courseGenConfig = {
   assetDirectoryName: string;
   outDirectoryName: string;
+  chunkSize: number;
 }
+class CoursePresentationGenerator implements contentGenerator {
+  generate(base: Pairs) {
+    //get template
+    //trasverse template for know generatable types
+    //generate for base data
+
+    return false;
+  }
+}
+/**
+ * main class that kick's things off
+ * maybe going to run everything in constructor
+ * additional methods for report generation? 
+ */
 class CourseCreator {
+  _config: courseGenConfig;
   _contentGenerator: contentGenerator[];
+  /**
+   * this structure is data that will be passed to generators
+   */
   _pairs: Awaited<ReturnType<typeof CourseCreator.prepareBaseDataFromAssets>>;
-  constructor(contentGenerators: contentGenerator[], pairs: Pairs) {
-      this._pairs = pairs;
-      this._contentGenerator = contentGenerators;
+  _pairsChunks: TranslationPair[][] = [];
+  constructor(config: courseGenConfig, contentGenerators: contentGenerator[], pairs: Pairs) {
+    this._config = config;
+    this._pairs = pairs;
+    this.chunkPairs();
+    this._contentGenerator = contentGenerators;
+    for(let i = 0; i < this._pairsChunks.length; i++){
+        const chunk = this._pairsChunks[i];
+        if(chunk){
+          this.runGenerators(chunk);
+        }
+    }
+    //iterate chunks
+    //    call generators
   }
-  
-  static  async create(){
-    return new CourseCreator([], await CourseCreator.prepareBaseDataFromAssets());
+  runGenerators(chunk: TranslationPair[]) {
+    this._contentGenerator.forEach((generator)=>{generator.generate(chunk)})
+    throw new Error("Method not implemented.");
   }
-  
+  chunkPairs() {
+    const data = this._pairs.getPairs();
+    let i = 0; 
+    let chunkSize = this._config.chunkSize;
+    this._pairsChunks = []; //reset
+    for (let i = 0; i < data.length; i += chunkSize) {
+      const chunk = data.slice(i, i + chunkSize);
+      this._pairsChunks.push(chunk);
+    }  
+
+    return;
+  }
+  /**
+   * static factory
+   * @param config 
+   * @returns 
+   */
+  static async create(config: courseGenConfig) {
+    return new CourseCreator(
+      config,
+      [],
+      await CourseCreator.prepareBaseDataFromAssets()
+    );
+  }
+
   static async prepareBaseDataFromAssets() {
     const expander = await PairsWordExpander.create("es");
-    const pairs = new Pairs(expander, 
-      loadStyle.LOAD_FROM_DISK, 
+    const pairs = new Pairs(expander,
+      loadStyle.LOAD_FROM_DISK,
       new PairsFileReaderWriter({
         dir: "tmp",
         name: "pairs.json"
@@ -63,14 +122,14 @@ const MODES = {
 
 
 } as const;
-type WordSearchItem = {word: string; logTranslations?: boolean}
+type WordSearchItem = { word: string; logTranslations?: boolean }
 type WordSearchList = WordSearchItem[];
 type Modes = typeof MODES[keyof typeof MODES]
 const mode = MODES.run as Modes;
 
 const words: WordSearchList = [
-  {word:"sonreír", logTranslations: true},
-  {word: "sonreir", logTranslations: true}
+  { word: "sonreír", logTranslations: true },
+  { word: "sonreir", logTranslations: true }
 ]
 
 
@@ -81,21 +140,21 @@ switch (mode) {
       const results = dictionary.findByWord(wordSearchItem.word);
       console.log(results);
       console.log(`finished logging word: ${wordSearchItem.word}`)
-      if(wordSearchItem.logTranslations){
-          results.forEach((entry)=>{
-            entry.translations?.forEach((trans)=>{
-              console.log(trans);
-            })
+      if (wordSearchItem.logTranslations) {
+        results.forEach((entry) => {
+          entry.translations?.forEach((trans) => {
+            console.log(trans);
           })
-          
+        })
+
       }
     })
     break;
   }
   case MODES.run: {
     const expander = await PairsWordExpander.create("es");
-    const pairs = new Pairs(expander, 
-      loadStyle.LOAD_FROM_DISK, 
+    const pairs = new Pairs(expander,
+      loadStyle.LOAD_FROM_DISK,
       new PairsFileReaderWriter({
         dir: "tmp",
         name: "pairs.json"
