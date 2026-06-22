@@ -45,7 +45,9 @@ class CoursePresentationGenerator implements contentGenerator {
         if(typeof element?.action !== "object" &&
           typeof element.action?.library !== "string"
         ) throw new Error("bad templ");
-
+        if (this.supportedActionLibraryRenderers.includes(element.action?.library )){
+          
+        }
 
       })
     })
