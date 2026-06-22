@@ -40,41 +40,11 @@ class CourseCreator {
    */
   _pairs: Awaited<ReturnType<typeof CourseCreator.prepareBaseDataFromAssets>>;
   _pairsChunks: TranslationPair[][] = [];
-  constructor(config: courseGenConfig, contentGenerators: contentGenerator[], pairs: Pairs) {
-    this._config = config;
-    this._pairs = pairs;
-    this.chunkPairs();
-    this._contentGenerator = contentGenerators;
-    for(let i = 0; i < this._pairsChunks.length; i++){
-        const chunk = this._pairsChunks[i];
-        if(chunk){
-          this.runGenerators(chunk);
-        }
-    }
-    //iterate chunks
-    //    call generators
-  }
-  runGenerators(chunk: TranslationPair[]) {
-    this._contentGenerator.forEach((generator)=>{generator.generate(chunk)})
-    throw new Error("Method not implemented.");
-  }
-  chunkPairs() {
-    const data = this._pairs.getPairs();
-    let i = 0; 
-    let chunkSize = this._config.chunkSize;
-    this._pairsChunks = []; //reset
-    for (let i = 0; i < data.length; i += chunkSize) {
-      const chunk = data.slice(i, i + chunkSize);
-      this._pairsChunks.push(chunk);
-    }  
-
-    return;
-  }
   /**
-   * static factory
-   * @param config 
-   * @returns 
-   */
+ * static factory
+ * @param config 
+ * @returns 
+ */
   static async create(config: courseGenConfig) {
     return new CourseCreator(
       config,
@@ -82,6 +52,38 @@ class CourseCreator {
       await CourseCreator.prepareBaseDataFromAssets()
     );
   }
+  constructor(config: courseGenConfig, contentGenerators: contentGenerator[], pairs: Pairs) {
+    this._config = config;
+    this._pairs = pairs;
+    this.chunkPairs();
+    this._contentGenerator = contentGenerators;
+    for (let i = 0; i < this._pairsChunks.length; i++) {
+      const chunk = this._pairsChunks[i];
+      if (chunk) {
+        this.runGenerators(chunk);
+      }
+    }
+    //iterate chunks
+    //    call generators
+  }
+  runGenerators(chunk: TranslationPair[]) {
+    this._contentGenerator.forEach((generator) => { generator.generate(chunk) })
+    throw new Error("Method not implemented.");
+  }
+  chunkPairs() {
+    const data = this._pairs.getPairs();
+    let i = 0;
+    let chunkSize = this._config.chunkSize;
+    this._pairsChunks = []; //reset
+    for (let i = 0; i < data.length; i += chunkSize) {
+      const chunk = data.slice(i, i + chunkSize);
+      this._pairsChunks.push(chunk);
+    }
+
+    return;
+  }
+
+
 
   static async prepareBaseDataFromAssets() {
     const expander = await PairsWordExpander.create("es");
