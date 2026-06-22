@@ -174,7 +174,7 @@ export class Dictionary {
         });
         return ret;
     }
-    isVerb(wordUnderTest: DictionaryEntry) {
+    static isVerb(wordUnderTest: DictionaryEntry) {
         return (wordUnderTest.pos === "verb")
     }
 }

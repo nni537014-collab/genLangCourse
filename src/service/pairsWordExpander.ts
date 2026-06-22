@@ -128,8 +128,15 @@ export class PairsWordExpander {
                     }
                     if (!expandedWords[i] &&
                         needToModify !== modifiedReflexiveStripped) {
+                        const verbs = this.dictionary.findByWord(modifiedReflexiveStripped)
+                                       .filter((entry)=> Dictionary.isVerb(entry));
+
+                        const transVerbs = verbs.filter((entry)=> Dictionary.hasTranslations(entry))
+                        const hasFormOfVerb  = verbs.filter(entry=>{
+                            Dictionary.hasFormOf(entry);
+                        })
                         expandedWords[i] = expandWord(modifiedReflexiveStripped);
-                    }
+                    } 
                     //remove trailing "s" - 
                     //remove reflective verb structure           
                 }

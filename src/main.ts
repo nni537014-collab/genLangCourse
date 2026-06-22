@@ -2,11 +2,39 @@ import { clearPreviousGeneratedData } from "./service/utils.ts"
 import { Dictionary } from "./service/dictionary.ts"
 import { PairsWordExpander } from "./service/pairsWordExpander.ts"
 import { loadStyle, Pairs, PairsFileReaderWriter } from "./service/pairs.ts"
-class CourseCreator {
-  constructor() {
 
+ 
+interface contentGenerator   {
+   generate():boolean;  
+}
+
+type courseGenConfig = {
+  assetDirectoryName: string;
+  outDirectoryName: string;
+}
+class CourseCreator {
+  _contentGenerator: contentGenerator[];
+  _pairs: Awaited<ReturnType<typeof CourseCreator.prepareBaseDataFromAssets>>;
+  constructor(contentGenerators: contentGenerator[], pairs: Pairs) {
+      this._pairs = pairs;
+      this._contentGenerator = contentGenerators;
   }
-  prepareBaseDataFromAssets() {
+  
+  static  async create(){
+    return new CourseCreator([], await CourseCreator.prepareBaseDataFromAssets());
+  }
+  
+  static async prepareBaseDataFromAssets() {
+    const expander = await PairsWordExpander.create("es");
+    const pairs = new Pairs(expander, 
+      loadStyle.LOAD_FROM_DISK, 
+      new PairsFileReaderWriter({
+        dir: "tmp",
+        name: "pairs.json"
+      }));
+    //console.log(pairs.getPairs());
+    console.log("pairs length:", pairs.getPairs().length);
+    return pairs;
 
   }
   extendBaseData() {
@@ -44,6 +72,8 @@ const words: WordSearchList = [
   {word:"sonreír", logTranslations: true},
   {word: "sonreir", logTranslations: true}
 ]
+
+
 switch (mode) {
   case MODES.find: {
     const dictionary = await Dictionary.create("es");
@@ -65,7 +95,7 @@ switch (mode) {
   case MODES.run: {
     const expander = await PairsWordExpander.create("es");
     const pairs = new Pairs(expander, 
-      loadStyle.LOAD_INITIAL, 
+      loadStyle.LOAD_FROM_DISK, 
       new PairsFileReaderWriter({
         dir: "tmp",
         name: "pairs.json"
