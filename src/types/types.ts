@@ -1,3 +1,15 @@
+export type JsonPrimitive = string | number | boolean | null;
+
+export type JsonObject = { [key: string]: JsonValue };
+
+export type JsonValue = JsonPrimitive | JsonValue[] | JsonObject;
+export interface contentGenerator {
+  generate(base: TranslationPair[]):JsonValue
+  
+}
+export interface subContentGenerator extends contentGenerator{
+  getActionLibrary(): string;
+}
 
 export type DictionaryTranslation = {
     word: string,

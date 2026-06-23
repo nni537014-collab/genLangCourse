@@ -2,17 +2,12 @@ import { clearPreviousGeneratedData } from "./service/utils.ts"
 import { Dictionary } from "./service/dictionary.ts"
 import { PairsWordExpander } from "./service/pairsWordExpander.ts"
 import { loadStyle, Pairs, PairsFileReaderWriter } from "./service/pairs.ts"
-import type { TranslationPair } from "./types/types.ts";
+import type { TranslationPair, JsonValue, contentGenerator, subContentGenerator } from "./types/types.ts";
 
 /**
  * @todo move somewhere, types? 
  */
-interface contentGenerator {
-  generate(base: TranslationPair[]): boolean;
-}
-interface subContentGenerator{
-  getActionLibrary(): string;
-}
+
 
 /**
  * @todo move somewhere, types or config? 
@@ -23,10 +18,9 @@ type courseGenConfig = {
   chunkSize: number;
 }
 class CoursePresentationGenerator implements contentGenerator {
-
-  supportedActionLibraryRenderers: string[];
-  constructor(){
-    this.supportedActionLibraryRenderers = [];
+  actionLibraryRenderers:  subContentGenerator[];
+  constructor(libraryRenderers: subContentGenerator[]){
+    this.actionLibraryRenderers = libraryRenderers;
   }
   generate(base: TranslationPair[]) {
 
@@ -37,16 +31,20 @@ class CoursePresentationGenerator implements contentGenerator {
     if (!Array.isArray(templ.presentation.slides))
        throw Error("bad template - no slides in json")
 
-    const slides = templ.presentation.slides as any[];
-    slides.forEach( slide => {
+            const slides = templ.presentation.slides as any[];
+    slides.forEach( (slide, i) => {
       if(!Array.isArray(slide)) throw new Error("bad template - no elements array")
 
-      slide.forEach( element => {
+              slide.forEach( element => {
         if(typeof element?.action !== "object" &&
           typeof element.action?.library !== "string"
         ) throw new Error("bad templ");
-        if (this.supportedActionLibraryRenderers.includes(element.action?.library )){
-          
+        const gen = this.actionLibraryRenderers.find((generator): boolean=> {
+            return (generator.getActionLibrary === element.action?.library)
+         })
+        if (gen){
+          console.log(`slide no. ${i+1}: generating ...${ gen.getActionLibrary() }`)
+           element.action.params = gen.generate(base);  
         }
 
       })
