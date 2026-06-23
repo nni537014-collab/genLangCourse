@@ -7,7 +7,7 @@ import type {
 
 export class SingleChoiceSetGenerator implements subContentGenerator{
   answerCount = 4;
-  generate(base: TranslationPair[]): JsonValue {
+  generate(base: TranslationPair[], template: JsonValue): JsonValue {
       return base.map(this.generateSingleChoice)
       return true;
   }
@@ -37,7 +37,7 @@ export class SingleChoiceSetGenerator implements subContentGenerator{
   subContentIdCreate(){
     return ""; //@todo
   }
-  getActionLibrary(): string {
+  getSupportedLibrary(): string {
       return "H5P.SingleChoiceSet 1.11";
   }
 }

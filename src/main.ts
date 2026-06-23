@@ -41,11 +41,11 @@ class CoursePresentationGenerator implements contentGenerator {
           typeof element.action?.library !== "string"
         ) throw new Error("bad templ");
         const gen = this.actionLibraryRenderers.find((generator): boolean=> {
-            return (generator.getActionLibrary === element.action?.library)
+            return (generator.getSupportedLibrary === element.action?.library)
          })
         if (gen){
-          console.log(`slide no. ${i+1}: generating ...${ gen.getActionLibrary() }`)
-           element.action.params = gen.generate(base);  
+          console.log(`slide no. ${i+1}: generating ...${ gen.getSupportedLibrary() }`)
+           element.action.params = gen.generate(base, element.action.params);  
         }
 
       })
@@ -100,7 +100,7 @@ class CourseCreator {
     //    call generators
   }
   runGenerators(chunk: TranslationPair[]) {
-    this._contentGenerator.forEach((generator) => { generator.generate(chunk) })
+    this._contentGenerator.forEach((generator) => { generator.generate(chunk, generatorTemplateFinder(generator)) })
     throw new Error("Method not implemented.");
   }
   chunkPairs() {
