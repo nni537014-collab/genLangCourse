@@ -2,7 +2,7 @@ import { clearPreviousGeneratedData } from "./service/utils.ts"
 import { Dictionary } from "./service/dictionary.ts"
 import { PairsWordExpander } from "./service/pairsWordExpander.ts"
 import { loadStyle, Pairs, PairsFileReaderWriter } from "./service/pairs.ts"
-import type { TranslationPair, JsonValue, contentGenerator, subContentGenerator } from "./types/types.ts";
+import type { TranslationPair, JsonValue, ContentGenerator, subContentGenerator } from "./types/types.ts";
 import { DialogGenerator } from "./service/generators/dialogs.ts"
 import { SingleChoiceSetGenerator } from "./service/generators/single_choice_set.ts"
 /**
@@ -18,48 +18,6 @@ type courseGenConfig = {
   outDirectoryName: string;
   chunkSize: number;
 }
-class CoursePresentationGenerator implements contentGenerator {
-  actionLibraryRenderers:  subContentGenerator[];
-  constructor(libraryRenderers: subContentGenerator[]){
-    this.actionLibraryRenderers = libraryRenderers;
-  }
-  generate(base: TranslationPair[]) {
-
-    //get template
-    const templ = this.loadTemplate();
-    if(!templ.presentation) throw new Error("bad template - no presentation in template");
-
-    if (!Array.isArray(templ.presentation.slides))
-       throw Error("bad template - no slides in json")
-
-            const slides = templ.presentation.slides as any[];
-    slides.forEach( (slide, i) => {
-      if(!Array.isArray(slide)) throw new Error("bad template - no elements array")
-
-              slide.forEach( element => {
-        if(typeof element?.action !== "object" &&
-          typeof element.action?.library !== "string"
-        ) throw new Error("bad templ");
-        const gen = this.actionLibraryRenderers.find((generator): boolean=> {
-            return (generator.getSupportedLibrary === element.action?.library)
-         })
-        if (gen){
-          console.log(`slide no. ${i+1}: generating ...${ gen.getSupportedLibrary() }`)
-           element.action.params = gen.generate(base, element.action.params);  
-        }
-
-      })
-    })
-  
-      //trasverse template for know generatable types
-    //generate for base data
-
-    return false;
-  }
-  loadTemplate() {
-    return JSON.parse("");
-  }
-}
 /**
  * main class that kick's things off
  * maybe going to run everything in constructor
@@ -67,7 +25,7 @@ class CoursePresentationGenerator implements contentGenerator {
  */
 class CourseCreator {
   _config: courseGenConfig;
-  _contentGenerator: contentGenerator[];
+  _contentGenerator: ContentGenerator[];
   /**
    * this structure is data that will be passed to generators
    */
@@ -85,7 +43,7 @@ class CourseCreator {
       await CourseCreator.prepareBaseDataFromAssets()
     );
   }
-  constructor(config: courseGenConfig, contentGenerators: contentGenerator[], pairs: Pairs) {
+  constructor(config: courseGenConfig, contentGenerators: ContentGenerator[], pairs: Pairs) {
     this._config = config;
     this._pairs = pairs;
     this.chunkPairs();

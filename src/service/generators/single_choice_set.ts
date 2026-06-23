@@ -1,7 +1,7 @@
 import type {
   TranslationPair,
   JsonValue,
-  contentGenerator as ContentGenerator,
+  ContentGenerator as ContentGenerator,
  
 } from "./../../types/types.ts";
 import { randomUUID } from "crypto";

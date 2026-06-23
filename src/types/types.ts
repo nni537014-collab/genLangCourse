@@ -3,13 +3,11 @@ export type JsonPrimitive = string | number | boolean | null;
 export type JsonObject = { [key: string]: JsonValue };
 
 export type JsonValue = JsonPrimitive | JsonValue[] | JsonObject;
-export interface contentGenerator {
+export interface ContentGenerator {
   generate(base: TranslationPair[], template: JsonValue):JsonValue
   getSupportedLibrary(): string;
 }
-export interface subContentGenerator extends contentGenerator{
-  getSupportedLibrary(): string;
-}
+
 
 export type DictionaryTranslation = {
     word: string,

@@ -1,8 +1,8 @@
-import { contentGenerator, TranslationPair } from "./../../types/types"
+import { ContentGenerator, TranslationPair } from "./../../types/types"
 
-class CoursePresentationGenerator implements contentGenerator {
-  actionLibraryRenderers:  contentGenerator[];
-  constructor(libraryRenderers: contentGenerator[]){
+class CoursePresentationGenerator implements ContentGenerator {
+  actionLibraryRenderers:  ContentGenerator[];
+  constructor(libraryRenderers: ContentGenerator[]){
     this.actionLibraryRenderers = libraryRenderers;
   }
   generate(base: TranslationPair[]) {
