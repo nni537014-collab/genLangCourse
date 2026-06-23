@@ -11,11 +11,11 @@ export class SingleChoiceSetGenerator implements ContentGenerator{
   answerCount = 4;
   generate(base: TranslationPair[], template: JsonValue): JsonValue {
       return base.map(this.generateSingleChoice)
-      return true;
+
   }
   generateSingleChoice(translationPair: TranslationPair, i: number, base: TranslationPair[]){
       return {
-        subContentId: this.subContentIdCreate(),
+        subContentId: randomUUID(),
         question: translationPair.source,
         answers: this.generateAnswer(translationPair, i, base)
       }
@@ -36,9 +36,7 @@ export class SingleChoiceSetGenerator implements ContentGenerator{
       useable.forEach(wrongIndex => (base[wrongIndex]) ? ret.push(base[wrongIndex].translation) : null);
       return ret;
   }
-  subContentIdCreate(){
-    return randomUUID();
-  }
+
   getSupportedLibrary(): string {
       return "H5P.SingleChoiceSet";
   }
