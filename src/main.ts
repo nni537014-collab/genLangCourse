@@ -3,7 +3,8 @@ import { Dictionary } from "./service/dictionary.ts"
 import { PairsWordExpander } from "./service/pairsWordExpander.ts"
 import { loadStyle, Pairs, PairsFileReaderWriter } from "./service/pairs.ts"
 import type { TranslationPair, JsonValue, contentGenerator, subContentGenerator } from "./types/types.ts";
-
+import { DialogGenerator } from "./service/generators/dialogs.ts"
+import { SingleChoiceSetGenerator } from "./service/generators/single_choice_set.ts"
 /**
  * @todo move somewhere, types? 
  */

@@ -5,7 +5,7 @@ import type {
   subContentGenerator
 } from "./../../types/types.ts";
 
-class DialogGenerator implements subContentGenerator{
+export class DialogGenerator implements subContentGenerator{
   generate(base: TranslationPair[]): JsonValue {
       return true;
   }

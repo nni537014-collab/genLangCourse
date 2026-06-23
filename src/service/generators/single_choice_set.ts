@@ -5,7 +5,7 @@ import type {
   subContentGenerator
 } from "./../../types/types.ts";
 
-class SingleChoiceSetGenerator implements subContentGenerator{
+export class SingleChoiceSetGenerator implements subContentGenerator{
   answerCount = 4;
   generate(base: TranslationPair[]): JsonValue {
       return base.map(this.generateSingleChoice)
