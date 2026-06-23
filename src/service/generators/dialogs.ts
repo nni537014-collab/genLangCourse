@@ -31,7 +31,7 @@ export class DialogGenerator implements subContentGenerator{
     throw new Error("Method not implemented.");
   }
   getSupportedLibrary(): string {
-      return "H5P.Dialog"; //@todo 
+      return "H5P.Dialogcards"; //@todo 
   }
 }
 

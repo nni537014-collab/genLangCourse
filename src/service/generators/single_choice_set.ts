@@ -38,6 +38,6 @@ export class SingleChoiceSetGenerator implements subContentGenerator{
     return ""; //@todo
   }
   getSupportedLibrary(): string {
-      return "H5P.SingleChoiceSet 1.11";
+      return "H5P.SingleChoiceSet";
   }
 }
