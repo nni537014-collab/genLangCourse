@@ -1,11 +1,13 @@
 import type {
   TranslationPair,
   JsonValue,
-  contentGenerator,
-  subContentGenerator
+  contentGenerator as ContentGenerator,
+ 
 } from "./../../types/types.ts";
+import { randomUUID } from "crypto";
 
-export class SingleChoiceSetGenerator implements subContentGenerator{
+
+export class SingleChoiceSetGenerator implements ContentGenerator{
   answerCount = 4;
   generate(base: TranslationPair[], template: JsonValue): JsonValue {
       return base.map(this.generateSingleChoice)
@@ -35,7 +37,7 @@ export class SingleChoiceSetGenerator implements subContentGenerator{
       return ret;
   }
   subContentIdCreate(){
-    return ""; //@todo
+    return randomUUID();
   }
   getSupportedLibrary(): string {
       return "H5P.SingleChoiceSet";
