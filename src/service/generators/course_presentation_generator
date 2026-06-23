@@ -1,14 +1,14 @@
-import { ContentGenerator, TranslationPair } from "./../../types/types"
+import { ContentGenerator, JsonValue, TranslationPair } from "./../../types/types"
 
 class CoursePresentationGenerator implements ContentGenerator {
   actionLibraryRenderers:  ContentGenerator[];
   constructor(libraryRenderers: ContentGenerator[]){
     this.actionLibraryRenderers = libraryRenderers;
   }
-  generate(base: TranslationPair[]) {
+  generate(base: TranslationPair[], template: JsonValue) {
 
     //get template
-    const templ = this.loadTemplate();
+    const templ = (template as any);
     if(!templ.presentation) throw new Error("bad template - no presentation in template");
 
     if (!Array.isArray(templ.presentation.slides))

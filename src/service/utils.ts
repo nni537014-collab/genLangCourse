@@ -8,7 +8,8 @@ import {
     h5pAssetsDirName,
     h5pJsonFileName,
     h5pContentDir,
-    h5pContentFileName
+    h5pContentFileName,
+    h5pAudioDirName
 } from "../config.ts"
 import { readFileSync } from "fs"
 import { fileURLToPath } from "url";
@@ -50,7 +51,14 @@ export function generatorTemplateFinder(supportedLibrary: string) {
 export function md5Filename(input: string): string {
     return createHash("md5").update(input).digest("hex");
 }
-
+export function audioDir() {
+    return path.join(
+        __dirname,
+        utilsToBase,
+        assetsDirName,
+        h5pAudioDirName
+    )
+}
 export const clearPreviousGeneratedData = () => {
     return rmSync(getOutPath(), { recursive: true, force: true })
 }

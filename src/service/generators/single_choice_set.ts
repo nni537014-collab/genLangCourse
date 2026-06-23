@@ -10,7 +10,9 @@ import { randomUUID } from "crypto";
 export class SingleChoiceSetGenerator implements ContentGenerator{
   answerCount = 4;
   generate(base: TranslationPair[], template: JsonValue): JsonValue {
-      return base.map(this.generateSingleChoice)
+
+      (template as any).choices = base.map(this.generateSingleChoice);
+      return template;
 
   }
   generateSingleChoice(translationPair: TranslationPair, i: number, base: TranslationPair[]){
@@ -28,7 +30,9 @@ export class SingleChoiceSetGenerator implements ContentGenerator{
           const maybeUseable = Math.random() * base.length
           if(maybeUseable !== i && base[i]){
                useable.push(i);
-               if(useable.length >= this.answerCount - 1) enoughWrongAns = true;
+               // > shouldn't be needed but leaving anyway
+               if(useable.length >= this.answerCount - 1)
+                enoughWrongAns = true;
           }
         
       }

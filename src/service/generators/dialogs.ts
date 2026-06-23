@@ -7,9 +7,9 @@ import type {
 import { md5Filename } from "./../utils.ts"
 
 export class DialogGenerator implements ContentGenerator {
-  generate(base: TranslationPair[], template: {h5p: JsonValue, content: JsonValue}): JsonValue {
-      if(template.content === null) throw new Error();
-      (template.content as any).dialogs = this.createDialogs(base);
+  generate(base: TranslationPair[], template: JsonValue): JsonValue {
+      if(template === null) throw new Error();
+      (template as any).dialogs = this.createDialogs(base);
       return template;
     
     
