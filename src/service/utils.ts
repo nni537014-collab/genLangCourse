@@ -4,9 +4,13 @@ import {
     outDirName,
     assetsDirName,
     pairsFileName,
-    dictionaryPath
+    dictionaryPath,
+    h5pAssetsDirName,
+    h5pJsonFileName,
+    h5pContentDir,
+    h5pContentFileName
 } from "../config.ts"
-
+import { readFileSync } from "fs"
 import { fileURLToPath } from "url";
 import { createHash } from "crypto";
 import type { JsonValue, contentGenerator } from "../types/types.ts";
@@ -14,9 +18,31 @@ import type { JsonValue, contentGenerator } from "../types/types.ts";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+const utilsToBase = "../../";
+export function generatorTemplateFinder(supportedLibrary: string): JsonValue{
 
-export function generatorTemplateFinder(): JsonValue{
-   return "";
+    const templPath = path.join(
+            __dirname,
+            utilsToBase,
+            assetsDirName,
+            h5pAssetsDirName,
+            supportedLibrary
+        );
+    const h5pJsonPath = path.join(
+        templPath,
+        h5pJsonFileName
+    );
+    const contentJsonPath = path.join(
+        templPath,
+        h5pContentDir,
+        h5pContentFileName
+    );
+    const h5pJson = readFileSync(h5pJsonPath, "utf8");
+    const h5pContent = readFileSync(contentJsonPath, "utf8");
+    return [JSON.parse(h5pJson), JSON.parse(h5pContent)];
+    // check required files can load
+    // return tuple - [h5pJson, contentJson]
+    
 }
 export function md5Filename(input: string): string {
   return createHash("md5").update(input).digest("hex");
