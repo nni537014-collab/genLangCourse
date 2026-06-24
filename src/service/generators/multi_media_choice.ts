@@ -5,7 +5,7 @@ import type {
   ContentGenerator,
 
 } from "./../../types/types.ts";
-import { md5Filename } from "./../utils.ts"
+import { audioFileName } from "./../utils.ts"
 
 export class MultiMediaChoiceGenerator implements ContentGenerator {
   _question = {
@@ -14,13 +14,95 @@ export class MultiMediaChoiceGenerator implements ContentGenerator {
   };
     generate(base: TranslationPair[], template: JsonValue): JsonValue {
      
-     base.map(tp => {
+     base.map((tp, i) => {
 
        const templ = structuredClone(template) as any;
        templ.question = `${this._question.prefix}${tp.source}${this._question.postfix}`
-       templ.media = this.generateMedia(tp)
+       templ.media.type = this.generateMedia(tp, templ.media.type, "source");
+       templ.options = this.generateOptions(tp, i, base, templ.options);
      });
      return template;
+  }
+  generateMedia(tp: TranslationPair, template: JsonValue, type: "source"|"translation"): JsonValue{
+  
+         (template as any).subContentId = randomUUID(); //@todo check function - utils?
+         (template as any).params.files = [{
+                          "path": this.generateFilePath(tp.source),
+                          "mime": "audio\/mpeg",
+                          "copyright": { "license": "U" }
+                        }]
+         return template;
+         /*
+           {       "type": {
+                    "params": {
+                      "playerMode": "minimalistic",
+                      "fitToWrapper": false,
+                      "controls": true,
+                      "autoplay": false,
+                      "playAudio": "Play audio",
+                      "pauseAudio": "Pause audio",
+                      "contentName": "Audio",
+                      "audioNotSupported": "Your browser does not support this audio",
+                      "files": [
+                        {
+                          "path": "audios\/files-6a3a495940dd5.mp3",
+                          "mime": "audio\/mpeg",
+                          "copyright": { "license": "U" }
+                        }
+                      ]
+                    },
+                    "library": "H5P.Audio 1.5",
+                    "metadata": {
+                      "contentType": "Audio",
+                      "license": "U",
+                      "title": "Untitled Audio"
+                    },
+                    "subContentId": "acfb0c69-b385-49b9-98e0-2cfb0c0ba790"
+                  },
+         */
+  }
+  generateOptions(tp: TranslationPair, index: number, base: TranslationPair[], templ: JsonValue){
+    
+    if(!Array.isArray(templ)) throw new Error("bad templ")
+    const mediaTempl = templ.pop() as any;
+    if(!mediaTempl || !mediaTempl.media) throw new Error("bad templ")
+    const ret: { media: any, correct: boolean}[] = [];
+    const optionBaseIndexes: number[] = [index];
+    
+    while(optionBaseIndexes.length <  3){
+      const candidate = Math.random() * base.length;
+      if(candidate !== index &&
+         !optionBaseIndexes.includes(candidate))
+          optionBaseIndexes.push(candidate);
+    }
+
+    for(let i = 0; i < optionBaseIndexes.length; i++){
+      const current = base[i];
+      if(!current) throw new Error("bad pairs") 
+      const media = {
+        params: this.generateMedia(
+          current,
+          structuredClone(mediaTempl),
+          "translation"
+      ) }
+      ret.push({
+        media:this.generateMedia(
+            current,
+            mediaTempl.media,
+            "translation"),
+        correct: (i === 0)
+      })
+    }
+    return ret;
+  }
+  generateFilePath(input: string){
+      return `audio/${audioFileName(input)}`;
+  }
+  getSupportedLibrary(): string {
+    return "H5P.MultiMediaChoice"; //@todo 
+  }
+}
+
 /*
 "media": {
                   "type": {
@@ -85,50 +167,3 @@ export class MultiMediaChoiceGenerator implements ContentGenerator {
                     "media": {
                      
 */    
-  }
-  generateMedia(tp: TranslationPair, template: JsonValue): JsonValue{
-  
-         /*
-           {       "type": {
-                    "params": {
-                      "playerMode": "minimalistic",
-                      "fitToWrapper": false,
-                      "controls": true,
-                      "autoplay": false,
-                      "playAudio": "Play audio",
-                      "pauseAudio": "Pause audio",
-                      "contentName": "Audio",
-                      "audioNotSupported": "Your browser does not support this audio",
-                      "files": [
-                        {
-                          "path": "audios\/files-6a3a495940dd5.mp3",
-                          "mime": "audio\/mpeg",
-                          "copyright": { "license": "U" }
-                        }
-                      ]
-                    },
-                    "library": "H5P.Audio 1.5",
-                    "metadata": {
-                      "contentType": "Audio",
-                      "license": "U",
-                      "title": "Untitled Audio"
-                    },
-                    "subContentId": "acfb0c69-b385-49b9-98e0-2cfb0c0ba790"
-                  },
-         */
-         (template as any).subContentId = randomUUID(); //@todo check function - utils?
-         (template as any).files = [{
-                          "path": this.generateFilePath(tp.source),
-                          "mime": "audio\/mpeg",
-                          "copyright": { "license": "U" }
-                        }]
-         return template;
-  }
-  generateFilePath(str: string){
-    throw Error("no implementation")
-  }
-  getSupportedLibrary(): string {
-    return "H5P.MultiMediaChoice"; //@todo 
-  }
-}
-

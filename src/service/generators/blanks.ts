@@ -26,7 +26,11 @@ export class BlanksGenerator implements ContentGenerator {
       length: 0
     }
     const partInfo = parts.map((part, i) => {
-      const ret: any = {};
+      const ret = {
+        length: 0,
+        endPunc: false,
+        startPunc: false
+      };
       ret.length = part.length
       //@todo improve regex
       if (part.match('/[,.?!:;]$/')) {
@@ -40,9 +44,9 @@ export class BlanksGenerator implements ContentGenerator {
         longest.length = ret.length;
         longest.index = i;
       }
-
+      return ret;
     })
-    const partWrapper = (toWrap: string: )=>{
+    const partWrapper = (toWrap: string )=>{
 
     }
     // wrap longest

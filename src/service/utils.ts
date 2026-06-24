@@ -51,6 +51,22 @@ export function generatorTemplateFinder(supportedLibrary: string) {
 export function md5Filename(input: string): string {
     return createHash("md5").update(input).digest("hex");
 }
+export function audioFileName(input: string){
+    return `${md5Filename(input)}.mp3`
+}
+export function getAudioPath(input:string){
+    return path.join(
+        audioDir(),
+        audioFileName(input)
+    )
+    
+}
+export function getAudioH5pRelativePath(input: string){
+    return path.join(
+        "audio",
+        audioFileName(input)
+    )
+}
 export function audioDir() {
     return path.join(
         __dirname,

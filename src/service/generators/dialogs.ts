@@ -4,7 +4,7 @@ import type {
   ContentGenerator,
 
 } from "./../../types/types.ts";
-import { md5Filename } from "./../utils.ts"
+import { getAudioH5pRelativePath  } from "./../utils.ts"
 
 export class DialogGenerator implements ContentGenerator {
   generate(base: TranslationPair[], template: JsonValue): JsonValue {
@@ -22,7 +22,7 @@ export class DialogGenerator implements ContentGenerator {
         "tips": {},
         "audio": [
           {
-            "path": `audios\/${md5Filename(tp.translation)}.mp3`,
+            "path": `${getAudioH5pRelativePath(tp.translation)}`,
             "mime": "audio\/mpeg",
             "copyright": {
               "license": "U"
@@ -31,7 +31,6 @@ export class DialogGenerator implements ContentGenerator {
         ]
       }
     })
-    throw new Error("Method not implemented.");
   }
   getSupportedLibrary(): string {
     return "H5P.Dialogcards"; //@todo 
