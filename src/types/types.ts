@@ -4,7 +4,7 @@ export type JsonObject = { [key: string]: JsonValue };
 
 export type JsonValue = JsonPrimitive | JsonValue[] | JsonObject;
 export interface ContentGenerator {
-  generate(base: TranslationPair[], template: JsonValue):JsonValue
+  generate(base: TranslationPair[], template: JsonValue):JsonValue | JsonValue[]
   getSupportedLibrary(): string;
 }
 

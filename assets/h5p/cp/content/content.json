@@ -1,0 +1,693 @@
+{
+  "presentation": {
+    "slides": [
+      {
+        "elements": [
+          {
+            "x": 20.812547885119937,
+            "y": 5.138970612796551,
+            "width": 46.828232741519855,
+            "height": 89.72205877440689,
+            "action": {
+              "library": "H5P.Dialogcards 1.9",
+              "params": {
+                "mode": "repetition",
+                "dialogs": [
+                  {
+                    "text": "<p style=\"text-align:center;\">Hint for the first part of the dialogue<\/p>",
+                    "answer": "<p style=\"text-align:center;\">Hint for the second part of the dialogue<\/p>",
+                    "tips": {},
+                    "audio": [
+                      {
+                        "path": "audios\/audio-6a391ad937637.mp3",
+                        "mime": "audio\/mpeg",
+                        "copyright": { "license": "U" }
+                      }
+                    ]
+                  }
+                ],
+                "behaviour": {
+                  "enableRetry": true,
+                  "disableBackwardsNavigation": false,
+                  "scaleTextNotCard": false,
+                  "randomCards": false,
+                  "maxProficiency": 5,
+                  "quickProgression": false
+                },
+                "answer": "Turn",
+                "next": "Next",
+                "prev": "Previous",
+                "retry": "Retry",
+                "correctAnswer": "I got it right!",
+                "incorrectAnswer": "I got it wrong",
+                "round": "Round @round",
+                "cardsLeft": "Cards left: @number",
+                "nextRound": "Proceed to round @round",
+                "startOver": "Start over",
+                "showSummary": "Next",
+                "summary": "Summary",
+                "summaryCardsRight": "Cards you got right:",
+                "summaryCardsWrong": "Cards you got wrong:",
+                "summaryCardsNotShown": "Cards in pool not shown:",
+                "summaryOverallScore": "Overall Score",
+                "summaryCardsCompleted": "Cards you have completed learning:",
+                "summaryCompletedRounds": "Completed rounds:",
+                "summaryAllDone": "Well done! You have mastered all @cards cards by getting them correct @max times!",
+                "progressText": "Card @card of @total",
+                "cardFrontLabel": "Card front",
+                "cardBackLabel": "Card back",
+                "tipButtonLabel": "Show tip",
+                "audioNotSupported": "Your browser does not support this audio",
+                "confirmStartingOver": {
+                  "header": "Start over?",
+                  "body": "All progress will be lost. Are you sure you want to start over?",
+                  "cancelLabel": "Cancel",
+                  "confirmLabel": "Start over"
+                },
+                "title": "<p>base dialog cards heading<\/p>",
+                "description": ""
+              },
+              "subContentId": "25220b92-d9f7-437d-9c57-68147a23627a",
+              "metadata": {
+                "contentType": "Dialog Cards",
+                "license": "U",
+                "title": "base Dialog Cards"
+              }
+            },
+            "alwaysDisplayComments": false,
+            "backgroundOpacity": 0,
+            "displayAsButton": false,
+            "buttonSize": "big",
+            "goToSlideType": "specified",
+            "invisible": false,
+            "solution": ""
+          }
+        ],
+        "slideBackgroundSelector": {}
+      },
+      {
+        "elements": [
+          {
+            "x": 30,
+            "y": 30.001097404316027,
+            "width": 40,
+            "height": 40,
+            "action": {
+              "library": "H5P.SingleChoiceSet 1.11",
+              "params": {
+                "choices": [
+                  {
+                    "subContentId": "60464fc7-47eb-4e19-988e-ce2dedcb7180",
+                    "question": "<p>example question<\/p>",
+                    "answers": ["<p>correct ans<\/p>", "<p>wrong ans<\/p>"]
+                  },
+                  { "subContentId": "59069299-e624-497c-99d0-d8ef30859d8f" }
+                ],
+                "overallFeedback": [{ "from": 0, "to": 100 }],
+                "behaviour": {
+                  "autoContinue": true,
+                  "timeoutCorrect": 2000,
+                  "timeoutWrong": 3000,
+                  "soundEffectsEnabled": true,
+                  "enableRetry": true,
+                  "enableSolutionsButton": true,
+                  "passPercentage": 100
+                },
+                "l10n": {
+                  "nextButtonLabel": "Next question",
+                  "nextButton": "Next",
+                  "showResultsButtonLabel": "Show results",
+                  "retryButtonLabel": "Retry",
+                  "solutionViewTitle": "Solution list",
+                  "correctText": "Correct!",
+                  "incorrectText": "Incorrect!",
+                  "shouldSelect": "Should have been selected",
+                  "shouldNotSelect": "Should not have been selected",
+                  "muteButtonLabel": "Mute feedback sound",
+                  "closeButtonLabel": "Close",
+                  "slideOfTotal": "Slide :num of :total",
+                  "scoreBarLabel": "You got :num out of :total points",
+                  "solutionListQuestionNumber": "Question :num",
+                  "a11yShowSolution": "Show the solution. The task will be marked with its correct solution.",
+                  "a11yRetry": "Retry the task. Reset all responses and start the task over again.",
+                  "resultHeader": "Your result:",
+                  "totalScore": ":score of :maxScore correct",
+                  "resultTableHeader": "Question",
+                  "resultScoreTableHeader": "Score",
+                  "correctAnswerIntroduction": "Correct answer"
+                }
+              },
+              "subContentId": "5268e898-32ae-4af6-8e1e-bfe5f3a9c3d1",
+              "metadata": {
+                "contentType": "Single Choice Set",
+                "license": "U",
+                "title": "Untitled Single Choice Set"
+              }
+            },
+            "alwaysDisplayComments": false,
+            "backgroundOpacity": 0,
+            "displayAsButton": false,
+            "buttonSize": "big",
+            "goToSlideType": "specified",
+            "invisible": false,
+            "solution": ""
+          }
+        ],
+        "slideBackgroundSelector": {}
+      },
+      {
+        "elements": [
+          {
+            "x": 29.998148148148147,
+            "y": 29.999375985781086,
+            "width": 40,
+            "height": 49.49078287963196,
+            "action": {
+              "library": "H5P.MultiChoice 1.16",
+              "params": {
+                "media": {
+                  "disableImageZooming": false,
+                  "type": {
+                    "params": {
+                      "playerMode": "minimalistic",
+                      "fitToWrapper": false,
+                      "controls": true,
+                      "autoplay": false,
+                      "playAudio": "Play audio",
+                      "pauseAudio": "Pause audio",
+                      "contentName": "Audio",
+                      "audioNotSupported": "Your browser does not support this audio",
+                      "files": [
+                        {
+                          "path": "audios\/files-6a3a4467a3f91.mp3",
+                          "mime": "audio\/mpeg",
+                          "copyright": { "license": "U" }
+                        }
+                      ]
+                    },
+                    "library": "H5P.Audio 1.5",
+                    "metadata": {
+                      "contentType": "Audio",
+                      "license": "U",
+                      "title": "Untitled Audio"
+                    },
+                    "subContentId": "823aa57d-c970-4f38-a747-0ac17f4fb65f"
+                  }
+                },
+                "answers": [
+                  {
+                    "correct": true,
+                    "tipsAndFeedback": {
+                      "tip": "",
+                      "chosenFeedback": "",
+                      "notChosenFeedback": ""
+                    },
+                    "text": "<div>correct answer<\/div>"
+                  },
+                  {
+                    "correct": false,
+                    "tipsAndFeedback": {
+                      "tip": "",
+                      "chosenFeedback": "",
+                      "notChosenFeedback": ""
+                    },
+                    "text": "<div>wrong answer<\/div>"
+                  }
+                ],
+                "overallFeedback": [{ "from": 0, "to": 100 }],
+                "behaviour": {
+                  "enableRetry": true,
+                  "enableSolutionsButton": true,
+                  "enableCheckButton": true,
+                  "type": "auto",
+                  "singlePoint": false,
+                  "randomAnswers": true,
+                  "showSolutionsRequiresInput": true,
+                  "confirmCheckDialog": false,
+                  "confirmRetryDialog": false,
+                  "autoCheck": false,
+                  "passPercentage": 100,
+                  "showScorePoints": true
+                },
+                "UI": {
+                  "checkAnswerButton": "Check",
+                  "submitAnswerButton": "Submit",
+                  "showSolutionButton": "Show solution",
+                  "tryAgainButton": "Retry",
+                  "tipsLabel": "Show tip",
+                  "scoreBarLabel": "You got :num out of :total points",
+                  "tipAvailable": "Tip available",
+                  "feedbackAvailable": "Feedback available",
+                  "readFeedback": "Read feedback",
+                  "wrongAnswer": "Wrong answer",
+                  "correctAnswer": "Correct answer",
+                  "shouldCheck": "Should have been checked",
+                  "shouldNotCheck": "Should not have been checked",
+                  "noInput": "Please answer before viewing the solution",
+                  "a11yCheck": "Check the answers. The responses will be marked as correct, incorrect, or unanswered.",
+                  "a11yShowSolution": "Show the solution. The task will be marked with its correct solution.",
+                  "a11yRetry": "Retry the task. Reset all responses and start the task over again."
+                },
+                "confirmCheck": {
+                  "header": "Finish ?",
+                  "body": "Are you sure you wish to finish ?",
+                  "cancelLabel": "Cancel",
+                  "confirmLabel": "Finish"
+                },
+                "confirmRetry": {
+                  "header": "Retry ?",
+                  "body": "Are you sure you wish to retry ?",
+                  "cancelLabel": "Cancel",
+                  "confirmLabel": "Confirm"
+                },
+                "question": "<p>Listen and then select the correct answer<\/p>"
+              },
+              "subContentId": "1291d395-e889-4385-a2a4-6cc22cd7ffa6",
+              "metadata": {
+                "contentType": "Multiple Choice",
+                "license": "U",
+                "title": "Untitled Multiple Choice"
+              }
+            },
+            "alwaysDisplayComments": false,
+            "backgroundOpacity": 0,
+            "displayAsButton": false,
+            "buttonSize": "big",
+            "goToSlideType": "specified",
+            "invisible": false,
+            "solution": ""
+          }
+        ],
+        "slideBackgroundSelector": {}
+      },
+      {
+        "elements": [
+          {
+            "x": 29.998148148148147,
+            "y": 29.999375985781086,
+            "width": 40,
+            "height": 45.18723654227266,
+            "action": {
+              "library": "H5P.Blanks 1.14",
+              "params": {
+                "media": { "disableImageZooming": false },
+                "text": "Fill in the missing words",
+                "overallFeedback": [{ "from": 0, "to": 100 }],
+                "showSolutions": "Show solution",
+                "tryAgain": "Retry",
+                "checkAnswer": "Check",
+                "submitAnswer": "Submit",
+                "notFilledOut": "Please fill in all blanks to view solution",
+                "answerIsCorrect": "&#039;:ans&#039; is correct",
+                "answerIsWrong": "&#039;:ans&#039; is wrong",
+                "answeredCorrectly": "Answered correctly",
+                "answeredIncorrectly": "Answered incorrectly",
+                "solutionLabel": "Correct answer:",
+                "inputLabel": "Blank input @num of @total",
+                "inputHasTipLabel": "Tip available",
+                "tipLabel": "Tip",
+                "behaviour": {
+                  "enableRetry": true,
+                  "allowRetryIfCorrect": false,
+                  "enableSolutionsButton": true,
+                  "enableCheckButton": true,
+                  "autoCheck": false,
+                  "caseSensitive": true,
+                  "showSolutionsRequiresInput": true,
+                  "separateLines": false,
+                  "confirmCheckDialog": false,
+                  "confirmRetryDialog": false,
+                  "acceptSpellingErrors": false
+                },
+                "scoreBarLabel": "You got :num out of :total points",
+                "a11yCheck": "Check the answers. The responses will be marked as correct, incorrect, or unanswered.",
+                "a11yShowSolution": "Show the solution. The task will be marked with its correct solution.",
+                "a11yRetry": "Retry the task. Reset all responses and start the task over again.",
+                "a11yCheckingModeHeader": "Checking mode",
+                "confirmCheck": {
+                  "header": "Finish ?",
+                  "body": "Are you sure you wish to finish ?",
+                  "cancelLabel": "Cancel",
+                  "confirmLabel": "Finish"
+                },
+                "confirmRetry": {
+                  "header": "Retry ?",
+                  "body": "Are you sure you wish to retry ?",
+                  "cancelLabel": "Cancel",
+                  "confirmLabel": "Confirm"
+                },
+                "questions": ["<p>oslo is the capital of *norway*<\/p>"]
+              },
+              "subContentId": "5d01245c-9528-482c-a751-1f04d7deb246",
+              "metadata": {
+                "contentType": "Fill in the Blanks",
+                "license": "U",
+                "title": "Untitled Fill in the Blanks"
+              }
+            },
+            "alwaysDisplayComments": false,
+            "backgroundOpacity": 0,
+            "displayAsButton": false,
+            "buttonSize": "big",
+            "goToSlideType": "specified",
+            "invisible": false,
+            "solution": ""
+          }
+        ],
+        "slideBackgroundSelector": {}
+      },
+      {
+        "elements": [
+          {
+            "x": 0,
+            "y": 0,
+            "width": 100,
+            "height": 99.99999999999999,
+            "action": {
+              "library": "H5P.MultiMediaChoice 0.3",
+              "params": {
+                "behaviour": {
+                  "aspectRatio": "16to9",
+                  "enableRetry": true,
+                  "enableSolutionsButton": true,
+                  "confirmCheckDialog": false,
+                  "confirmRetryDialog": false,
+                  "singlePoint": false,
+                  "showSolutionsRequiresInput": true,
+                  "questionType": "auto",
+                  "maxAlternativesPerRow": "4",
+                  "passPercentage": 100
+                },
+                "media": {
+                  "type": {
+                    "params": {
+                      "playerMode": "minimalistic",
+                      "fitToWrapper": false,
+                      "controls": true,
+                      "autoplay": false,
+                      "playAudio": "Play audio",
+                      "pauseAudio": "Pause audio",
+                      "contentName": "Audio",
+                      "audioNotSupported": "Your browser does not support this audio",
+                      "files": [
+                        {
+                          "path": "audios\/files-6a3a495940dd5.mp3",
+                          "mime": "audio\/mpeg",
+                          "copyright": { "license": "U" }
+                        }
+                      ]
+                    },
+                    "library": "H5P.Audio 1.5",
+                    "metadata": {
+                      "contentType": "Audio",
+                      "license": "U",
+                      "title": "Untitled Audio"
+                    },
+                    "subContentId": "acfb0c69-b385-49b9-98e0-2cfb0c0ba790"
+                  },
+                  "disableImageZooming": false
+                },
+                "options": [
+                  {
+                    "media": {
+                      "params": {
+                        "playerMode": "minimalistic",
+                        "fitToWrapper": false,
+                        "controls": true,
+                        "autoplay": false,
+                        "playAudio": "Play audio",
+                        "pauseAudio": "Pause audio",
+                        "contentName": "Audio",
+                        "audioNotSupported": "Your browser does not support this audio",
+                        "files": [
+                          {
+                            "path": "audios\/files-6a3a489d935e2.mp3",
+                            "mime": "audio\/mpeg",
+                            "copyright": { "license": "U" }
+                          }
+                        ]
+                      },
+                      "library": "H5P.Audio 1.5",
+                      "metadata": {
+                        "contentType": "Audio",
+                        "license": "U",
+                        "title": "Untitled Audio"
+                      },
+                      "subContentId": "2a6f7667-a2d1-4253-bcbe-9058abba2d34"
+                    },
+                    "correct": true
+                  },
+                  {
+                    "media": {
+                      "params": {
+                        "playerMode": "minimalistic",
+                        "fitToWrapper": false,
+                        "controls": true,
+                        "autoplay": false,
+                        "playAudio": "Play audio",
+                        "pauseAudio": "Pause audio",
+                        "contentName": "Audio",
+                        "audioNotSupported": "Your browser does not support this audio",
+                        "files": [
+                          {
+                            "path": "audios\/files-6a3a48c7b5cb9.mp3",
+                            "mime": "audio\/mpeg",
+                            "copyright": { "license": "U" }
+                          }
+                        ]
+                      },
+                      "library": "H5P.Audio 1.5",
+                      "metadata": {
+                        "contentType": "Audio",
+                        "license": "U",
+                        "title": "Untitled Audio"
+                      },
+                      "subContentId": "e2bfc978-b573-42a9-93a3-5395963aa343"
+                    },
+                    "correct": false
+                  },
+                  {
+                    "media": {
+                      "params": {
+                        "playerMode": "minimalistic",
+                        "fitToWrapper": false,
+                        "controls": true,
+                        "autoplay": false,
+                        "playAudio": "Play audio",
+                        "pauseAudio": "Pause audio",
+                        "contentName": "Audio",
+                        "audioNotSupported": "Your browser does not support this audio",
+                        "files": [
+                          {
+                            "path": "audios\/files-6a3a52fcc6cf6.mp3",
+                            "mime": "audio\/mpeg",
+                            "copyright": { "license": "U" }
+                          }
+                        ]
+                      },
+                      "library": "H5P.Audio 1.5",
+                      "metadata": {
+                        "contentType": "Audio",
+                        "license": "U",
+                        "title": "Untitled Audio"
+                      },
+                      "subContentId": "adb0c892-d3db-4ff4-bb0b-5d2e35f497d7"
+                    },
+                    "correct": false
+                  }
+                ],
+                "overallFeedback": [{ "from": 0, "to": 100 }],
+                "l10n": {
+                  "checkAnswerButtonText": "Check",
+                  "submitAnswerButtonText": "Submit",
+                  "checkAnswer": "Check the answers. The responses will be marked as correct, incorrect, or unanswered.",
+                  "showSolutionButtonText": "Show solution",
+                  "showSolution": "Show the solution. The correct options will be marked.",
+                  "correctAnswer": "Correct answer",
+                  "wrongAnswer": "Wrong answer",
+                  "shouldCheck": "Should have been checked",
+                  "shouldNotCheck": "Should not have been checked",
+                  "noAnswer": "Please answer before viewing the solution",
+                  "retryText": "Retry",
+                  "retry": "Retry the task. Reset all responses and start the task over again.",
+                  "result": "You got :num out of :total points",
+                  "missingAltText": "Alt text missing",
+                  "closeModalText": "Close modal",
+                  "confirmCheck": {
+                    "header": "Finish?",
+                    "body": "Are you sure you want to finish?",
+                    "cancelLabel": "Cancel",
+                    "confirmLabel": "Finish"
+                  },
+                  "confirmRetry": {
+                    "header": "Retry?",
+                    "body": "Are you sure you wish to retry?",
+                    "cancelLabel": "Cancel",
+                    "confirmLabel": "Retry"
+                  }
+                },
+                "question": "<h3>Select the matching audio<\/h3><p>this is a phrase<\/p>"
+              },
+              "subContentId": "8f9503a3-3083-45bf-9a30-fe569022562f",
+              "metadata": {
+                "contentType": "Multimedia Choice",
+                "license": "U",
+                "title": "Untitled Multimedia Choice"
+              }
+            },
+            "alwaysDisplayComments": false,
+            "backgroundOpacity": 0,
+            "displayAsButton": false,
+            "buttonSize": "big",
+            "goToSlideType": "specified",
+            "invisible": false,
+            "solution": ""
+          }
+        ],
+        "slideBackgroundSelector": {}
+      },
+      {
+        "elements": [
+          {
+            "x": 5.200964661594474,
+            "y": 7.708455919194826,
+            "width": 78.12510162376897,
+            "height": 76.24947646736882,
+            "action": {
+              "library": "H5P.DragText 1.10",
+              "params": {
+                "media": { "disableImageZooming": false },
+                "taskDescription": "Drag the words into the correct boxes",
+                "overallFeedback": [{ "from": 0, "to": 100 }],
+                "checkAnswer": "Check",
+                "submitAnswer": "Submit",
+                "tryAgain": "Retry",
+                "showSolution": "Show solution",
+                "dropZoneIndex": "Drop Zone @index.",
+                "empty": "Drop Zone @index is empty.",
+                "contains": "Drop Zone @index contains draggable @draggable.",
+                "ariaDraggableIndex": "@index of @count draggables.",
+                "tipLabel": "Show tip",
+                "correctText": "Correct!",
+                "incorrectText": "Incorrect!",
+                "resetDropTitle": "Reset drop",
+                "resetDropDescription": "Are you sure you want to reset this drop zone?",
+                "grabbed": "Draggable is grabbed.",
+                "cancelledDragging": "Cancelled dragging.",
+                "correctAnswer": "Correct answer:",
+                "feedbackHeader": "Feedback",
+                "behaviour": {
+                  "enableRetry": true,
+                  "enableSolutionsButton": true,
+                  "enableCheckButton": true,
+                  "instantFeedback": false
+                },
+                "scoreBarLabel": "You got :num out of :total points",
+                "a11yCheck": "Check the answers. The responses will be marked as correct, incorrect, or unanswered.",
+                "a11yShowSolution": "Show the solution. The task will be marked with its correct solution.",
+                "a11yRetry": "Retry the task. Reset all responses and start the task over again.",
+                "textField": "Example one - replace *this* with\nexample two - repplace *that* with"
+              },
+              "subContentId": "489a37da-ee16-4e0a-b71e-332a5c2435c2",
+              "metadata": {
+                "contentType": "Drag the Words",
+                "license": "U",
+                "title": "Untitled Drag the Words"
+              }
+            },
+            "alwaysDisplayComments": false,
+            "backgroundOpacity": 0,
+            "displayAsButton": false,
+            "buttonSize": "big",
+            "goToSlideType": "specified",
+            "invisible": false,
+            "solution": ""
+          }
+        ],
+        "slideBackgroundSelector": {}
+      }
+    ],
+    "keywordListEnabled": true,
+    "globalBackgroundSelector": {},
+    "keywordListAlwaysShow": false,
+    "keywordListAutoHide": false,
+    "keywordListOpacity": 100
+  },
+  "override": {
+    "activeSurface": false,
+    "hideSummarySlide": false,
+    "summarySlideSolutionButton": true,
+    "summarySlideRetryButton": true,
+    "enablePrintButton": false,
+    "social": {
+      "showFacebookShare": false,
+      "facebookShare": {
+        "url": "@currentpageurl",
+        "quote": "I scored @score out of @maxScore on a task at @currentpageurl."
+      },
+      "showTwitterShare": false,
+      "twitterShare": {
+        "statement": "I scored @score out of @maxScore on a task at @currentpageurl.",
+        "url": "@currentpageurl",
+        "hashtags": "h5p, course"
+      },
+      "showGoogleShare": false,
+      "googleShareUrl": "@currentpageurl"
+    }
+  },
+  "l10n": {
+    "slide": "Slide",
+    "slides": "Slides",
+    "score": "Score",
+    "yourScore": "Your Score",
+    "maxScore": "Max Score",
+    "total": "Total",
+    "totalScore": "Total Score",
+    "showSolutions": "Show solutions",
+    "retry": "Retry",
+    "exportAnswers": "Export text",
+    "hideKeywords": "Hide sidebar navigation menu",
+    "showKeywords": "Show sidebar navigation menu",
+    "fullscreen": "Fullscreen",
+    "exitFullscreen": "Exit fullscreen",
+    "prevSlide": "Previous slide",
+    "nextSlide": "Next slide",
+    "currentSlide": "Current slide",
+    "lastSlide": "Last slide",
+    "solutionModeTitle": "Exit solution mode",
+    "solutionModeText": "Solution Mode",
+    "summaryMultipleTaskText": "Multiple tasks",
+    "scoreMessage": "You achieved:",
+    "shareFacebook": "Share on Facebook",
+    "shareTwitter": "Share on Twitter",
+    "shareGoogle": "Share on Google+",
+    "summary": "Summary",
+    "solutionsButtonTitle": "Show comments",
+    "printTitle": "Print",
+    "printIngress": "How would you like to print this presentation?",
+    "printAllSlides": "Print all slides",
+    "printCurrentSlide": "Print current slide",
+    "noTitle": "No title",
+    "accessibilitySlideNavigationExplanation": "Use left and right arrow to change slide in that direction whenever canvas is selected.",
+    "accessibilityCanvasLabel": "Presentation canvas. Use left and right arrow to move between slides.",
+    "accessibilityProgressBarLabel": "Choose slide to display",
+    "containsNotCompleted": "@slideName contains not completed interaction",
+    "containsCompleted": "@slideName contains completed interaction",
+    "slideCount": "Slide @index of @total",
+    "containsOnlyCorrect": "@slideName only has correct answers",
+    "containsIncorrectAnswers": "@slideName has incorrect answers",
+    "resultHeader": "Results",
+    "amountCorrect": "@value \/ @max correct",
+    "amountCorrectAria": "@value out of @max correct",
+    "shareResult": "Share Result",
+    "accessibilityTotalScore": "You got @score of @maxScore points in total",
+    "accessibilityEnteredFullscreen": "Entered fullscreen",
+    "accessibilityExitedFullscreen": "Exited fullscreen",
+    "confirmDialogHeader": "Submit your answers",
+    "confirmDialogText": "This will submit your results, do you want to continue?",
+    "confirmDialogConfirmText": "Submit and see results",
+    "slideshowNavigationLabel": "Slideshow navigation",
+    "confirmDialogConfirmLabel": "Confirm",
+    "confirmDialogCancelLabel": "Cancel"
+  }
+}
