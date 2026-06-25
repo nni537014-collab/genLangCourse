@@ -28,18 +28,19 @@ export class BlanksGenerator implements ContentGenerator {
     const partInfo = parts.map((part, i) => {
       const ret = {
         length: 0,
-        endPunc: false,
-        startPunc: false
+        endOffset: 0,
+        startOffset: 0
       };
-      ret.length = part.length
       //@todo improve regex
-      if (part.match('/[,.?!:;]$/')) {
-        ret.endPunc = true;
-        ret.length -= 1;
-      } if (part.match('/^[,.?!:;]/')) {
-        ret.length -= 1;
-        ret.startPunc = true;
+      const end =  part.match(/[,.?!:;]+?$/);
+      if (end) {
+        ret.endOffset = end[0].length;
       }
+      const start = part.match(/^[,.?!:;]+/);
+      if (start) {
+        ret.startOffset = start[0].length;
+      }
+      ret.length =  part.length - ret.endOffset - ret.startOffset;
       if (longest.length < ret.length) {
         longest.length = ret.length;
         longest.index = i;
@@ -49,8 +50,15 @@ export class BlanksGenerator implements ContentGenerator {
     const partWrapper = (toWrap: string )=>{
 
     }
-    // wrap longest
-    parts[longest.index] = 
+    const part = parts[longest.index];
+    const info = partInfo[longest.index];
+    if(!part || !info) throw new Error("should never throw");
+    const start = part.slice(0, info.startOffset);
+    const middle = part.slice(info.startOffset, info.length + info.startOffset);
+    const end = part.slice(part.length - info.endOffset, part.length)
+    const wrapped = `${ start }*${ middle }*${ end }`;
+
+    return wrapped; 
 
   }
   getSupportedLibrary(): string {
