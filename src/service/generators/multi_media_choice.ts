@@ -5,7 +5,7 @@ import type {
   ContentGenerator,
 
 } from "./../../types/types.ts";
-import { audioFileName } from "./../utils.ts"
+import { audioFileName } from "../../utils/utils.ts"
 
 export class MultiMediaChoiceGenerator implements ContentGenerator {
   _question = {

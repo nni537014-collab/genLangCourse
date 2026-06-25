@@ -1,5 +1,5 @@
 import type { TranslationPair } from "./../../types/types.ts"
-import { audioDir, md5Filename } from "./../utils.ts"
+import { audioDir, md5Filename } from "../../utils/utils.ts"
 import { } from "./../../config.ts"
 import path from "path";
 import fs from "fs"

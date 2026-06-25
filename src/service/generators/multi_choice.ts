@@ -4,7 +4,7 @@ import type {
   ContentGenerator,
 
 } from "./../../types/types.ts";
-import { md5Filename } from "./../utils.ts"
+import { md5Filename } from "../../utils/utils.ts"
 
 export class MultiChoiceGenerator implements ContentGenerator {
   generate(base: TranslationPair[], template: JsonValue): JsonValue {

@@ -4,7 +4,7 @@ import type {
   ContentGenerator,
 
 } from "./../../types/types.ts";
-import { getAudioH5pRelativePath  } from "./../utils.ts"
+import { getAudioH5pRelativePath  } from "../../utils/utils.ts"
 
 export class DialogGenerator implements ContentGenerator {
   generate(base: TranslationPair[], template: JsonValue): JsonValue {

@@ -1,5 +1,5 @@
 import { createReadStream } from "fs";
-import { getAssetDictionaryPath } from "./utils.ts"
+import { getAssetDictionaryPath } from "../utils/utils.ts"
 import { createInterface } from "readline";
 import type {
     DictionaryEntry,

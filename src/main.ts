@@ -1,4 +1,4 @@
-import { clearPreviousGeneratedData } from "./service/utils.ts"
+import { clearPreviousGeneratedData } from "./utils/utils.ts"
 import { Dictionary } from "./service/dictionary.ts"
 import { PairsWordExpander } from "./service/pairsWordExpander.ts"
 import { loadStyle, Pairs, PairsFileReaderWriter } from "./service/pairs.ts"
