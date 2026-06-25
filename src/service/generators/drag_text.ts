@@ -5,9 +5,9 @@ import type {
 
 } from "./../../types/types.ts";
 import su from "../../utils/string.ts"
-
-import { md5Filename } from "../../utils/utils.ts"
-import { off } from "process";
+import { genRandomNumbers } from "../../utils/utils.ts"
+// import { md5Filename } from "../../utils/utils.ts"
+// import { off } from "process";
 
 export class DragTextGenerator implements ContentGenerator {
   generate(base: TranslationPair[], template: JsonValue): JsonValue[] {
@@ -35,13 +35,7 @@ export class DragTextGenerator implements ContentGenerator {
           parts.push(part);
           offset++;
         }
-        while (remainder > 0) {
-          remainder--;
-          //gen random numbers in range
-          if (!part) throw new Error("bad data");
-          parts.push(part);
-          offset++;
-        }
+        genRandomNumbers(remainder, 0, offset, )
       } else {
         const part1 = longBase[offset]
         const part2 = longBase[offset + 1]
