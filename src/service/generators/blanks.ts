@@ -27,7 +27,6 @@ export class BlanksGenerator implements ContentGenerator {
   wrapWithTags(input: string) {
     return `<p>${ input }</p>`
   }
-
   wrapLongestWord(input: string) {
     const parts = input.split(" ");
     let longest: { index: number, length: number } = {
