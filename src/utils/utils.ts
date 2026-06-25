@@ -104,6 +104,8 @@ export const genRandomNumbers = (
     if(upperLimit - lowerLimit - skip.length < count) throw new Error("not possible to generate solutions");
     if(upperLimit < 0 || lowerLimit < 0) throw new Error("positive limits required");
     const generated: number[] = [];
+    let repLimit = 10000; 
+    let repCount = 0;
     while (generated.length < count) {
         const candidate = Math.random() * (upperLimit - lowerLimit) + lowerLimit;
         if (!skip.includes(candidate)
@@ -111,5 +113,12 @@ export const genRandomNumbers = (
         ) {
            generated.push(candidate);
         }
+        if( ++repCount > repLimit){
+            throw new Error(`rep limit exceed, bad luck? 
+                upperLimit: ${ upperLimit } lowerLimit: ${ lowerLimit }
+                count: ${ count } skip length: ${skip.length}`)
+        }
+
     }
+    return generated;
 }
