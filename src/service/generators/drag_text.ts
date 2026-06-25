@@ -7,6 +7,7 @@ import type {
 import su from "../../utils/string.ts"
 
 import { md5Filename } from "../../utils/utils.ts"
+import { off } from "process";
 
 export class DragTextGenerator implements ContentGenerator {
   generate(base: TranslationPair[], template: JsonValue): JsonValue[] {
@@ -17,24 +18,39 @@ export class DragTextGenerator implements ContentGenerator {
     */
 
     const longBase = base.filter(tp => (tp.translation.length < 4));
-    const remainder = 3 - (longBase.length % 3)
+    let remainder = 3 - (longBase.length % 3);
+    let lastAvailIndexes = 3 - remainder;
     const numberOfLoops = Math.floor(longBase.length / 3);
     const ret: JsonValue[] = [];
-    for (let i = 0; i < longBase.length; i += 3) {
+    for (let i = 0; i < longBase.length; i++) {
+      let offset = i * 3;
       let lastRun = false;
       const templInst = structuredClone(template) as any;
-      if (i + 2 >= longBase.length) {
-        lastRun = true;
+      if (i > numberOfLoops) {
+        const parts: TranslationPair[] = [];
+        while (lastAvailIndexes > 0) {
+          lastAvailIndexes--;
+          const part = longBase[offset];
+          if (!part) throw new Error("bad data");
+          parts.push(part);
+          offset++;
+        }
+        while (remainder > 0) {
+          remainder--;
+          //gen random numbers in range
+          if (!part) throw new Error("bad data");
+          parts.push(part);
+          offset++;
+        }
       } else {
-
-        const part1 = longBase[i]
-        const part2 = longBase[i + 1]
-        const part3 = longBase[i + 2]
+        const part1 = longBase[offset]
+        const part2 = longBase[offset + 1]
+        const part3 = longBase[offset + 2]
         if (part1 && part2 && part3) {
 
 
-          templInst.textField = 
-`${su.wrapLongestWord(part1.translation)}
+          templInst.textField =
+            `${su.wrapLongestWord(part1.translation)}
 ${su.wrapLongestWord(part2.translation)}
 ${su.wrapLongestWord(part3.translation)}`
           ret.push(templInst);

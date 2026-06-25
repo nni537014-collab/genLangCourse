@@ -1,4 +1,4 @@
-import { ContentGenerator, JsonValue, TranslationPair } from "./../../types/types"
+import type { ContentGenerator, JsonValue, TranslationPair } from "./../../types/types.ts"
 
 class CoursePresentationGenerator implements ContentGenerator {
   actionLibraryRenderers:  ContentGenerator[];

@@ -15,6 +15,7 @@ import { readFileSync } from "fs"
 import { fileURLToPath } from "url";
 import { createHash } from "crypto";
 import type { JsonValue, ContentGenerator } from "../types/types.ts";
+import { hasUncaughtExceptionCaptureCallback } from "process";
 
 
 const __filename = fileURLToPath(import.meta.url);
@@ -51,17 +52,17 @@ export function generatorTemplateFinder(supportedLibrary: string) {
 export function md5Filename(input: string): string {
     return createHash("md5").update(input).digest("hex");
 }
-export function audioFileName(input: string){
+export function audioFileName(input: string) {
     return `${md5Filename(input)}.mp3`
 }
-export function getAudioPath(input:string){
+export function getAudioPath(input: string) {
     return path.join(
         audioDir(),
         audioFileName(input)
     )
-    
+
 }
-export function getAudioH5pRelativePath(input: string){
+export function getAudioH5pRelativePath(input: string) {
     return path.join(
         "audio",
         audioFileName(input)
@@ -94,4 +95,21 @@ export const getAssetDictionaryPath = () => {
 }
 const getBasePath = () => {
     return path.resolve(__dirname, "../../");
+}
+export const genRandomNumbers = (
+    count: number,
+    lowerLimit: number,
+    upperLimit: number,
+    skip: number[]) => {
+    if(upperLimit - lowerLimit - skip.length < count) throw new Error("not possible to generate solutions");
+    if(upperLimit < 0 || lowerLimit < 0) throw new Error("positive limits required");
+    const generated: number[] = [];
+    while (generated.length < count) {
+        const candidate = Math.random() * (upperLimit - lowerLimit) + lowerLimit;
+        if (!skip.includes(candidate)
+            && !generated.includes(candidate)
+        ) {
+           generated.push(candidate);
+        }
+    }
 }
