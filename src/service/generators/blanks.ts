@@ -21,8 +21,7 @@ export class BlanksGenerator implements ContentGenerator {
   generateBlank(tp: TranslationPair) {
     //find longest word start and wrap in **
     
-    this.wrapWithTags(this.wrapLongestWord(tp.translation));
-    return wrapped;
+    return this.wrapWithTags(this.wrapLongestWord(tp.translation));
 
   }
   wrapWithTags(input: string) {
