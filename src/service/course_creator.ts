@@ -2,6 +2,7 @@ import type {
     courseGenConfig,
     ContentGenerator,
     TranslationPair,
+    Writer,
     
 } from "../types/types.ts";
 import  {
@@ -46,17 +47,18 @@ export class CourseCreator {
     //    call generators
   }
   runGenerators(chunk: TranslationPair[]) {
-    this._contentGenerator.forEach((generator) => {
+    this._contentGenerator.forEach((generator, index) => {
         const writer = this.getWriter(generator); 
         const generated = generator.generate(
             chunk, 
-            generatorTemplateFinder(generator.getSupportedLibrary()).content) 
-            writer.write(generated);
+            generatorTemplateFinder(generator.getSupportedLibrary())
+        .content) 
+        writer.write(generated, index);
         
-        });
+    });
 
   }
-    getWriter(generator: ContentGenerator) {
+    getWriter(generator: ContentGenerator): Writer {
         throw new Error("Method not implemented.");
     }
   chunkPairs() {

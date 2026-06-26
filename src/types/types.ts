@@ -7,6 +7,15 @@ export interface ContentGenerator {
   generate(base: TranslationPair[], template: JsonValue):JsonValue | JsonValue[]
   getSupportedLibrary(): string;
 }
+
+export const writeError = {
+    NO_ERROR: "NO_ERROR",
+    ERROR: "ERROR"
+} as const;
+export type WriteError = typeof writeError[keyof typeof writeError]; 
+export interface Writer{
+    write(generated: JsonValue, index: number):WriteError
+}
 export const loadStyle = {
     LOAD_INITIAL: "LOAD_INITIAL",
     LOAD_FROM_DISK: "LOAD_FROM_DISK"
