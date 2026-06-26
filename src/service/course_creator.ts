@@ -1,7 +1,11 @@
 import type {
     courseGenConfig,
     ContentGenerator,
-    TranslationPair
+    TranslationPair,
+    
+} from "../types/types.ts";
+import  {
+    loadStyle
 } from "../types/types.ts";
 import { PairsWordExpander } from "./pairsWordExpander.ts";
 //@todo move pairsfilereaderwriter

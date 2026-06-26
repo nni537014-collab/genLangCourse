@@ -1,5 +1,6 @@
 import { readFileSync } from "fs";
-import type { TranslationPair } from "../types/types.ts";
+import type { TranslationPair, LoadStyle } from "../types/types.ts";
+import { loadStyle } from "../types/types.ts";
 import { getAssetPairsPath } from "../utils/utils.ts";
 import { PairsWordExpander } from "./pairsWordExpander.ts"
 import path from "path";
@@ -11,11 +12,6 @@ import { dirname } from 'path';
 const __filename = fileURLToPath(import.meta.url);
 // 2. Extract the directory name from the file path
 const __dirname = path.dirname(__filename);
-export const loadStyle = {
-    LOAD_INITIAL: "LOAD_INITIAL",
-    LOAD_FROM_DISK: "LOAD_FROM_DISK"
-} as const;
-export type LoadStyle = typeof loadStyle[keyof typeof loadStyle]
 
 export type PairsFileWriterConfig = {
     dir?: string;
@@ -173,3 +169,5 @@ export class Pairs {
         return this._pairs;
     }
 }
+export { loadStyle };
+

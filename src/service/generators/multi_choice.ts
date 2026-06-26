@@ -112,7 +112,7 @@ export class MultiChoiceGenerator implements ContentGenerator {
       if (!tpWrong) throw new Error("bad data");
       const wrong = structuredClone(ansTempl) as { correct: boolean, text: string };
       wrong.correct = false;
-      wrong.text = `<div>${ tpWrong.translation }</div>`;
+      wrong.text = `<div>${tpWrong.translation}</div>`;
       ret.push(wrong);
     }
     return ret;

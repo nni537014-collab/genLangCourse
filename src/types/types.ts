@@ -7,6 +7,12 @@ export interface ContentGenerator {
   generate(base: TranslationPair[], template: JsonValue):JsonValue | JsonValue[]
   getSupportedLibrary(): string;
 }
+export const loadStyle = {
+    LOAD_INITIAL: "LOAD_INITIAL",
+    LOAD_FROM_DISK: "LOAD_FROM_DISK"
+} as const;
+export type LoadStyle = typeof loadStyle[keyof typeof loadStyle]
+
 export type courseGenConfig = {
   assetDirectoryName: string;
   outDirectoryName: string;
