@@ -10,6 +10,7 @@ import  {
 import { PairsWordExpander } from "./pairsWordExpander.ts";
 //@todo move pairsfilereaderwriter
 import { Pairs, PairsFileReaderWriter } from "./pairs.ts";
+import { generatorTemplateFinder } from "../utils/utils.ts"
 export class CourseCreator {
   _config: courseGenConfig;
   _contentGenerator: ContentGenerator[];
@@ -45,9 +46,19 @@ export class CourseCreator {
     //    call generators
   }
   runGenerators(chunk: TranslationPair[]) {
-    this._contentGenerator.forEach((generator) => { generator.generate(chunk, generatorTemplateFinder(generator)) })
-    throw new Error("Method not implemented.");
+    this._contentGenerator.forEach((generator) => {
+        const writer = this.getWriter(generator); 
+        const generated = generator.generate(
+            chunk, 
+            generatorTemplateFinder(generator.getSupportedLibrary()).content) 
+            writer.write(generated);
+        
+        });
+
   }
+    getWriter(generator: ContentGenerator) {
+        throw new Error("Method not implemented.");
+    }
   chunkPairs() {
     const data = this._pairs.getPairs();
     let i = 0;

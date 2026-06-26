@@ -21,14 +21,24 @@ import { hasUncaughtExceptionCaptureCallback } from "process";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const utilsToBase = "../../";
-export function generatorTemplateFinder(supportedLibrary: string) {
 
+export function generatorWriterFinder(generator: ContentGenerator){
+    const libraryName = getLibraryName(generator.getSupportedLibrary());
+    //@todo    
+}
+function getLibraryName(input: string){
+    const name = input.trim().split(" ")[0];
+    if(!name || name.length < 1) throw new Error("bad input");
+    return name;
+}
+export function generatorTemplateFinder(supportedLibrary: string) {
+    const libraryName = getLibraryName(supportedLibrary);
     const templPath = path.join(
         __dirname,
         utilsToBase,
         assetsDirName,
         h5pAssetsDirName,
-        supportedLibrary
+        libraryName
     );
     const h5pJsonPath = path.join(
         templPath,
