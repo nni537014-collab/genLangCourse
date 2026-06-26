@@ -7,7 +7,11 @@ export interface ContentGenerator {
   generate(base: TranslationPair[], template: JsonValue):JsonValue | JsonValue[]
   getSupportedLibrary(): string;
 }
-
+export type courseGenConfig = {
+  assetDirectoryName: string;
+  outDirectoryName: string;
+  chunkSize: number;
+}
 
 export type DictionaryTranslation = {
     word: string,
