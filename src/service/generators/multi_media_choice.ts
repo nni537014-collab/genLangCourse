@@ -24,10 +24,10 @@ export class MultiMediaChoiceGenerator implements ContentGenerator {
      return template;
   }
   generateMedia(tp: TranslationPair, template: JsonValue, type: "source"|"translation"): JsonValue{
-  
+         
          (template as any).subContentId = randomUUID(); //@todo check function - utils?
          (template as any).params.files = [{
-                          "path": this.generateFilePath(tp.source),
+                          "path": this.generateFilePath(tp[type]),
                           "mime": "audio\/mpeg",
                           "copyright": { "license": "U" }
                         }]
@@ -78,17 +78,11 @@ export class MultiMediaChoiceGenerator implements ContentGenerator {
 
     for(let i = 0; i < optionBaseIndexes.length; i++){
       const current = base[i];
-      if(!current) throw new Error("bad pairs") 
-      const media = {
-        params: this.generateMedia(
-          current,
-          structuredClone(mediaTempl),
-          "translation"
-      ) }
+      if(!current) throw new Error("bad pairs")
       ret.push({
         media:this.generateMedia(
             current,
-            mediaTempl.media,
+            structuredClone(mediaTempl.media),
             "translation"),
         correct: (i === 0)
       })
