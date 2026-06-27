@@ -1,5 +1,4 @@
 import { writeError, type JsonValue, type WriteError, type Writer } from "../../types/types.ts"
-writeError.ERROR;
 
 export class BlanksWriter implements Writer {
   constructor(public writeDirName: string){

@@ -4,8 +4,8 @@ import type {
   JsonValue,
   ContentGenerator,
 
-} from "./../../types/types.ts";
-import { audioFileName } from "../../utils/utils.ts"
+} from "../../../types/types.ts";
+import { audioFileName } from "../../../utils/utils.ts"
 
 export class MultiMediaChoiceGenerator implements ContentGenerator {
   _question = {

@@ -4,14 +4,31 @@ export type JsonObject = { [key: string]: JsonValue };
 
 export type JsonValue = JsonPrimitive | JsonValue[] | JsonObject;
 
-interface Generator{
+export type LibraryNames = "H5P.Blanks"
+    | "H5P.MultiMediaChoice"
+    | "H5P.Dialogcards"
+    | "H5P.SingleChoiceSet"
+    | "H5P.MultiChoice"
+    | "H5P.MultiMediaChoice"
+    | "H5P.DragText";
+const libraryNames = [
+    "H5P.Blanks",
+    "H5P.MultiMediaChoice",
+    "H5P.Dialogcards",
+    "H5P.SingleChoiceSet",
+    "H5P.MultiChoice",
+    "H5P.MultiMediaChoice",
+    "H5P.DragText"
+] as const satisfies readonly LibraryNames[];
+
+interface Generator {
     getSupportedLibrary(): string;
 }
-export interface ContentGenerator extends Generator{
+export interface ContentGenerator extends Generator {
     generate(base: TranslationPair[], template: JsonValue): JsonValue | JsonValue[]
 
 }
-export interface H5pGenerator extends Generator{
+export interface H5pGenerator extends Generator {
     generate(index: number, template: JsonValue): JsonValue | JsonValue[]
 
 }
@@ -20,15 +37,15 @@ export const writeError = {
     NO_ERROR: "NO_ERROR",
     ERROR: "ERROR"
 } as const;
-export type WriteError = typeof writeError[keyof typeof writeError]; 
-export interface Writer{
+export type WriteError = typeof writeError[keyof typeof writeError];
+export interface Writer {
     writeDirName: string;
-    write(content: JsonValue, h5p: JsonValue, index: number):WriteError
+    write(content: JsonValue, h5p: JsonValue, index: number): WriteError
 }
 export type GenSet = {
-   content: ContentGenerator;
-   h5p: H5pGenerator;
-   writer: Writer;
+    content: ContentGenerator;
+    h5p: H5pGenerator;
+    writer: Writer;
 }
 export const loadStyle = {
     LOAD_INITIAL: "LOAD_INITIAL",
@@ -37,9 +54,9 @@ export const loadStyle = {
 export type LoadStyle = typeof loadStyle[keyof typeof loadStyle]
 
 export type courseGenConfig = {
-  assetDirectoryName: string;
-  outDirectoryName: string;
-  chunkSize: number;
+    assetDirectoryName: string;
+    outDirectoryName: string;
+    chunkSize: number;
 }
 
 export type DictionaryTranslation = {
@@ -86,10 +103,10 @@ export type SingleCoiceTranslationPairs = {
     wrong: TranslationPair[];
 }
 export type MultiMediaChoice = {
-  correct: TranslationPair;
-  correctAudio: TranslationPairAudioName;
-  wrong: TranslationPair[];
-  wrongAudio: TranslationPairAudioName[]; 
+    correct: TranslationPair;
+    correctAudio: TranslationPairAudioName;
+    wrong: TranslationPair[];
+    wrongAudio: TranslationPairAudioName[];
 }
 export type blankWordsIncluded = Set<string>;
 export type SingleCoiceTranslationPairsChunk = SingleCoiceTranslationPairs[];

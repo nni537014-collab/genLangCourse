@@ -3,7 +3,7 @@ import type {
   JsonValue,
   ContentGenerator as ContentGenerator,
  
-} from "./../../types/types.ts";
+} from "../../../types/types.ts";
 import { randomUUID } from "crypto";
 
 

@@ -3,9 +3,9 @@ import type {
   JsonValue,
   ContentGenerator,
 
-} from "./../../types/types.ts";
-import su from "../../utils/string.ts"
-import { genRandomNumbers } from "../../utils/utils.ts"
+} from "../../../types/types.ts";
+import su from "../../../utils/string.ts"
+import { genRandomNumbers } from "../../../utils/utils.ts"
 // import { md5Filename } from "../../utils/utils.ts"
 // import { off } from "process";
 

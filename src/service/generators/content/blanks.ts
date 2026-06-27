@@ -3,9 +3,9 @@ import type {
   JsonValue,
   ContentGenerator,
 
-} from "./../../types/types.ts";
+} from "../../../types/types.ts";
 // import { md5Filename } from "../../utils/utils.ts"
-import su from "../../utils/string.ts"
+import su from "../../../utils/string.ts"
 
 export class BlanksGenerator implements ContentGenerator {
     /**

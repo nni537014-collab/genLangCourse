@@ -3,10 +3,10 @@ import type {
   JsonValue,
   ContentGenerator,
 
-} from "./../../types/types.ts";
-import { getAudioH5pRelativePath  } from "../../utils/utils.ts"
+} from "../../../types/types.ts";
+import { getAudioH5pRelativePath  } from "../../../utils/utils.ts"
 
-export class DialogGenerator implements ContentGenerator {
+export class DialogCardsGenerator implements ContentGenerator {
   generate(base: TranslationPair[], template: JsonValue): JsonValue {
       if(template === null) throw new Error();
       (template as any).dialogs = this.createDialogs(base);

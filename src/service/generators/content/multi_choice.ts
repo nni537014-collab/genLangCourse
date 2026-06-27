@@ -3,8 +3,8 @@ import type {
   JsonValue,
   ContentGenerator,
 
-} from "./../../types/types.ts";
-import { md5Filename, getAudioH5pRelativePath, genRandomNumbers, } from "../../utils/utils.ts"
+} from "../../../types/types.ts";
+import { md5Filename, getAudioH5pRelativePath, genRandomNumbers, } from "../../../utils/utils.ts"
 import { error } from "console";
 
 export class MultiChoiceGenerator implements ContentGenerator {
