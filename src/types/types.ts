@@ -7,6 +7,10 @@ export interface ContentGenerator {
   generate(base: TranslationPair[], template: JsonValue):JsonValue | JsonValue[]
   getSupportedLibrary(): string;
 }
+export interface H5pGenerator {
+    generate(base: TranslationPair[], template: JsonValue): JsonValue | JsonValue[]
+    getSupportedLibrary(): string;
+}
 
 export const writeError = {
     NO_ERROR: "NO_ERROR",
@@ -14,7 +18,7 @@ export const writeError = {
 } as const;
 export type WriteError = typeof writeError[keyof typeof writeError]; 
 export interface Writer{
-    _writeDirName: string;
+    writeDirName: string;
     write(generated: JsonValue, index: number):WriteError
 }
 export const loadStyle = {

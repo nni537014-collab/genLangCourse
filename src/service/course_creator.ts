@@ -51,7 +51,7 @@ export class CourseCreator {
         const writer = this.getWriter(generator); 
         const generated = generator.generate(
             chunk, 
-            generatorTemplateFinder(generator.getSupportedLibrary())
+            generatorTemplateFinder(generator.getSupportedLibrary()).content
         .content) 
         writer.write(generated, index);
         
