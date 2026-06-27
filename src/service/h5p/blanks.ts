@@ -2,9 +2,9 @@ import type { H5pGenerator, JsonValue, TranslationPair } from "../../types/types
 
 export class BlankH5pGenerator implements H5pGenerator{
     getSupportedLibrary(): string {
-        return "";
+        return "H5p.Blanks";
     }
-    generate(base: TranslationPair[], template: JsonValue): JsonValue | JsonValue[] {
-        return false;
+    generate(template: JsonValue): JsonValue | JsonValue[] {
+        return template;
     }
 }

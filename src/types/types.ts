@@ -3,13 +3,17 @@ export type JsonPrimitive = string | number | boolean | null;
 export type JsonObject = { [key: string]: JsonValue };
 
 export type JsonValue = JsonPrimitive | JsonValue[] | JsonObject;
-export interface ContentGenerator {
-  generate(base: TranslationPair[], template: JsonValue):JsonValue | JsonValue[]
-  getSupportedLibrary(): string;
-}
-export interface H5pGenerator {
-    generate(base: TranslationPair[], template: JsonValue): JsonValue | JsonValue[]
+
+interface Generator{
     getSupportedLibrary(): string;
+}
+export interface ContentGenerator extends Generator{
+    generate(base: TranslationPair[], template: JsonValue): JsonValue | JsonValue[]
+
+}
+export interface H5pGenerator extends Generator{
+    generate(index: number, template: JsonValue): JsonValue | JsonValue[]
+
 }
 
 export const writeError = {
@@ -19,7 +23,12 @@ export const writeError = {
 export type WriteError = typeof writeError[keyof typeof writeError]; 
 export interface Writer{
     writeDirName: string;
-    write(generated: JsonValue, index: number):WriteError
+    write(content: JsonValue, h5p: JsonValue, index: number):WriteError
+}
+export type GenSet = {
+   content: ContentGenerator;
+   h5p: H5pGenerator;
+   writer: Writer;
 }
 export const loadStyle = {
     LOAD_INITIAL: "LOAD_INITIAL",

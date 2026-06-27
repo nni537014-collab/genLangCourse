@@ -1,12 +1,12 @@
 import type {
-    courseGenConfig,
-    ContentGenerator,
-    TranslationPair,
-    Writer,
-    
+  courseGenConfig,
+  ContentGenerator,
+  TranslationPair,
+  Writer,
+  GenSet
 } from "../types/types.ts";
-import  {
-    loadStyle
+import {
+  loadStyle
 } from "../types/types.ts";
 import { PairsWordExpander } from "./pairsWordExpander.ts";
 //@todo move pairsfilereaderwriter
@@ -14,7 +14,7 @@ import { Pairs, PairsFileReaderWriter } from "./pairs.ts";
 import { generatorTemplateFinder } from "../utils/utils.ts"
 export class CourseCreator {
   _config: courseGenConfig;
-  _contentGenerator: ContentGenerator[];
+  _genSets: GenSet[];
   /**
    * this structure is data that will be passed to generators
    */
@@ -28,15 +28,19 @@ export class CourseCreator {
   static async create(config: courseGenConfig) {
     return new CourseCreator(
       config,
-      [],
-      await CourseCreator.prepareBaseDataFromAssets()
+      await CourseCreator.prepareBaseDataFromAssets(),
+      []
     );
   }
-  constructor(config: courseGenConfig, contentGenerators: ContentGenerator[], pairs: Pairs) {
+  constructor(
+    config: courseGenConfig,
+    pairs: Pairs,
+    genSets: GenSet[]
+  ) {
     this._config = config;
     this._pairs = pairs;
     this.chunkPairs();
-    this._contentGenerator = contentGenerators;
+    this._genSets = genSets;
     for (let i = 0; i < this._pairsChunks.length; i++) {
       const chunk = this._pairsChunks[i];
       if (chunk) {
@@ -47,20 +51,28 @@ export class CourseCreator {
     //    call generators
   }
   runGenerators(chunk: TranslationPair[]) {
-    this._contentGenerator.forEach((generator, index) => {
-        const writer = this.getWriter(generator); 
-        const generated = generator.generate(
-            chunk, 
-            generatorTemplateFinder(generator.getSupportedLibrary()).content
-        .content) 
-        writer.write(generated, index);
-        
-    });
+
+    this._genSets.forEach((genSet, index) => {
+      const templates = generatorTemplateFinder(
+        genSet.content.getSupportedLibrary()
+      ) 
+      const content = genSet.content.generate(
+        chunk,
+        templates.content
+      );
+      const h5p = genSet.h5p.generate(
+        templates.h5p,
+        index
+      );
+      genSet.writer.write(content, h5p,  index);
+      //logging?
+      //data structure for created h5p's for later report rendering
+    })
 
   }
-    getWriter(generator: ContentGenerator): Writer {
-        throw new Error("Method not implemented.");
-    }
+  getWriter(generator: ContentGenerator): Writer {
+    throw new Error("Method not implemented.");
+  }
   chunkPairs() {
     const data = this._pairs.getPairs();
     let i = 0;
