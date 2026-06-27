@@ -14,6 +14,7 @@ export const writeError = {
 } as const;
 export type WriteError = typeof writeError[keyof typeof writeError]; 
 export interface Writer{
+    _writeDirName: string;
     write(generated: JsonValue, index: number):WriteError
 }
 export const loadStyle = {

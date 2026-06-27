@@ -9,7 +9,8 @@ import {
     h5pJsonFileName,
     h5pContentDir,
     h5pContentFileName,
-    h5pAudioDirName
+    h5pAudioDirName,
+    writeDirName
 } from "../config.ts"
 import { readFileSync } from "fs"
 import { fileURLToPath } from "url";
@@ -96,6 +97,9 @@ export const getAssetPairsPath = () => {
 
 const getOutPath = () => {
     return path.join(getBasePath(), outDirName)
+}
+export const getWritePath = () => {
+    return path.join(getOutPath(), writeDirName);
 }
 const getAssetsPath = () => {
     return path.join(getBasePath(), assetsDirName)
