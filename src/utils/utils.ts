@@ -12,17 +12,25 @@ import {
     h5pAudioDirName,
     writeDirName
 } from "../config.ts"
-import { readFileSync } from "fs"
+import { readFileSync } from "fs";
+import fs from "fs";
+
 import { fileURLToPath } from "url";
 import { createHash } from "crypto";
-import type { JsonValue, ContentGenerator } from "../types/types.ts";
-import { hasUncaughtExceptionCaptureCallback } from "process";
+import type { JsonValue, ContentGenerator, LibraryNames } from "../types/types.ts";
 
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const utilsToBase = "../../";
-
+export function h5pWrite(
+    generated: JsonValue,
+    h5p: JsonValue,
+    index: number,
+    libraryName: LibraryNames
+){
+   fs.
+}
 export function generatorWriterFinder(generator: ContentGenerator){
     const libraryName = getLibraryName(generator.getSupportedLibrary());
     //@todo    
