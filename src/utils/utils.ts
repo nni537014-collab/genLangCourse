@@ -1,4 +1,10 @@
-import { rmSync } from "fs"
+import {
+    mkdirSync,
+    rmSync,
+    readFileSync,
+    writeFileSync,
+    type PathLike
+} from "fs"
 import path from "path"
 import {
     outDirName,
@@ -12,8 +18,6 @@ import {
     h5pAudioDirName,
     writeDirName
 } from "../config.ts"
-import { readFileSync } from "fs";
-import fs from "fs";
 
 import { fileURLToPath } from "url";
 import { createHash } from "crypto";
@@ -24,12 +28,24 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const utilsToBase = "../../";
 export function h5pWrite(
-    generated: JsonValue,
+    content: JsonValue,
     h5p: JsonValue,
     index: number,
     libraryName: LibraryNames
 ){
-   fs.
+    const writeAllPath = path.join(getWritePath(), libraryName); 
+    const writePath = path.join(writeAllPath, `${ libraryName }${ index }`);
+    const h5pFilePath = path.join(writePath, "h5p.json");
+    const contentFolderPath = path.join(writePath, "content");
+    const contentFilePath = path.join(contentFolderPath, "content.json"); 
+    mkdirSync(contentFolderPath, { recursive: true});
+    writeFileSync(h5pFilePath, JSON.stringify(h5p));
+    writeFileSync(contentFilePath, JSON.stringify(content));   
+    h5pFolderToArchive(writePath, index, libraryName);
+}
+export function h5pFolderToArchive(folderPath: string, index: number, libraryName: LibraryNames){
+    //@todo
+    const h5pArchivePath = path.join(folderPath);
 }
 export function generatorWriterFinder(generator: ContentGenerator){
     const libraryName = getLibraryName(generator.getSupportedLibrary());
