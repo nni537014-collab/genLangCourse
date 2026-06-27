@@ -27,7 +27,7 @@ export function createGenSet(libraryName: LibraryNames) {
         case "H5P.MultiMediaChoice":
             genSet = {
                 content: new MultiMediaChoiceGenerator(),
-                h5p: new H5pGenerator(),
+                h5p: new MultiMediaChoiceH5pGenerator(),
                 writer: new MultiMediaChoiceWriter(getWritePath()),
             }
             break;
