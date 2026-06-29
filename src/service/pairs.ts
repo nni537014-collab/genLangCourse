@@ -1,7 +1,7 @@
 import { readFileSync } from "fs";
 import type { TranslationPair, LoadStyle } from "../types/types.ts";
 import { loadStyle } from "../types/types.ts";
-import { getAssetPairsPath, paths } from "../utils/utils.ts";
+import {  paths } from "../utils/utils.ts";
 import { PairsWordExpander } from "./pairsWordExpander.ts"
 import path from "path";
 import { fileURLToPath } from 'node:url';
