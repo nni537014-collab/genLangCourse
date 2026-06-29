@@ -1,7 +1,7 @@
 import { readFileSync } from "fs";
 import type { TranslationPair, LoadStyle } from "../types/types.ts";
 import { loadStyle } from "../types/types.ts";
-import {  paths } from "../utils/utils.ts";
+import { paths } from "../utils/utils.ts";
 import { PairsWordExpander } from "./pairsWordExpander.ts"
 import path from "path";
 import { fileURLToPath } from 'node:url';
@@ -25,28 +25,28 @@ export class PairsFileReaderWriter {
             name = "pairs.json"
         } = config;
         if (config.dir && config.name)
-            this._writePath = path.join(__dirname,"../../", config.dir, config.name);
-        else 
+            this._writePath = path.join(__dirname, "../../", config.dir, config.name);
+        else
             throw new Error("bad config");
     }
-    writeJSON(pairs: TranslationPair[]){
+    writeJSON(pairs: TranslationPair[]) {
         let success = true;
         try {
             const dir = dirname(this._writePath);
-    
-    // Recursively create directory (does nothing if it already exists)
-           mkdirSync(dir, { recursive: true });
 
-           writeFileSync(this._writePath, JSON.stringify(pairs), 'utf-8')
+            // Recursively create directory (does nothing if it already exists)
+            mkdirSync(dir, { recursive: true });
+
+            writeFileSync(this._writePath, JSON.stringify(pairs), 'utf-8')
         } catch (error) {
-           success = false;
-           console.warn((error as Error).message);
+            success = false;
+            console.warn((error as Error).message);
         }
 
         console.log(this._writePath, success); process.exit();
         return success;
     }
-    readJSON():[boolean, TranslationPair[]] {
+    readJSON(): [boolean, TranslationPair[]] {
         let success = true;
         let pairs: TranslationPair[] = [];
         try {
@@ -54,42 +54,42 @@ export class PairsFileReaderWriter {
         } catch (error) {
             //@todo error logging
             success = false;
-           console.warn((error as Error).message);
+            console.warn((error as Error).message);
         }
         return [success, pairs];
     }
-    readTxt():[boolean, TranslationPair[]]{
+    readTxt(): [boolean, TranslationPair[]] {
         let success = true;
         // read whole file as UTF‑8 text
         let pairs: TranslationPair[] = [];
-        try{
+        try {
             const raw = readFileSync(paths.getAssetPairs(), "utf8");
 
-        // split into lines (handles Windows + Linux newlines)
-        const lines = raw.split(/\r?\n/);
+            // split into lines (handles Windows + Linux newlines)
+            const lines = raw.split(/\r?\n/);
 
-        // skip first 2 lines
-        const data = lines.slice(2)
-            .filter(Boolean);
+            // skip first 2 lines
+            const data = lines.slice(2)
+                .filter(Boolean);
 
-        pairs = data.map<TranslationPair>((line: string) => {
-            const [source, translation] = line.split("\t");
+            pairs = data.map<TranslationPair>((line: string) => {
+                const [source, translation] = line.split("\t");
 
-            return {
-                source: source?.trim() ?? "",
-                translation: translation?.trim() ?? ""
-            };
-        })
-            .filter(pair =>
-                pair.source.length > 0 &&
-                pair.translation.length > 0
-            )
-         } catch (error){
-             success = false;
-             console.warn((error as Error).message);
-         }
-         return [success, pairs];   
-        
+                return {
+                    source: source?.trim() ?? "",
+                    translation: translation?.trim() ?? ""
+                };
+            })
+                .filter(pair =>
+                    pair.source.length > 0 &&
+                    pair.translation.length > 0
+                )
+        } catch (error) {
+            success = false;
+            console.warn((error as Error).message);
+        }
+        return [success, pairs];
+
     }
 }
 export class Pairs {
@@ -99,72 +99,72 @@ export class Pairs {
     constructor(expander: PairsWordExpander, load: LoadStyle, readerWriter: PairsFileReaderWriter) {
         // loads pairs and writes to disk
         const writePairsToDisk = (pairs: TranslationPair[]) => {
-        return readerWriter.writeJSON(pairs);
-    }
-        const loadCreatedPairs = (): TranslationPair[] | undefined => {
-        const [success, pairs] = readerWriter.readJSON();
-        if(success){
-            return pairs;
+            return readerWriter.writeJSON(pairs);
         }
-        return;
-    }
+        const loadCreatedPairs = (): TranslationPair[] | undefined => {
+            const [success, pairs] = readerWriter.readJSON();
+            if (success) {
+                return pairs;
+            }
+            return;
+        }
 
         const loadRawPairs = () => {
 
-        const [sucess, pairs] = readerWriter.readTxt();
-        if(sucess){
-            this._expander.expand(pairs);
-            return pairs;
-            
-        }
-    }
+            const [sucess, pairs] = readerWriter.readTxt();
+            if (sucess) {
+                this._expander.expand(pairs);
+                return pairs;
 
-        const loadInitial = ()=> {
-            const rawPairs = loadRawPairs();
-            if(rawPairs){
-                writePairsToDisk(rawPairs);
-                return rawPairs;    
             }
-            
+        }
+
+        const loadInitial = () => {
+            const rawPairs = loadRawPairs();
+            if (rawPairs) {
+                writePairsToDisk(rawPairs);
+                return rawPairs;
+            }
+
         }
         this._expander = expander;
         this._readerWriter = readerWriter;
         let p: TranslationPair[] | undefined;
-         switch (load) {
+        switch (load) {
             case loadStyle.LOAD_INITIAL:
                 console.log("loading initial");
                 p = loadInitial();
-                if(p){
-                    this._pairs = p;              
+                if (p) {
+                    this._pairs = p;
                 } else {
                     throw Error("load");
                 }
-                                // this.writePairsToDisk();
+                // this.writePairsToDisk();
                 //@todo 
                 //stringify
                 // write to disk
                 break;
             case loadStyle.LOAD_FROM_DISK:
                 console.log("creating from json")
-                p = loadCreatedPairs(); 
-                if(p)
+                p = loadCreatedPairs();
+                if (p)
                     this._pairs = p;
                 else
                     console.log("load from disk failed, loading initial");;;
-                    p = loadInitial()
-                    if (p)
-                         this._pairs = p;
-                    else {
-                        throw new Error("load from disk");
-                    }
+                p = loadInitial()
+                if (p)
+                    this._pairs = p;
+                else {
+                    throw new Error("load from disk");
+                }
             default:
-                   throw new Error("load not specificied correctly");
-            }
+                throw new Error("load not specificied correctly");
+        }
 
     }
-        
 
-    
+
+
     getPairs() {
         return this._pairs;
     }

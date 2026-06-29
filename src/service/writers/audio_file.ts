@@ -1,8 +1,9 @@
 import type { TranslationPair } from "./../../types/types.ts"
-import { audioDir, md5Filename, paths } from "../../utils/utils.ts"
-import { } from "./../../config.ts"
-import path from "path";
+import { paths } from "../../utils/utils.ts"
 import fs from "fs"
+import say from "say";
+import { execSync } from "child_process";
+
 class AudioFileCreator {
     completed: TranslationPair[] = [];
     _base: TranslationPair[];
@@ -13,21 +14,21 @@ class AudioFileCreator {
         this._base.forEach(this.produceFile)
     }
     produceFile(tp: TranslationPair) {
-        const translationFileName = md5Filename(tp.translation);
-        const sourceFileName = md5Filename(tp.source);
-        const translationAudioPath = path.join(
-            paths.audioDir(),
-            translationFileName
-        );
-        const sourceAudioPath = path.join(
-            paths.audioDir(),
-            sourceFileName
-        );
+        const translationAudioPath = paths.getAudio(tp.translation); 
+        const sourceAudioPath = paths.getAudio(tp.source); 
+
         if (!fs.existsSync(translationAudioPath)) {
             //gen
         }
         if (!fs.existsSync(sourceAudioPath)) {
             //gen
         }
+    }
+    createAudioFile(text: string, filePath: string) {
+        say.export("Hello world", "Microsoft Hazel Desktop", 1, filePath, (err) => {
+  if (err) return console.error(err);
+
+  //execSync(`ffmpeg -y -i ${wavFile} ${mp3File}`);
+});
     }
 }
