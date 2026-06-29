@@ -1,7 +1,10 @@
 import { writeError, type JsonValue, type WriteError, type Writer } from "../../types/types.ts"
 
 export class MultiMediaChoiceWriter implements Writer {
-  constructor(public writeDirName: string){
+  constructor(
+    public writeDirName: string,
+    public archivedPaths: ArchivedPaths
+  ){
 
   }
   write(generated: JsonValue, h5p: JsonValue, index: number): WriteError {

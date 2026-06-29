@@ -20,6 +20,8 @@ const libraryNames = [
     "H5P.MultiMediaChoice",
     "H5P.DragText"
 ] as const satisfies readonly LibraryNames[];
+export type ArchivedPaths = Set<string>;
+export type WrittenH5PArchive = Record<LibraryNames, ArchivedPaths>;
 
 interface Generator {
     getSupportedLibrary(): string;
@@ -40,6 +42,7 @@ export const writeError = {
 export type WriteError = typeof writeError[keyof typeof writeError];
 export interface Writer {
     writeDirName: string;
+    archivedPaths: ArchivedPaths;
     write(content: JsonValue, h5p: JsonValue, index: number): WriteError
 }
 export type GenSet = {
