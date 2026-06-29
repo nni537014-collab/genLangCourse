@@ -11,15 +11,14 @@ Add-Type -AssemblyName System.Speech;
 $s = New-Object System.Speech.Synthesis.SpeechSynthesizer;
 $s.GetInstalledVoices() | ForEach-Object { $_.VoiceInfo.Name }
 `;
-10548787
-
-  console.log("Installed voices:\n", result.split("\n").map(v => v.trim().toLowerCase()).filter(v => v.length > 0).join("\n"));
+const result = execSync(ps);
+  console.log("Installed voices:\n", result.toString().split("\n").map(v => v.trim().toLowerCase()).filter(v => v.length > 0).join("\n"));
 }
 
-listVoices();
+//listVoices();
 
 
-say.export("Hello world", "Microsoft Hazel Desktop", 1, wavFile, (err) => {
+say.export("Hello world", undefined, 1, wavFile, (err) => {
   if (err) return console.error(err);
 
   //execSync(`ffmpeg -y -i ${wavFile} ${mp3File}`);
