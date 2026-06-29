@@ -1,7 +1,7 @@
-import { writeError, type JsonValue, type WriteError, type Writer } from "../../types/types.ts";
+import { writeError, type ArchivedPaths, type JsonValue, type WriteError, type Writer } from "../../types/types.ts";
 import { h5pWrite } from "../../utils/utils.ts";
 export class BlanksWriter implements Writer {
-  constructor(public writeDirName: string){
+  constructor(public writeDirName: string, public archivedPaths: ArchivedPaths){
 
   }
   write(generated: JsonValue, h5p: JsonValue, index: number): WriteError {

@@ -2,9 +2,10 @@ import type {
   TranslationPair,
   JsonValue,
   ContentGenerator,
+  LibraryNames,
 
 } from "../../../types/types.ts";
-import { getAudioH5pRelativePath  } from "../../../utils/utils.ts"
+import { paths  } from "../../../utils/utils.ts"
 
 export class DialogCardsGenerator implements ContentGenerator {
   generate(base: TranslationPair[], template: JsonValue): JsonValue {
@@ -22,7 +23,7 @@ export class DialogCardsGenerator implements ContentGenerator {
         "tips": {},
         "audio": [
           {
-            "path": `${getAudioH5pRelativePath(tp.translation)}`,
+            "path": `${paths.getAudioH5pRelative(tp.translation)}`,
             "mime": "audio\/mpeg",
             "copyright": {
               "license": "U"
@@ -32,7 +33,7 @@ export class DialogCardsGenerator implements ContentGenerator {
       }
     })
   }
-  getSupportedLibrary(): string {
+  getSupportedLibrary(): LibraryNames {
     return "H5P.Dialogcards"; //@todo 
   }
 }

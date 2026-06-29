@@ -10,21 +10,23 @@ export type LibraryNames = "H5P.Blanks"
     | "H5P.SingleChoiceSet"
     | "H5P.MultiChoice"
     | "H5P.MultiMediaChoice"
-    | "H5P.DragText";
-const libraryNames = [
+    | "H5P.DragText"
+    | "H5P.CoursePresentation";
+export const libraryNames = [
     "H5P.Blanks",
     "H5P.MultiMediaChoice",
     "H5P.Dialogcards",
     "H5P.SingleChoiceSet",
     "H5P.MultiChoice",
     "H5P.MultiMediaChoice",
-    "H5P.DragText"
+    "H5P.DragText",
+    "H5P.CoursePresentation"
 ] as const satisfies readonly LibraryNames[];
 export type ArchivedPaths = Set<string>;
 export type WrittenH5PArchive = Record<LibraryNames, ArchivedPaths>;
 
 interface Generator {
-    getSupportedLibrary(): string;
+    getSupportedLibrary(): LibraryNames;
 }
 export interface ContentGenerator extends Generator {
     generate(base: TranslationPair[], template: JsonValue): JsonValue | JsonValue[]

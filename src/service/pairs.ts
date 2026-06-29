@@ -1,7 +1,7 @@
 import { readFileSync } from "fs";
 import type { TranslationPair, LoadStyle } from "../types/types.ts";
 import { loadStyle } from "../types/types.ts";
-import { getAssetPairsPath } from "../utils/utils.ts";
+import { getAssetPairsPath, paths } from "../utils/utils.ts";
 import { PairsWordExpander } from "./pairsWordExpander.ts"
 import path from "path";
 import { fileURLToPath } from 'node:url';
@@ -63,7 +63,7 @@ export class PairsFileReaderWriter {
         // read whole file as UTF‑8 text
         let pairs: TranslationPair[] = [];
         try{
-            const raw = readFileSync(getAssetPairsPath(), "utf8");
+            const raw = readFileSync(paths.getAssetPairs(), "utf8");
 
         // split into lines (handles Windows + Linux newlines)
         const lines = raw.split(/\r?\n/);

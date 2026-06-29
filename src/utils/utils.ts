@@ -1,3 +1,4 @@
+//@todo move paths to separate file
 import { ZipArchive } from "archiver"
 
 import {
@@ -32,8 +33,8 @@ import type {
     JsonValue,
     ContentGenerator,
     LibraryNames,
-    archivedPaths,
-    writtenH5PArchive
+    ArchivedPaths,
+    WrittenH5PArchive
 } from "../types/types.ts";
 
 
@@ -45,7 +46,7 @@ export function h5pWrite(
     h5p: JsonValue,
     index: number,
     libraryName: LibraryNames,
-    writtenPaths: archivedPaths
+    writtenPaths: ArchivedPaths
 ){
     const writeAllPath = path.join(getWritePath(), libraryName); 
     const writePath = path.join(writeAllPath, `${ libraryName }${ index }`);
@@ -64,7 +65,7 @@ export function h5pFolderToArchive(folderPath: string, index: number, libraryNam
     const h5pArchivePath = path.join(folderPath);
 }
 
-    const archiveContent = (dir: string, archivedPaths: archivedPaths) => {
+    const archiveContent = (dir: string, archivedPaths: ArchivedPaths) => {
      // create a file to stream archive data to.
      //@todo path.join to replace path concat below
      const zipPath = `${dir}.zip`;
@@ -164,20 +165,20 @@ export function md5Filename(input: string): string {
 export function audioFileName(input: string) {
     return `${md5Filename(input)}.mp3`
 }
-export function getAudioPath(input: string) {
+function getAudioPath(input: string) {
     return path.join(
         audioDir(),
         audioFileName(input)
     )
 
 }
-export function getAudioH5pRelativePath(input: string) {
+function getAudioH5pRelativePath(input: string) {
     return path.join(
         "audio",
         audioFileName(input)
     )
 }
-export function audioDir() {
+function audioDir() {
     return path.join(
         __dirname,
         utilsToBase,
@@ -189,24 +190,35 @@ export const clearPreviousGeneratedData = () => {
     return rmSync(getOutPath(), { recursive: true, force: true })
 }
 
-export const getAssetPairsPath = () => {
+ const getAssetPairsPath = () => {
     return path.join(getAssetsPath(), pairsFileName);
 }
 
 const getOutPath = () => {
     return path.join(getBasePath(), outDirName)
 }
-export const getWritePath = () => {
+ const getWritePath = () => {
     return path.join(getOutPath(), writeDirName);
 }
 const getAssetsPath = () => {
     return path.join(getBasePath(), assetsDirName)
 }
-export const getAssetDictionaryPath = () => {
+const getAssetDictionaryPath = () => {
     return path.join(getAssetsPath(), dictionaryPath);
 }
 const getBasePath = () => {
     return path.resolve(__dirname, "../../");
+}
+export const paths = {
+    getBase: getBasePath,
+    getAssetDictionary: getAssetDictionaryPath,
+    getWrite: getWritePath,
+    getOut: getOutPath,
+    getAssetPairs: getAssetPairsPath,
+    audioDir: audioDir,
+    getAudioH5pRelative: getAudioH5pRelativePath,
+    getAudio: getAudioPath
+
 }
 export const genRandomNumbers = (
     count: number,

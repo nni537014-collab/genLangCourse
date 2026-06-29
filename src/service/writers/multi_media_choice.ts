@@ -1,4 +1,4 @@
-import { writeError, type JsonValue, type WriteError, type Writer } from "../../types/types.ts"
+import { writeError, type ArchivedPaths, type JsonValue, type WriteError, type Writer } from "../../types/types.ts"
 
 export class MultiMediaChoiceWriter implements Writer {
   constructor(

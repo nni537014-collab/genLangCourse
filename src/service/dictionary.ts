@@ -1,5 +1,5 @@
 import { createReadStream } from "fs";
-import { getAssetDictionaryPath } from "../utils/utils.ts"
+import { paths } from "../utils/utils.ts"
 import { createInterface } from "readline";
 import type {
     DictionaryEntry,
@@ -8,7 +8,7 @@ import { totalmem } from "os";
 
 const readlineCreateInterface = () => {
     return createInterface({
-        input: createReadStream(getAssetDictionaryPath()),
+        input: createReadStream(paths.getAssetDictionary()),
         crlfDelay: Infinity
     });
 }

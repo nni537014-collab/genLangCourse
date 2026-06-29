@@ -1,5 +1,5 @@
 import type { TranslationPair } from "./../../types/types.ts"
-import { audioDir, md5Filename } from "../../utils/utils.ts"
+import { audioDir, md5Filename, paths } from "../../utils/utils.ts"
 import { } from "./../../config.ts"
 import path from "path";
 import fs from "fs"
@@ -16,11 +16,11 @@ class AudioFileCreator {
         const translationFileName = md5Filename(tp.translation);
         const sourceFileName = md5Filename(tp.source);
         const translationAudioPath = path.join(
-            audioDir(),
+            paths.audioDir(),
             translationFileName
         );
         const sourceAudioPath = path.join(
-            audioDir(),
+            paths.audioDir(),
             sourceFileName
         );
         if (!fs.existsSync(translationAudioPath)) {

@@ -3,6 +3,7 @@ import type {
   TranslationPair,
   JsonValue,
   ContentGenerator,
+  LibraryNames,
 
 } from "../../../types/types.ts";
 import { audioFileName } from "../../../utils/utils.ts"
@@ -92,7 +93,7 @@ export class MultiMediaChoiceGenerator implements ContentGenerator {
   generateFilePath(input: string){
       return `audio/${audioFileName(input)}`;
   }
-  getSupportedLibrary(): string {
+  getSupportedLibrary(): LibraryNames {
     return "H5P.MultiMediaChoice"; //@todo 
   }
 }

@@ -2,6 +2,7 @@ import type {
   TranslationPair,
   JsonValue,
   ContentGenerator,
+  LibraryNames,
 
 } from "../../../types/types.ts";
 // import { md5Filename } from "../../utils/utils.ts"
@@ -28,7 +29,7 @@ export class BlanksGenerator implements ContentGenerator {
    * @returns 
    */
 
-  getSupportedLibrary(): string {
+  getSupportedLibrary(): LibraryNames {
     return "H5P.Blanks"; //@todo 
   }
 }

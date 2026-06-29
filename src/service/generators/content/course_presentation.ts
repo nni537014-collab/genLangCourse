@@ -1,4 +1,4 @@
-import type { ContentGenerator, JsonValue, TranslationPair } from "../../../types/types.ts"
+import type { ContentGenerator, JsonValue, LibraryNames, TranslationPair } from "../../../types/types.ts"
 
 class CoursePresentationGenerator implements ContentGenerator {
   actionLibraryRenderers:  ContentGenerator[];
@@ -45,7 +45,7 @@ class CoursePresentationGenerator implements ContentGenerator {
   loadTemplate() {
     return JSON.parse("");
   }
-  getSupportedLibrary(): string {
+  getSupportedLibrary(): LibraryNames {
       return "H5P.CoursePresentation";
   }
 }

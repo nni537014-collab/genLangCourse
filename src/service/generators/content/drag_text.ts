@@ -2,6 +2,7 @@ import type {
   TranslationPair,
   JsonValue,
   ContentGenerator,
+  LibraryNames,
 
 } from "../../../types/types.ts";
 import su from "../../../utils/string.ts"
@@ -71,7 +72,7 @@ ${su.wrapLongestWord(part3.translation)}`
     }
     return ret;
   }
-  getSupportedLibrary(): string {
+  getSupportedLibrary(): LibraryNames {
     return "H5P.DragText"; //@todo 
   }
 }

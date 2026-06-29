@@ -2,9 +2,10 @@ import type {
   TranslationPair,
   JsonValue,
   ContentGenerator,
+  LibraryNames,
 
 } from "../../../types/types.ts";
-import { md5Filename, getAudioH5pRelativePath, genRandomNumbers, } from "../../../utils/utils.ts"
+import { md5Filename, getAudioH5pRelativePath, genRandomNumbers, paths, } from "../../../utils/utils.ts"
 import { error } from "console";
 
 export class MultiChoiceGenerator implements ContentGenerator {
@@ -131,9 +132,9 @@ export class MultiChoiceGenerator implements ContentGenerator {
     return "<p>Listen and then select the correct answer<\/p>";
   }
   generateAudioPath(tp: TranslationPair): any {
-    return getAudioH5pRelativePath(tp.translation);
+    return paths.getAudioH5pRelative(tp.translation);
   }
-  getSupportedLibrary(): string {
+  getSupportedLibrary(): LibraryNames {
     return "H5P.MultiChoice"; //@todo 
   }
 }

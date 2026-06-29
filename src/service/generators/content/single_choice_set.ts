@@ -2,6 +2,7 @@ import type {
   TranslationPair,
   JsonValue,
   ContentGenerator as ContentGenerator,
+  LibraryNames,
  
 } from "../../../types/types.ts";
 import { randomUUID } from "crypto";
@@ -41,7 +42,7 @@ export class SingleChoiceSetGenerator implements ContentGenerator{
       return ret;
   }
 
-  getSupportedLibrary(): string {
+  getSupportedLibrary(): LibraryNames {
       return "H5P.SingleChoiceSet";
   }
 }
