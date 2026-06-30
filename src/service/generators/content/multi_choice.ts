@@ -5,7 +5,9 @@ import type {
   LibraryNames,
 
 } from "../../../types/types.ts";
-import { md5Filename, getAudioH5pRelativePath, genRandomNumbers, paths, } from "../../../utils/utils.ts"
+import {  genRandomNumbers,  } from "../../../utils/utils.ts"
+import {  paths, } from "../../../utils/paths.ts"
+
 import { error } from "console";
 
 export class MultiChoiceGenerator implements ContentGenerator {

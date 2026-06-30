@@ -36,7 +36,7 @@ import type {
     ArchivedPaths,
     WrittenH5PArchive
 } from "../types/types.ts";
-
+import { paths } from "./paths.ts";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -48,7 +48,7 @@ export function h5pWrite(
     libraryName: LibraryNames,
     writtenPaths: ArchivedPaths
 ){
-    const writeAllPath = path.join(getWritePath(), libraryName); 
+    const writeAllPath = path.join(paths.getWrite(), libraryName); 
     const writePath = path.join(writeAllPath, `${ libraryName }${ index }`);
     const h5pFilePath = path.join(writePath, "h5p.json");
     const contentFolderPath = path.join(writePath, "content");
@@ -123,16 +123,22 @@ export function h5pFolderToArchive(folderPath: string, index: number, libraryNam
 
 
 export function generatorWriterFinder(generator: ContentGenerator){
-    const libraryName = getLibraryName(generator.getSupportedLibrary());
+    const libraryName = stripVersionFromLibraryName(generator.getSupportedLibrary());
     //@todo    
 }
-function getLibraryName(input: string){
+/**
+currently classes use lib name eg "H5P.Blanks"
+json files join a version on a space
+this func returnsi just a name 
+*/
+ 
+function stripVersionFromLibraryName(input: string){
     const name = input.trim().split(" ")[0];
     if(!name || name.length < 1) throw new Error("bad input");
     return name;
 }
 export function generatorTemplateFinder(supportedLibrary: string) {
-    const libraryName = getLibraryName(supportedLibrary);
+    const libraryName = stripVersionFromLibraryName(supportedLibrary);
     const templPath = path.join(
         __dirname,
         utilsToBase,
@@ -159,67 +165,67 @@ export function generatorTemplateFinder(supportedLibrary: string) {
     // return tuple - [h5pJson, contentJson]
 
 }
-export function md5Filename(input: string): string {
-    return createHash("md5").update(input).digest("hex");
-}
-export function audioFileName(input: string) {
-    return `${md5Filename(input)}.mp3`
-}
-function getAudioPath(input: string) {
-    return path.join(
-        audioDir(),
-        audioFileName(input)
-    )
+// export function md5Filename(input: string): string {
+//     return createHash("md5").update(input).digest("hex");
+// }
+// export function audioFileName(input: string) {
+//     return `${md5Filename(input)}.mp3`
+// }
+// function getAudioPath(input: string) {
+//     return path.join(
+//         audioDir(),
+//         audioFileName(input)
+//     )
 
-}
-function getAudioH5pRelativePath(input: string) {
-    return path.join(
-        "audio",
-        audioFileName(input)
-    )
-}
-function audioDir() {
-    return path.join(
-        __dirname,
-        utilsToBase,
-        assetsDirName,
-        h5pAudioDirName
-    )
-}
+// }
+// function getAudioH5pRelativePath(input: string) {
+//     return path.join(
+//         "audio",
+//         audioFileName(input)
+//     )
+// }
+// function audioDir() {
+//     return path.join(
+//         __dirname,
+//         utilsToBase,
+//         assetsDirName,
+//         h5pAudioDirName
+//     )
+// }
 export const clearPreviousGeneratedData = () => {
-    return rmSync(getOutPath(), { recursive: true, force: true })
+    return rmSync(paths.getOut(), { recursive: true, force: true })
 }
 
- const getAssetPairsPath = () => {
-    return path.join(getAssetsPath(), pairsFileName);
-}
+//  const getAssetPairsPath = () => {
+//     return path.join(getAssetsPath(), pairsFileName);
+// }
 
-const getOutPath = () => {
-    return path.join(getBasePath(), outDirName)
-}
- const getWritePath = () => {
-    return path.join(getOutPath(), writeDirName);
-}
-const getAssetsPath = () => {
-    return path.join(getBasePath(), assetsDirName)
-}
-const getAssetDictionaryPath = () => {
-    return path.join(getAssetsPath(), dictionaryPath);
-}
-const getBasePath = () => {
-    return path.resolve(__dirname, "../../");
-}
-export const paths = {
-    getBase: getBasePath,
-    getAssetDictionary: getAssetDictionaryPath,
-    getWrite: getWritePath,
-    getOut: getOutPath,
-    getAssetPairs: getAssetPairsPath,
-    audioDir: audioDir,
-    getAudioH5pRelative: getAudioH5pRelativePath,
-    getAudio: getAudioPath
+// const getOutPath = () => {
+//     return path.join(getBasePath(), outDirName)
+// }
+//  const getWritePath = () => {
+//     return path.join(getOutPath(), writeDirName);
+// }
+// const getAssetsPath = () => {
+//     return path.join(getBasePath(), assetsDirName)
+// }
+// const getAssetDictionaryPath = () => {
+//     return path.join(getAssetsPath(), dictionaryPath);
+// }
+// const getBasePath = () => {
+//     return path.resolve(__dirname, "../../");
+// }
+// export const paths = {
+//     getBase: getBasePath,
+//     getAssetDictionary: getAssetDictionaryPath,
+//     getWrite: getWritePath,
+//     getOut: getOutPath,
+//     getAssetPairs: getAssetPairsPath,
+//     audioDir: audioDir,
+//     getAudioH5pRelative: getAudioH5pRelativePath,
+//     getAudio: getAudioPath
 
-}
+// }
 export const genRandomNumbers = (
     count: number,
     lowerLimit: number,

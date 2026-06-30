@@ -5,7 +5,7 @@ import type {
   LibraryNames,
 
 } from "../../../types/types.ts";
-import { paths  } from "../../../utils/utils.ts"
+import { paths  } from "../../../utils/paths.ts"
 
 export class DialogCardsGenerator implements ContentGenerator {
   generate(base: TranslationPair[], template: JsonValue): JsonValue {
