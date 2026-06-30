@@ -22,6 +22,8 @@ export const libraryNames = [
     "H5P.DragText",
     "H5P.CoursePresentation"
 ] as const satisfies readonly LibraryNames[];
+
+export type SourceOrTranslation = "source" | "translation";
 export type ArchivedPaths = Set<string>;
 export type WrittenH5PArchive = Record<LibraryNames, ArchivedPaths>;
 

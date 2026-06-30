@@ -34,7 +34,8 @@ import type {
     ContentGenerator,
     LibraryNames,
     ArchivedPaths,
-    WrittenH5PArchive
+    WrittenH5PArchive,
+    SourceOrTranslation
 } from "../types/types.ts";
 
 
@@ -45,20 +46,20 @@ const utilsToBase = "../../";
 export function md5Filename(input: string): string {
     return createHash("md5").update(input).digest("hex");
 }
-export function audioFileName(input: string) {
+export function audioFileName(input: string, type: "source" | "translation") {
     return `${md5Filename(input)}.mp3`
 }
-function getAudioPath(input: string) {
+function getAudioPath(input: string, type: SourceOrTranslation) {
     return path.join(
         audioDir(),
-        audioFileName(input)
+        audioFileName(input, type)
     )
 
 }
-function getAudioH5pRelativePath(input: string) {
+function getAudioH5pRelativePath(input: string, type: SourceOrTranslation) {
     return path.join(
         "audio",
-        audioFileName(input)
+        audioFileName(input, type)
     )
 }
 function audioDir() {
