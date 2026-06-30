@@ -4,7 +4,7 @@ import type {
     ArchivedPaths,
 } from "../../types/types.ts";
 
-export class DragTextWriter implements Writer {
+export default class DragTextWriter implements Writer {
   constructor(
     public writeDirName: string,
     public archivedPaths: ArchivedPaths

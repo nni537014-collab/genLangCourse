@@ -2,7 +2,7 @@ import type { GenSet, LibraryNames, WrittenH5PArchive } from "../types/types.ts"
 import { BlanksGenerator } from "./generators/content/blanks.ts";
 import { BlankH5pGenerator } from "./generators/h5p/blanks.ts";
 import { BlanksWriter } from "./writers/blanks.ts";
-import { paths } from "../utils/utils.ts"
+import { paths } from "../utils/paths.ts"
 import { MultiMediaChoiceGenerator } from "./generators/content/multi_media_choice.ts";
 import { DialogCardsGenerator } from "./generators/content/dialog_cards.ts";
 import { SingleChoiceSetGenerator } from "./generators/content/single_choice_set.ts";
@@ -12,7 +12,7 @@ import { MultiMediaChoiceWriter } from "./writers/multi_media_choice.ts";
 import { DialogCardsWriter } from "./writers/dialog_cards.ts";
 import { SingleChoiceSetWriter } from "./writers/single_choice_set.ts";
 import { MultiChoiceWriter } from "./writers/multi_choice.ts";
-import { DragTextWriter } from "./writers/drag_text.ts";
+import DragTextWriter from "./writers/drag_text.ts";
 import { MultiMediaChoiceH5pGenerator } from "./generators/h5p/multi_media_choice.ts";
 import { DialogCardsH5pGenerator } from "./generators/h5p/dialog_cards.ts";
 import { SingleChoiceSetH5pGenerator } from "./generators/h5p/single_choice_set.ts";
