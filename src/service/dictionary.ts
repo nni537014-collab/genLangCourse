@@ -1,5 +1,5 @@
 import { createReadStream } from "fs";
-import { paths } from "../utils/utils.ts"
+import { paths } from "../utils/paths.ts"
 import { createInterface } from "readline";
 import type {
     DictionaryEntry,

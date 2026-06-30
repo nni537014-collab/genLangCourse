@@ -23,7 +23,7 @@ export class DialogCardsGenerator implements ContentGenerator {
         "tips": {},
         "audio": [
           {
-            "path": `${paths.getAudioH5pRelative(tp.translation)}`,
+            "path": `${paths.getAudioH5pRelative(tp.translation, "translation")}`,
             "mime": "audio\/mpeg",
             "copyright": {
               "license": "U"

@@ -6,7 +6,7 @@ import type {
   LibraryNames,
 
 } from "../../../types/types.ts";
-import { audioFileName } from "../../../utils/utils.ts"
+import { audioFileName } from "../../../utils/paths.ts"
 
 export class MultiMediaChoiceGenerator implements ContentGenerator {
   _question = {
@@ -28,7 +28,7 @@ export class MultiMediaChoiceGenerator implements ContentGenerator {
          
          (template as any).subContentId = randomUUID(); //@todo check function - utils?
          (template as any).params.files = [{
-                          "path": this.generateFilePath(tp[type]),
+                          "path": this.generateFilePath(tp[type], type),
                           "mime": "audio\/mpeg",
                           "copyright": { "license": "U" }
                         }]
@@ -90,8 +90,8 @@ export class MultiMediaChoiceGenerator implements ContentGenerator {
     }
     return ret;
   }
-  generateFilePath(input: string){
-      return `audio/${audioFileName(input)}`;
+  generateFilePath(input: string, type: "source" | "translation"){
+      return `audio/${audioFileName(input, type)}`;
   }
   getSupportedLibrary(): LibraryNames {
     return "H5P.MultiMediaChoice"; //@todo 
