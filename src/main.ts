@@ -1,7 +1,7 @@
 import { clearPreviousGeneratedData } from "./utils/utils.ts"
 import { Dictionary } from "./service/dictionary.ts"
-import { PairsWordExpander } from "./service/pairsWordExpander.ts"
-import { loadStyle, Pairs, PairsFileReaderWriter } from "./service/pairs.ts"
+import { PairsWordExpander } from "./service/pairs/pairsWordExpander.ts"
+import { loadStyle, Pairs, PairsFileReaderWriter } from "./service/pairs/pairs.ts"
 import type { TranslationPair, JsonValue, ContentGenerator } from "./types/types.ts";
 import { DialogCardsGenerator } from "./service/generators/content/dialog_cards.ts"
 import { SingleChoiceSetGenerator } from "./service/generators/content/single_choice_set.ts"

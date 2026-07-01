@@ -1,7 +1,7 @@
 import path, { dirname } from "path";
-import type { PairsFileWriterConfig, TranslationPair } from "../types/types.ts";
+import type { PairsFileWriterConfig, TranslationPair } from "../../types/types.ts";
 import { mkdirSync, readFileSync, writeFileSync } from "fs";
-import { paths } from "../utils/paths.ts";
+import { paths } from "../../utils/paths.ts";
 
 
 export class PairsFileReaderWriter {

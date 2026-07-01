@@ -8,9 +8,9 @@ import type {
 import {
   loadStyle
 } from "../types/types.ts";
-import { PairsWordExpander } from "./pairsWordExpander.ts";
+import { PairsWordExpander } from "./pairs/pairsWordExpander.ts";
 //@todo move pairsfilereaderwriter
-import { Pairs, PairsFileReaderWriter } from "./pairs.ts";
+import { Pairs, PairsFileReaderWriter } from "./pairs/pairs.ts";
 import { generatorTemplateFinder } from "../utils/utils.ts"
 export class CourseCreator {
   _config: courseGenConfig;
