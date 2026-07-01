@@ -28,8 +28,7 @@ export class Pairs {
             const [success, pairs] = readerWriter.readJSON();
             if (success) {
                 return pairs;
-            }
-            return;
+            } 
         }
 
         const loadRawPairs = () => {
@@ -38,8 +37,7 @@ export class Pairs {
             if (sucess) {
                 this._expander.expand(pairs);
                 return pairs;
-
-            }
+            } 
         }
 
         const loadInitial = () => {
@@ -72,18 +70,18 @@ export class Pairs {
                 p = loadCreatedPairs();
                 if (p)
                     this._pairs = p;
-                else
-                    console.log("load from disk failed, loading initial");;;
-                p = loadInitial()
-                if (p)
-                    this._pairs = p;
                 else {
-                    throw new Error("load from disk");
+                    console.log("load from disk failed, loading initial");
+                    p = loadInitial()
+                    if (p)
+                        this._pairs = p;
+                    else {
+                        throw new Error("load from disk");
+                    }
                 }
             default:
                 throw new Error("load not specificied correctly");
         }
-
     }
 
 

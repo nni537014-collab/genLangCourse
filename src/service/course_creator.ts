@@ -10,7 +10,8 @@ import {
 } from "../types/types.ts";
 import { PairsWordExpander } from "./pairs/pairsWordExpander.ts";
 //@todo move pairsfilereaderwriter
-import { Pairs, PairsFileReaderWriter } from "./pairs/pairs.ts";
+import { Pairs } from "./pairs/pairs.ts";
+import {  PairsFileReaderWriter } from "./pairs/pairsFileReaderWriter.ts";
 import { generatorTemplateFinder } from "../utils/utils.ts"
 export class CourseCreator {
   _config: courseGenConfig;

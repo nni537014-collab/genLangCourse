@@ -81,7 +81,14 @@ switch (mode) {
       }));
     //console.log(pairs.getPairs());
     console.log("pairs length:", pairs.getPairs().length);
-
+    //@todo run audio file generation
+    const courseCreator = new CourseCreator({
+      assetDirectoryName: "assets",
+      outDirectoryName: "out", 
+    chunkSize: 10
+  }, pairs, [
+      new DialogCardsGenerator(),
+      new SingleChoiceSetGenerator() ]);
   }
 
 }
