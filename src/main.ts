@@ -2,7 +2,7 @@ import { clearPreviousGeneratedData } from "./utils/utils.ts"
 import { Dictionary } from "./service/dictionary.ts"
 import { PairsWordExpander } from "./service/pairs/pairsWordExpander.ts"
 import { loadStyle, Pairs, PairsFileReaderWriter } from "./service/pairs/pairs.ts"
-import type { TranslationPair, JsonValue, ContentGenerator } from "./types/types.ts";
+import type { TranslationPair, JsonValue, ContentGenerator, courseGenConfig } from "./types/types.ts";
 import { DialogCardsGenerator } from "./service/generators/content/dialog_cards.ts"
 import { SingleChoiceSetGenerator } from "./service/generators/content/single_choice_set.ts"
 import { CourseCreator } from "./service/course_creator.ts";
@@ -82,15 +82,13 @@ switch (mode) {
     //console.log(pairs.getPairs());
     console.log("pairs length:", pairs.getPairs().length);
     //@todo run audio file generation
-    const courseCreator = new CourseCreator({
+    const config: courseGenConfig = {
       assetDirectoryName: "assets",
-      outDirectoryName: "out", 
-    chunkSize: 10
-  }, pairs, [
-      new DialogCardsGenerator(),
-      new SingleChoiceSetGenerator() ]);
-  }
-
+      outDirectoryName: "out",
+      chunkSize: 10 
+    };
+    const courseCreator = await CourseCreator.create(config);
+    // courseCreator.
 }
 
 
