@@ -26,7 +26,10 @@ export const libraryNames = [
 export type SourceOrTranslation = "source" | "translation";
 export type ArchivedPaths = Set<string>;
 export type WrittenH5PArchive = Record<LibraryNames, ArchivedPaths>;
-
+export type PairsFileWriterConfig = {
+    dir?: string;
+    name?: string;
+}
 interface Generator {
     getSupportedLibrary(): LibraryNames;
 }
