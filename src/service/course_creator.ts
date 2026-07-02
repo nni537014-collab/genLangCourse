@@ -6,6 +6,7 @@ import type {
   GenSet,
   LibraryNames,
   Creator,
+  ArchivedPaths,
 } from "../types/types.ts";
 import { loadStyle } from "../types/types.ts";
 import { PairsWordExpander } from "./pairs/pairsWordExpander.ts";
@@ -66,6 +67,15 @@ export class CourseCreator implements Creator<TranslationPair[]>{
       //logging?
       //data structure for created h5p's for later report rendering
     });
+    let rec: Record<LibraryNames, ArchivedPaths>;
+    this._genSets.forEach(genSet => { 
+      const p = new Set(genSet.writer.archivedPaths) as ArchivedPaths;
+      rec = {"H5P.Blanks": p};
+      genSet.writer.archivedPaths.clear();
+      return p as ArchivedPaths;
+
+     });
+     return rec;
   }
  //@todo create chunk interface that uses generics
  //chunk should return an array of T
@@ -99,5 +109,4 @@ export class CourseCreator implements Creator<TranslationPair[]>{
 
     return pairs;
   }
-  extendBaseData() { }
 }

@@ -36,6 +36,8 @@ interface Generator {
 }
 export interface Creator<T>{
   chunk(): T[]; 
+  runGenerators(chunk: T): Record<LibraryNames, ArchivedPaths>;
+  map(allPaths: ArchivedPaths[][]): [Error | undefined,  ]
 }
 export interface ContentGenerator extends Generator {
   generate(
