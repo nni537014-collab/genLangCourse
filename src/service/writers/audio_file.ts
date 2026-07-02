@@ -22,9 +22,10 @@ export class AudioFileCreator {
   }
   async produceAllFiles(allSettled: (stored: string[]) => void) {
     const created: Promise<Record<AudioFileName, string>>[] = [];
-    for (const entry of this._flatBase) {
-      entry;
-      created.push(this.createAudioFile(text, fileName));
+    for (const filename of Object.keys(this._flatBase) as AudioFileName[]) {
+      const text  = this._flatBase[filename];
+      if(!text) throw new Error("bad data");
+      created.push(this.createAudioFile(text, filename));
     }
     const set = await Promise.allSettled(created);
     const ret = set
@@ -54,3 +55,7 @@ export class AudioFileCreator {
     return audioFileName(input, type);
   }
 }
+
+
+
+
