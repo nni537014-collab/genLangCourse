@@ -1,18 +1,15 @@
-import type { TranslationPair } from "./../../types/types.ts";
+import type { TranslationPair, AudioFileName } from "./../../types/types.ts";
 
 import { paths, md5Filename, audioFileName } from "../../utils/paths.ts";
 import fs from "fs";
 import say from "say";
 import { execSync } from "child_process";
-import { fileURLToPath } from "url";
 
-export type FlatBase = Record<string, string>;
-class AudioFileCreator {
-  //    state: "ready" | "busy" = "ready";
-  //    busyCount = 0;
-  voice = "Microsoft Hazel Desktop";
-  _base: TranslationPair[];
-  _flatBase: FlatBase = {};
+export type FlatBase = Record<AudioFileName, string>;
+export class AudioFileCreator {
+  protected voice = "Microsoft Hazel Desktop";
+  protected _base: TranslationPair[];
+  protected _flatBase: FlatBase = {};
   constructor(base: TranslationPair[]) {
     this._base = base;
   }
@@ -23,34 +20,27 @@ class AudioFileCreator {
     });
     return Object.entries(this._flatBase);
   }
-  produceAllFiles(allSettled: (stored: string[]) => void) {
-    //        this._base.forEach(this.produceFile)
-    const created: Promise<Record<string, string>>[] = [];
-    for (const [fileName, text] of this.flatBase()) {
+  async produceAllFiles(allSettled: (stored: string[]) => void) {
+    const created: Promise<Record<AudioFileName, string>>[] = [];
+    for (const entry of this._flatBase) {
+      entry;
       created.push(this.createAudioFile(text, fileName));
     }
-    const set = Promise.allSettled(created);
-    set.then(
-      (stored) => {
-        const values = stored
-          .map((value) => {
-            if (value.status === "fulfilled") {
-              return value.value;
-            } else {
-              return undefined;
-            }
-          })
-          .filter((value) => value);
-        allSettled(values);
-      },
-      (reason) => {
-        console.log(reason);
-      },
-    );
+    const set = await Promise.allSettled(created);
+    const ret = set
+      .map((value) => {
+        if (value.status === "fulfilled") {
+          return value.value;
+        } else {
+          return undefined;
+        }
+      })
+      .filter((value) => value) as unknown as Record<string, string>;
+    return ret;
   }
-  createAudioFile(text: string, filePath: string) {
+  createAudioFile(text: string, filePath: AudioFileName) {
     const wavFile = `${filePath}.wav`;
-    return new Promise<Record<string, string>>((resolve, reject) => {
+    return new Promise<Record<AudioFileName, string>>((resolve, reject) => {
       say.export(text, this.voice, 1, wavFile, (err) => {
         if (err) reject(err);
         execSync(`ffmpeg -y -i ${wavFile} ${filePath}`);
@@ -61,6 +51,6 @@ class AudioFileCreator {
     });
   }
   protected key(type: "source" | "translation", input: string) {
-    return `${audioFileName(input, type)}`;
+    return audioFileName(input, type);
   }
 }
