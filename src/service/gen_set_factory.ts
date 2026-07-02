@@ -18,7 +18,7 @@ import { DialogCardsH5pGenerator } from "./generators/h5p/dialog_cards.ts";
 import { SingleChoiceSetH5pGenerator } from "./generators/h5p/single_choice_set.ts";
 import { MultiChoiceH5pGenerator } from "./generators/h5p/multi_choice.ts";
 import { DragTextH5pGenerator } from "./generators/h5p/drag_text.ts";
-//@todo add course presentation
+
  const writtenH5PArchive: WrittenH5PArchive = {
      "H5P.Blanks": new Set<string>,
      "H5P.Dialogcards" : new Set<string>,

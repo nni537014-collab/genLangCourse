@@ -4,6 +4,8 @@ import type {
   TranslationPair,
   Writer,
   GenSet,
+  LibraryNames,
+  Creator,
 } from "../types/types.ts";
 import { loadStyle } from "../types/types.ts";
 import { PairsWordExpander } from "./pairs/pairsWordExpander.ts";
@@ -12,7 +14,9 @@ import { Pairs } from "./pairs/pairs.ts";
 import { PairsFileReaderWriter } from "./pairs/pairsFileReaderWriter.ts";
 import { generatorTemplateFinder } from "../utils/utils.ts";
 import { AudioFileCreator } from "./writers/audio_file.ts";
-export class CourseCreator {
+import { createGenSet } from "./gen_set_factory.ts";
+export class CourseCreator implements Creator<TranslationPair[]>{
+  static supportedLibraryNames: LibraryNames[] = ["H5P.CoursePresentation"];
   _config: courseGenConfig;
   _genSets: GenSet[];
   /**
@@ -29,20 +33,25 @@ export class CourseCreator {
     return new CourseCreator(
       config,
       await CourseCreator.prepareBaseDataFromAssets(),
-      [],
+      CourseCreator.genSetFactory(),
     );
+  }
+  static genSetFactory() {
+    return CourseCreator.supportedLibraryNames.map(createGenSet)
   }
   constructor(config: courseGenConfig, pairs: Pairs, genSets: GenSet[]) {
     this._config = config;
     this._pairs = pairs;
-    this.chunkPairs();
     this._genSets = genSets;
-    for (let i = 0; i < this._pairsChunks.length; i++) {
-      const chunk = this._pairsChunks[i];
-      if (chunk) {
-        this.runGenerators(chunk);
-      }
+    for(let chunk of this.chunk()){
+       this.runGenerators(chunk);
     }
+    // for (let i = 0; i < this._pairsChunks.length; i++) {
+    //   const chunk = this._pairsChunks[i];
+    //   if (chunk) {
+    //     this.runGenerators(chunk);
+    //   }
+    // }
     //iterate chunks
     //    call generators
   }
@@ -58,10 +67,9 @@ export class CourseCreator {
       //data structure for created h5p's for later report rendering
     });
   }
-  getWriter(generator: ContentGenerator): Writer {
-    throw new Error("Method not implemented.");
-  }
-  chunkPairs() {
+ //@todo create chunk interface that uses generics
+ //chunk should return an array of T
+  chunk  () {
     const data = this._pairs.getPairs();
     let i = 0;
     let chunkSize = this._config.chunkSize;
@@ -71,7 +79,7 @@ export class CourseCreator {
       this._pairsChunks.push(chunk);
     }
 
-    return;
+    return this._pairsChunks;
   }
 
   static async prepareBaseDataFromAssets() {
@@ -87,9 +95,9 @@ export class CourseCreator {
     //console.log(pairs.getPairs());
     console.log("pairs length:", pairs.getPairs().length);
     const audioFileCreator = new AudioFileCreator(pairs.getPairs());
-    const audioRecords = await audioFileCreator.produceAllFiles((stored) => {});
+    const audioRecords = await audioFileCreator.produceAllFiles((stored) => { });
 
     return pairs;
   }
-  extendBaseData() {}
+  extendBaseData() { }
 }

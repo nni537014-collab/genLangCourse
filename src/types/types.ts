@@ -34,6 +34,9 @@ export type PairsFileWriterConfig = {
 interface Generator {
   getSupportedLibrary(): LibraryNames;
 }
+export interface Creator<T>{
+  chunk(): T[]; 
+}
 export interface ContentGenerator extends Generator {
   generate(
     base: TranslationPair[],
