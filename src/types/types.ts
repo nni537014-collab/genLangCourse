@@ -27,6 +27,7 @@ export const libraryNames = [
 export type SourceOrTranslation = "source" | "translation";
 export type ArchivedPaths = Set<string>;
 export type WrittenH5PArchive = Record<LibraryNames, ArchivedPaths>;
+
 export type PairsFileWriterConfig = {
   dir?: string;
   name?: string;
@@ -34,10 +35,17 @@ export type PairsFileWriterConfig = {
 interface Generator {
   getSupportedLibrary(): LibraryNames;
 }
-export interface Creator<T>{
-  chunk(): T[]; 
-  runGenerators(chunk: T): Record<LibraryNames, ArchivedPaths>;
-  map(allPaths: ArchivedPaths[][]): [Error | undefined,  ]
+export type segmentId = string;
+export type segmentArchivedPaths = Record<LibraryNames, ArchivedPaths>;
+export type AllSegmentArchivedPaths = Record<segmentId, segmentArchivedPaths>;
+export interface Creator<T> {
+  segmentedArchivedPaths: Record<segmentId, segmentArchivedPaths>;
+  chunk(): T[];
+  runGenerators(
+    chunk: T,
+    archive: WrittenH5PArchive,
+  ): Record<LibraryNames, ArchivedPaths>;
+  map(allPaths: AllSegmentArchivedPaths): [Error | undefined];
 }
 export interface ContentGenerator extends Generator {
   generate(
@@ -56,6 +64,7 @@ export const writeError = {
 } as const;
 export type WriteError = (typeof writeError)[keyof typeof writeError];
 export interface Writer {
+  getSupportedLibrary(): LibraryNames;
   writeDirName: string;
   archivedPaths: ArchivedPaths;
   write(content: JsonValue, h5p: JsonValue, index: number): WriteError;
