@@ -8,11 +8,11 @@ export type DictionaryEntryStructure = {
   word: string;
   pos: string;
   lang_code?: string;
-  senses?: any[];
+  senses?: Sense[];
   tags?: string[];
   translations: DictionaryTranslationStructure[] | undefined;
 };
 export type SenseBase = {
-  form_of: string[];
+  form_of: { word: string }[] ;
 };
-export type Sense = SenseBase & any;
+export type Sense = SenseBase// & any;

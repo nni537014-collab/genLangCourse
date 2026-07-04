@@ -3,6 +3,7 @@ import { paths } from "../utils/paths.ts"
 import { createInterface } from "readline";
 import type {
     DictionaryEntryStructure,
+    Sense,
 } from "./../types/dictionary.ts"
 import { totalmem } from "os";
 import { DictionaryEntry } from "./dictionary_entry.ts";
@@ -140,9 +141,9 @@ export class Dictionary {
         }
         // if (entry.tags?.includes("form-of"))
         //     hasFormOf = true;
-        entry.senses?.map((sense) => {
+        entry.senses?.map((sense: Sense) => {
             if (sense.form_of) {
-                sense.form_of.map((formOf: { word: string }) => {
+                sense.form_of.map((formOf) => {
                     hasFormOf = true;
                     forms.add(formOf.word)
                     // formsFound.push(formOf.word);
