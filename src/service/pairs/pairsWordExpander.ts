@@ -67,7 +67,8 @@ export class PairsWordExpander {
         const expandWord = (word: string) => {
             let expanded = false;
             const recordDetails = this.getTranslatedWord(word);
-            if (Dictionary.hasTranslations(recordDetails)) {
+            const hasTranslations = recordDetails.find(de => de.hasTranslations())
+            if (hasTranslations) {
                 expanded = this.addTranslationPair(recordDetails, translationPairs);
                 //@todo - have translations - use one to create tp
             } else {

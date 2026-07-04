@@ -161,7 +161,7 @@ export class Dictionary {
         const translations = this.findByWord(word)
 
         if (lang_code) {
-            translations.map((entry, i, data) => {
+            translations.forEach((entry, i, data) => {
                 entry.translations = entry.translations?.filter((dictionaryTranslation) => {
                     return (dictionaryTranslation.lang_code === lang_code)
                 })
@@ -171,8 +171,11 @@ export class Dictionary {
             if (entry.translations)
                 return true
         })
+        return ret.map(des => {
+            return new DictionaryEntry(des);
+        })
         // console.log(`found ${ret.length} translations for word: ${word}`);
-        return ret;
+        // return ret;
     }
     async findFormOf(word: string) {
         const wordDetails = await this.findByWord(word);

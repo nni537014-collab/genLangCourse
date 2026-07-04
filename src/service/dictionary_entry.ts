@@ -4,7 +4,7 @@ export class DictionaryEntry {
     constructor(data: DictionaryEntryStructure) {
         this._data = data;
     }
-    isVerb(){
+    isVerb() {
         //@todo refactor string
         return (this._data.pos === "verb")
     }
@@ -29,5 +29,13 @@ export class DictionaryEntry {
             }
         })
         return [(forms.size > 0), forms];
+    }
+
+    hasTranslations() {
+
+        if (Array.isArray(this._data.translations)
+            && this._data.translations.length > 0) {
+            return true;
+        }
     }
 }
