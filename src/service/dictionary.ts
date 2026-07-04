@@ -5,6 +5,7 @@ import type {
     DictionaryEntryStructure,
 } from "./../types/dictionary.ts"
 import { totalmem } from "os";
+import { DictionaryEntry } from "./dictionary_entry.ts";
 
 const readlineCreateInterface = () => {
     return createInterface({
@@ -12,9 +13,9 @@ const readlineCreateInterface = () => {
         crlfDelay: Infinity
     });
 }
-export const loadFromDisk = async (langCode: string): Promise<DictionaryEntryStructure[]> => {
+export const loadFromDisk = async (langCode: string): Promise<[DictionaryEntryStructure[], DictionaryEntry[]]> => {
     const ret: DictionaryEntryStructure[] = [];
-
+    const dictionaryEntries: DictionaryEntry[] = [];
     const rl = readlineCreateInterface();
 
     return new Promise((resolve, reject) => {
@@ -22,12 +23,14 @@ export const loadFromDisk = async (langCode: string): Promise<DictionaryEntryStr
             const parsed = processLine(line);
             if (parsed &&
                 parsed.lang_code === langCode) {
+                    //@todo VALIDATION!!!!!
                 ret.push(parsed);
+                dictionaryEntries.push(new DictionaryEntry(parsed))
                 // console.log("line added");
             }
         });
 
-        rl.on("close", () => resolve(ret));
+        rl.on("close", () => resolve([ret, dictionaryEntries]));
         rl.on("error", reject);
     });
 };
@@ -64,16 +67,22 @@ function processLine(line: string): DictionaryEntryStructure | undefined {
 export class Dictionary {
     // uniqueWordsInCards: Set<string>;
     _data: DictionaryEntryStructure[];
+    _dictionaryEntries: DictionaryEntry[];
     langCode: string;
-    constructor(langCode: string, data: DictionaryEntryStructure[]) {
+    constructor(
+        langCode: string,
+        data: DictionaryEntryStructure[],
+        dictionaryEntries: DictionaryEntry[]
+    ) {
         this._data = data;
+        this._dictionaryEntries = dictionaryEntries;
         this.langCode = langCode;
         //console.log("dictionary length", this._data.length)
 
     }
     static async create(langCode: string) {
-        const data = await loadFromDisk(langCode);
-        return new Dictionary(langCode, data);
+        const [data, dictionaryEntries] = await loadFromDisk(langCode);
+        return new Dictionary(langCode, data, dictionaryEntries);
     }
 
     // async loadWordDetailFromDisk(word: string | string[]): Promise<DictionaryEntry[]> {

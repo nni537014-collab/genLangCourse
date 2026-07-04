@@ -1,6 +1,7 @@
 import type { DictionaryEntryStructure } from "../types/dictionary.ts"
 export class DictionaryEntry {
-  constructor(data: DictionaryEntryStructure){
-    
-  }
+    _data: DictionaryEntryStructure;
+    constructor(data: DictionaryEntryStructure) {
+        this._data = data;
+    }
 }
