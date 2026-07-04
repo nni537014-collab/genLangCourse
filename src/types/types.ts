@@ -86,24 +86,6 @@ export type courseGenConfig = {
   chunkSize: number;
 };
 
-export type DictionaryTranslation = {
-  word: string;
-  lang_code: string;
-  lang: string;
-  sense_index: string | undefined;
-};
-export type DictionaryEntry = {
-  word: string;
-  pos: string;
-  lang_code?: string;
-  senses?: any[];
-  tags?: string[];
-  translations: DictionaryTranslation[] | undefined;
-};
-export type SenseBase = {
-  form_of: string[];
-};
-export type Sense = SenseBase & any;
 export type TranslationPair = {
   source: string;
   translation: string;

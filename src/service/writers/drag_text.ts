@@ -2,6 +2,7 @@ import { writeError, type JsonValue, type WriteError, type Writer } from "../../
 import type {
     
     ArchivedPaths,
+    LibraryNames,
 } from "../../types/types.ts";
 
 export default class DragTextWriter implements Writer {
@@ -12,7 +13,9 @@ export default class DragTextWriter implements Writer {
 
 
   }
-
+  getSupportedLibrary(): LibraryNames {
+    return "H5P.DragText"; //@todo 
+  }
 
   write(generated: JsonValue, h5p: JsonValue, index: number): WriteError {
     // get h5p.json

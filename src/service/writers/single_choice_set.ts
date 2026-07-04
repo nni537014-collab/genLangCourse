@@ -2,6 +2,7 @@ import { writeError, type JsonValue, type WriteError, type Writer } from "../../
 import type {
     
     ArchivedPaths,
+    LibraryNames,
 } from "../../types/types.ts";
 
 export class SingleChoiceSetWriter implements Writer {
@@ -12,6 +13,9 @@ export class SingleChoiceSetWriter implements Writer {
 
 
   }
+    getSupportedLibrary(): LibraryNames {
+      return "H5P.SingleChoiceSet"; //@todo 
+    }
   write(generated: JsonValue, h5p: JsonValue, index: number): WriteError {
     // get h5p.json
     // another set of generators?

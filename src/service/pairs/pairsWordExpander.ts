@@ -1,6 +1,7 @@
-import type { DictionaryTranslation, TranslationPair } from "../../types/types.ts";
+import type {  TranslationPair } from "../../types/types.ts";
+
 import { Dictionary, } from "../dictionary.ts"
-import type { DictionaryEntry } from "../../types/types.ts"
+import type { DictionaryEntryStructure } from "../../types/dictionary.ts"
 function splitAndClean(input: string): string[] {
     return input
         .trim()
@@ -32,25 +33,25 @@ export class PairsWordExpander {
             const newTPs: TranslationPair[] = this.expandTranslationPair(tp);
             data.splice(i, 0, ...newTPs);
             i += newTPs.length;
-            // console.log(`${newTPs.length} added`) 
+            // console.log(`${newTPs.length} added`)
         }
         data.forEach((tp, i, data)=>{
-            
+
             data.forEach((tpToTest, j) => {
-                if(tpToTest.translation === tp.translation 
+                if(tpToTest.translation === tp.translation
                     && tpToTest.source === tp.source
                     && i !== j
                 ){
                     //absolute duplicate
                      //remove one with higher index
                 }
-                 if(tpToTest.translation === tp.translation 
+                 if(tpToTest.translation === tp.translation
                     && tpToTest.source !== tp.source
                 ){
                     //partial duplicate
                     //keep one with longer source
                 }
-                    
+
             })
         })
         console.log("words size: ", this._words.size);
@@ -73,7 +74,7 @@ export class PairsWordExpander {
                 // console.log("finally"); process.exit();
                 console.log("translations not found for word", word);
                 const entries = this.dictionary.findByWord(word.toLowerCase());
-                let verb: DictionaryEntry | undefined;
+                let verb: DictionaryEntryStructure | undefined;
                 let oneEntryHasFormOf = false;
                 for (let entry of entries) {
                     const [hasFormOf, forms] = Dictionary.hasFormOf(entry);
@@ -96,7 +97,7 @@ export class PairsWordExpander {
             return expanded;
             //@todo if no translations - find if word has "formOf"
             // if so find if formOf word has translations
-            // if so add formOf word to _words and add translations 
+            // if so add formOf word to _words and add translations
         }
         const expandedWords = words.map(expandWord);
         expandedWords.forEach((expanded, i) => {
@@ -127,8 +128,8 @@ export class PairsWordExpander {
                     } else if (needToModify !== modifiedReflexiveStripped) {
                         expandedWords[i] = expandWord(modifiedReflexiveStripped);
                     }
-                    //remove trailing "s" - 
-                    //remove reflective verb structure           
+                    //remove trailing "s" -
+                    //remove reflective verb structure
                 }
             }
         })
@@ -143,7 +144,7 @@ export class PairsWordExpander {
         return translationPairs;
 
     }
-    addTranslationPair(recordDetails: DictionaryEntry[], translationPairs: TranslationPair[]) {
+    addTranslationPair(recordDetails: DictionaryEntryStructure[], translationPairs: TranslationPair[]) {
 
         const recordDetail = recordDetails.pop();
 
@@ -166,7 +167,7 @@ export class PairsWordExpander {
             return false;
         }
     }
-    // returns lower case words 
+    // returns lower case words
     getWords(translation: string) {
         const words = splitAndClean(translation).map(word => word.toLowerCase());
         return words.filter(word => {

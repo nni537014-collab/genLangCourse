@@ -1,7 +1,8 @@
 import { clearPreviousGeneratedData } from "./utils/utils.ts"
 import { Dictionary } from "./service/dictionary.ts"
 import { PairsWordExpander } from "./service/pairs/pairsWordExpander.ts"
-import { loadStyle, Pairs, PairsFileReaderWriter } from "./service/pairs/pairs.ts"
+import { loadStyle, Pairs } from "./service/pairs/pairs.ts"
+import { PairsFileReaderWriter } from "./service/pairs/pairsFileReaderWriter.ts"
 import type { TranslationPair, JsonValue, ContentGenerator, courseGenConfig } from "./types/types.ts";
 import { DialogCardsGenerator } from "./service/generators/content/dialog_cards.ts"
 import { SingleChoiceSetGenerator } from "./service/generators/content/single_choice_set.ts"
@@ -85,12 +86,12 @@ switch (mode) {
     const config: courseGenConfig = {
       assetDirectoryName: "assets",
       outDirectoryName: "out",
-      chunkSize: 10 
+      chunkSize: 10
     };
     const courseCreator = await CourseCreator.create(config);
     // courseCreator.
+  }
 }
-
 
 //  dictionary.findByWord("casa").map((entry)=>{
 //   if(entry.pos === "verb"){
@@ -124,4 +125,4 @@ switch (mode) {
 //     entry.translations?.map((trans) => {
 //         console.log(trans);
 //     })
-// })
+

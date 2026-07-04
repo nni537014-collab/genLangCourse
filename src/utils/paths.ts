@@ -58,7 +58,7 @@ function getAudioH5pRelativePath(input: string, type: SourceOrTranslation) {
   return path.join("audio", audioFileName(input, type));
 }
 function audioDir() {
-  return path.join(__dirname, utilsToBase, assetsDirName, h5pAudioDirName);
+  return path.join(getBasePath(), assetsDirName, h5pAudioDirName);
 }
 
 const getAssetPairsPath = () => {
@@ -78,7 +78,7 @@ const getAssetDictionaryPath = () => {
   return path.join(getAssetsPath(), dictionaryPath);
 };
 const getBasePath = () => {
-  return path.resolve(__dirname, "../../");
+  return path.resolve(__dirname, utilsToBase);
 };
 export const paths = {
   getBase: getBasePath,

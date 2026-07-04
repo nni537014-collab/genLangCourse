@@ -2,8 +2,8 @@ import { createReadStream } from "fs";
 import { paths } from "../utils/paths.ts"
 import { createInterface } from "readline";
 import type {
-    DictionaryEntry,
-} from "./../types/types.ts"
+    DictionaryEntryStructure,
+} from "./../types/dictionary.ts"
 import { totalmem } from "os";
 
 const readlineCreateInterface = () => {
@@ -12,8 +12,8 @@ const readlineCreateInterface = () => {
         crlfDelay: Infinity
     });
 }
-export const loadFromDisk = async (langCode: string): Promise<DictionaryEntry[]> => {
-    const ret: DictionaryEntry[] = [];
+export const loadFromDisk = async (langCode: string): Promise<DictionaryEntryStructure[]> => {
+    const ret: DictionaryEntryStructure[] = [];
 
     const rl = readlineCreateInterface();
 
@@ -34,7 +34,7 @@ export const loadFromDisk = async (langCode: string): Promise<DictionaryEntry[]>
 
 
 
-function processLine(line: string): DictionaryEntry | undefined {
+function processLine(line: string): DictionaryEntryStructure | undefined {
     //remove empty lines
     if (!line.trim()) return;
 
@@ -63,9 +63,9 @@ function processLine(line: string): DictionaryEntry | undefined {
 
 export class Dictionary {
     // uniqueWordsInCards: Set<string>;
-    _data: DictionaryEntry[];
+    _data: DictionaryEntryStructure[];
     langCode: string;
-    constructor(langCode: string, data: DictionaryEntry[]) {
+    constructor(langCode: string, data: DictionaryEntryStructure[]) {
         this._data = data;
         this.langCode = langCode;
         //console.log("dictionary length", this._data.length)
@@ -95,7 +95,7 @@ export class Dictionary {
     //         rl.on("error", reject);
     //     });
     // }
-    processLine(line: string): DictionaryEntry | undefined {
+    processLine(line: string): DictionaryEntryStructure | undefined {
         //remove empty lines
         if (!line.trim()) return;
         try {
@@ -107,7 +107,7 @@ export class Dictionary {
             return undefined;
         }
     }
-    static hasTranslations(toTest: DictionaryEntry | DictionaryEntry[]) {
+    static hasTranslations(toTest: DictionaryEntryStructure | DictionaryEntryStructure[]) {
         if (!Array.isArray(toTest)) {
             toTest = [toTest];
         }
@@ -120,7 +120,7 @@ export class Dictionary {
         return false;
     }
     //@todo return formFound[]?
-    static hasFormOf(entry: DictionaryEntry): [boolean, Set<string>] {
+    static hasFormOf(entry: DictionaryEntryStructure): [boolean, Set<string>] {
         let hasFormOf = false;
         let formsFound: string[] = [];
         let forms = new Set<string>;
@@ -174,7 +174,7 @@ export class Dictionary {
         });
         return ret;
     }
-    static isVerb(wordUnderTest: DictionaryEntry) {
+    static isVerb(wordUnderTest: DictionaryEntryStructure) {
         return (wordUnderTest.pos === "verb")
     }
 }
