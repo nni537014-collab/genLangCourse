@@ -23,6 +23,7 @@ import { SingleChoiceSetH5pGenerator } from "./generators/h5p/single_choice_set.
 import { MultiChoiceH5pGenerator } from "./generators/h5p/multi_choice.ts";
 import { DragTextH5pGenerator } from "./generators/h5p/drag_text.ts";
 
+import type { DialogcardsContent }  from "../types/H5P/dialog-cards.ts";
 export const createWrittenH5PArchive = (): WrittenH5PArchive => {
   return {
     "H5P.Blanks": new Set<string>(),

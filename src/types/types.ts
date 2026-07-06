@@ -1,3 +1,5 @@
+import type { H5PJSON } from "./H5P/h5p.ts";
+
 export type JsonPrimitive = string | number | boolean | null;
 
 export type JsonObject = { [key: string]: JsonValue };
@@ -47,14 +49,14 @@ export interface Creator<T> {
   ): Record<LibraryNames, ArchivedPaths>;
   map(allPaths: AllSegmentArchivedPaths): [Error | undefined];
 }
-export interface ContentGenerator extends Generator {
+export interface ContentGenerator<TTemplate extends object = object> extends Generator {
   generate(
     base: TranslationPair[],
-    template: JsonValue,
-  ): JsonValue | JsonValue[];
+    template: TTemplate,
+  ): TTemplate | TTemplate[];
 }
 export interface H5pGenerator extends Generator {
-  generate(index: number, template: JsonValue): JsonValue | JsonValue[];
+  generate(index: number, template: H5PJSON): H5PJSON | H5PJSON[];
 }
 export type AudioFileName = `${string}.mp3`;
 
@@ -63,11 +65,11 @@ export const writeError = {
   ERROR: "ERROR",
 } as const;
 export type WriteError = (typeof writeError)[keyof typeof writeError];
-export interface Writer {
+export interface Writer<TContent extends Object = Object> {
   getSupportedLibrary(): LibraryNames;
   writeDirName: string;
   archivedPaths: ArchivedPaths;
-  write(content: JsonValue, h5p: JsonValue, index: number): WriteError;
+  write(content: TContent, h5p: H5PJSON, index: number): WriteError;
 }
 export type GenSet = {
   content: ContentGenerator;
