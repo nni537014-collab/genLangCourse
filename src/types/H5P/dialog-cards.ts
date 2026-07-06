@@ -55,3 +55,11 @@ export interface Dialog {
 
 export interface Tips {
 }
+export interface Copyright {
+    license: string;
+}
+export interface AudioItem {
+    path: string;
+    mime: string;
+    copyright?: Copyright;
+}
