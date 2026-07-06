@@ -3,6 +3,7 @@ import type {
   JsonValue,
   ContentGenerator,
   LibraryNames,
+  SourceOrTranslation,
 
 } from "../../../types/types.ts";
 import {  genRandomNumbers,  } from "../../../utils/utils.ts"
@@ -19,7 +20,7 @@ export class MultiChoiceGenerator implements ContentGenerator {
       const templClone = structuredClone(template) as any;
       const file = templClone.media.type.params.files[0];
       if (typeof file !== "object") throw new Error("bad data");
-      file.path = this.generateAudioPath(tp);
+      file.path = this.generateAudioPath(tp, "translation");
 
       templClone.question = this.generateQuestion(tp);
       templClone.answers = this.generateAnswers(tp, base, templClone.answers);
@@ -133,8 +134,8 @@ export class MultiChoiceGenerator implements ContentGenerator {
   generateQuestion(tp: TranslationPair): any {
     return "<p>Listen and then select the correct answer<\/p>";
   }
-  generateAudioPath(tp: TranslationPair): any {
-    return paths.getAudioH5pRelative(tp.translation);
+  generateAudioPath(tp: TranslationPair, type: SourceOrTranslation): any {
+    return paths.getAudioH5pRelative(tp.translation, type);
   }
   getSupportedLibrary(): LibraryNames {
     return "H5P.MultiChoice"; //@todo 

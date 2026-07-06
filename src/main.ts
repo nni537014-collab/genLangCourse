@@ -56,20 +56,20 @@ const words: WordSearchList = [
 
 switch (mode) {
   case MODES.find: {
-    const dictionary = await Dictionary.create("es");
-    words.forEach((wordSearchItem) => {
-      const results = dictionary.findByWord(wordSearchItem.word);
-      console.log(results);
-      console.log(`finished logging word: ${wordSearchItem.word}`)
-      if (wordSearchItem.logTranslations) {
-        results.forEach((entry) => {
-          entry.translations?.forEach((trans) => {
-            console.log(trans);
-          })
-        })
+    // const dictionary = await Dictionary.create("es");
+    // words.forEach((wordSearchItem) => {
+    //   const results = dictionary.findByWord(wordSearchItem.word);
+    //   console.log(results);
+    //   console.log(`finished logging word: ${wordSearchItem.word}`)
+    //   if (wordSearchItem.logTranslations) {
+    //     results.forEach((entry) => {
+    //       entry.translations?.forEach((trans) => {
+    //         console.log(trans);
+    //       })
+    //     })
 
-      }
-    })
+    //   }
+    // })
     break;
   }
   case MODES.run: {
