@@ -1,7 +1,7 @@
 import type { DictionaryTranslationStructure } from "../../types/dictionary.ts";
 import type { TranslationPair } from "../../types/types.ts";
 
-import { Dictionary } from "../dictionary.ts";
+import { Dictionary, DictionaryFactory } from "../dictionary.ts";
 import { DictionaryEntry } from "../dictionary_entry.ts";
 function splitAndClean(input: string): string[] {
   return input
@@ -33,7 +33,7 @@ export class PairsWordExpander {
     this._langSpecificWordModifier = langSpecificWordModifier;
   }
   static async create(langCode: string) {
-    const dictionary = await Dictionary.create(langCode);
+    const dictionary = await DictionaryFactory(langCode);
     //@todo need factory to create modifier func
     return new PairsWordExpander(
       dictionary,

@@ -4,9 +4,8 @@ import { createInterface } from "readline";
 import type {
   DictionaryEntryStructure,
   DictionaryTranslationStructure,
-  Sense,
+  // Sense,
 } from "./../types/dictionary.ts";
-import { totalmem } from "os";
 import { DictionaryEntry } from "./dictionary_entry.ts";
 
 const readlineCreateInterface = () => {
@@ -66,7 +65,10 @@ function processLine(line: string): DictionaryEntryStructure | undefined {
     return undefined;
   }
 }
-
+export async function DictionaryFactory(langCode: string) {
+  const [data, dictionaryEntries] = await loadFromDisk(langCode);
+  return new Dictionary(langCode, data, dictionaryEntries);
+}
 export class Dictionary {
   // uniqueWordsInCards: Set<string>;
   _data: DictionaryEntryStructure[];
@@ -81,10 +83,6 @@ export class Dictionary {
     this._dictionaryEntries = dictionaryEntries;
     this.langCode = langCode;
     //console.log("dictionary length", this._data.length)
-  }
-  static async create(langCode: string) {
-    const [data, dictionaryEntries] = await loadFromDisk(langCode);
-    return new Dictionary(langCode, data, dictionaryEntries);
   }
 
   // async loadWordDetailFromDisk(word: string | string[]): Promise<DictionaryEntry[]> {
@@ -117,42 +115,42 @@ export class Dictionary {
       return undefined;
     }
   }
-  static hasTranslations(
-    toTest: DictionaryEntryStructure | DictionaryEntryStructure[],
-  ) {
-    if (!Array.isArray(toTest)) {
-      toTest = [toTest];
-    }
-    for (let entry of toTest) {
-      if (Array.isArray(entry.translations) && entry.translations.length > 0) {
-        return true;
-      }
-    }
-    return false;
-  }
+  // static hasTranslations(
+  //   toTest: DictionaryEntryStructure | DictionaryEntryStructure[],
+  // ) {
+  //   if (!Array.isArray(toTest)) {
+  //     toTest = [toTest];
+  //   }
+  //   for (let entry of toTest) {
+  //     if (Array.isArray(entry.translations) && entry.translations.length > 0) {
+  //       return true;
+  //     }
+  //   }
+  //   return false;
+  // }
   //@todo return formFound[]?
-  static hasFormOf(entry: DictionaryEntryStructure): [boolean, Set<string>] {
-    let hasFormOf = false;
-    let formsFound: string[] = [];
-    let forms = new Set<string>();
-    //@todo
-    if (entry.formof) {
-      console.log(entry, "formof exiting");
-      process.exit();
-    }
-    // if (entry.tags?.includes("form-of"))
-    //     hasFormOf = true;
-    entry.senses?.map((sense: Sense) => {
-      if (sense.form_of) {
-        sense.form_of.map((formOf) => {
-          hasFormOf = true;
-          forms.add(formOf.word);
-          // formsFound.push(formOf.word);
-        });
-      }
-    });
-    return [forms.size > 0, forms];
-  }
+  // static hasFormOf(entry: DictionaryEntryStructure): [boolean, Set<string>] {
+  //   let hasFormOf = false;
+  //   let formsFound: string[] = [];
+  //   let forms = new Set<string>();
+  //   //@todo
+  //   if (entry.formof) {
+  //     console.log(entry, "formof exiting");
+  //     process.exit();
+  //   }
+  //   // if (entry.tags?.includes("form-of"))
+  //   //     hasFormOf = true;
+  //   entry.senses?.map((sense: Sense) => {
+  //     if (sense.form_of) {
+  //       sense.form_of.map((formOf) => {
+  //         hasFormOf = true;
+  //         forms.add(formOf.word);
+  //         // formsFound.push(formOf.word);
+  //       });
+  //     }
+  //   });
+  //   return [forms.size > 0, forms];
+  // }
   findByWord(word: string) {
     return this._dictionaryEntries.filter((de) => de.isWord(word));
   }
@@ -184,7 +182,7 @@ export class Dictionary {
   }
   async findFormOf(word: string) {
     const des = this.findByWord(word);
-    let ret: string[] = [];
+    const ret: string[] = [];
     des.map((de) => {
       const [hasFormOf, formFound] = de.hasFormOf();
       if (hasFormOf && typeof formFound === "string") ret.push(formFound);

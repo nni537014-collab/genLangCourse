@@ -1,39 +1,26 @@
 import { clearPreviousGeneratedData } from "./utils/utils.ts"
-import { Dictionary } from "./service/dictionary.ts"
+// import { Dictionary } from "./service/dictionary.ts"
 import { PairsWordExpander } from "./service/pairs/pairsWordExpander.ts"
 import { loadStyle, Pairs } from "./service/pairs/pairs.ts"
 import { PairsFileReaderWriter } from "./service/pairs/pairsFileReaderWriter.ts"
-import type { TranslationPair, JsonValue, ContentGenerator, courseGenConfig } from "./types/types.ts";
-import { DialogCardsGenerator } from "./service/generators/content/dialog_cards.ts"
-import { SingleChoiceSetGenerator } from "./service/generators/content/single_choice_set.ts"
+import type { /*TranslationPair, JsonValue, ContentGenerator,*/ courseGenConfig } from "./types/types.ts";
+// import { DialogCardsGenerator } from "./service/generators/content/dialog_cards.ts"
+// import { SingleChoiceSetGenerator } from "./service/generators/content/single_choice_set.ts"
 import { CourseCreator } from "./service/course_creator.ts";
-/**
- * @todo move somewhere, types? 
- */
 
 
-/**
- * @todo move somewhere, types or config? 
- */
 
-/**
- * main class that kick's things off
- * maybe going to run everything in constructor
- * additional methods for report generation? 
- */
+// class DataExtenderImage {
+//   constructor() {
 
+//   }
+// }
 
-class DataExtenderImage {
-  constructor() {
+// class DataExtenderAudio {
+//   constructor() {
 
-  }
-}
-
-class DataExtenderAudio {
-  constructor() {
-
-  }
-}
+//   }
+// }
 
 
 clearPreviousGeneratedData();
@@ -43,15 +30,15 @@ const MODES = {
 
 
 } as const;
-type WordSearchItem = { word: string; logTranslations?: boolean }
-type WordSearchList = WordSearchItem[];
+// type WordSearchItem = { word: string; logTranslations?: boolean }
+// type WordSearchList = WordSearchItem[];
 type Modes = typeof MODES[keyof typeof MODES]
 const mode = MODES.run as Modes;
 
-const words: WordSearchList = [
-  { word: "sonreír", logTranslations: true },
-  { word: "sonreir", logTranslations: true }
-]
+// const words: WordSearchList = [
+//   { word: "sonreír", logTranslations: true },
+//   { word: "sonreir", logTranslations: true }
+// ]
 
 
 switch (mode) {
@@ -88,7 +75,9 @@ switch (mode) {
       outDirectoryName: "out",
       chunkSize: 10
     };
+    //@todo remove static methods - add factory funcs
     const courseCreator = await CourseCreator.create(config);
+    console.log(courseCreator);
     // courseCreator.
   }
 }

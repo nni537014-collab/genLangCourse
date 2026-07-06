@@ -9,7 +9,6 @@ import type {
 import {  genRandomNumbers,  } from "../../../utils/utils.ts"
 import {  paths, } from "../../../utils/paths.ts"
 
-import { error } from "console";
 
 export class MultiChoiceGenerator implements ContentGenerator {
   numberOfWrongAnswers: number = 3;
@@ -35,61 +34,61 @@ export class MultiChoiceGenerator implements ContentGenerator {
     //answers {correct: boolean, text: string}[]
     // text in source lang  - one correct ans - wrap <div>
     // structuredClone required
-    return [];//template;
+    return ret;//[];//template;
 
 
-    const j = {
-      "media": {
-        "disableImageZooming": false,
-        "type": {
-          "params": {
-            "playerMode": "minimalistic",
-            "fitToWrapper": false,
-            "controls": true,
-            "autoplay": false,
-            "playAudio": "Play audio",
-            "pauseAudio": "Pause audio",
-            "contentName": "Audio",
-            "audioNotSupported": "Your browser does not support this audio",
-            "files": [
-              {
-                "path": "audios\/files-6a3a4467a3f91.mp3",
-                "mime": "audio\/mpeg",
-                "copyright": { "license": "U" }
-              }
-            ]
-          },
-          "library": "H5P.Audio 1.5",
-          "metadata": {
-            "contentType": "Audio",
-            "license": "U",
-            "title": "Untitled Audio"
-          },
-          "subContentId": "823aa57d-c970-4f38-a747-0ac17f4fb65f"
-        }
-      },
-      "answers": [
-        {
-          "correct": true,
-          "tipsAndFeedback": {
-            "tip": "",
-            "chosenFeedback": "",
-            "notChosenFeedback": ""
-          },
-          "text": "<div>correct answer<\/div>"
-        },
-        {
-          "correct": false,
-          "tipsAndFeedback": {
-            "tip": "",
-            "chosenFeedback": "",
-            "notChosenFeedback": ""
-          },
-          "text": "<div>wrong answer<\/div>"
-        }
-      ],
-      "question": "<p>Listen and then select the correct answer<\/p>"
-    }
+    // const j = {
+    //   "media": {
+    //     "disableImageZooming": false,
+    //     "type": {
+    //       "params": {
+    //         "playerMode": "minimalistic",
+    //         "fitToWrapper": false,
+    //         "controls": true,
+    //         "autoplay": false,
+    //         "playAudio": "Play audio",
+    //         "pauseAudio": "Pause audio",
+    //         "contentName": "Audio",
+    //         "audioNotSupported": "Your browser does not support this audio",
+    //         "files": [
+    //           {
+    //             "path": "audios\/files-6a3a4467a3f91.mp3",
+    //             "mime": "audio\/mpeg",
+    //             "copyright": { "license": "U" }
+    //           }
+    //         ]
+    //       },
+    //       "library": "H5P.Audio 1.5",
+    //       "metadata": {
+    //         "contentType": "Audio",
+    //         "license": "U",
+    //         "title": "Untitled Audio"
+    //       },
+    //       "subContentId": "823aa57d-c970-4f38-a747-0ac17f4fb65f"
+    //     }
+    //   },
+    //   "answers": [
+    //     {
+    //       "correct": true,
+    //       "tipsAndFeedback": {
+    //         "tip": "",
+    //         "chosenFeedback": "",
+    //         "notChosenFeedback": ""
+    //       },
+    //       "text": "<div>correct answer<\/div>"
+    //     },
+    //     {
+    //       "correct": false,
+    //       "tipsAndFeedback": {
+    //         "tip": "",
+    //         "chosenFeedback": "",
+    //         "notChosenFeedback": ""
+    //       },
+    //       "text": "<div>wrong answer<\/div>"
+    //     }
+    //   ],
+    //   "question": "<p>Listen and then select the correct answer<\/p>"
+    // }
   }
   generateAnswers(tp: TranslationPair, base: TranslationPair[], template: JsonValue) {
     const ret: JsonValue[] = [];
@@ -111,7 +110,7 @@ export class MultiChoiceGenerator implements ContentGenerator {
     correct.correct = true;
     correct.text = `<div>${tp.source}</div>`
     ret.push(correct)
-    for (let index of wrongIndexes) {
+    for (const index of wrongIndexes) {
       const tpWrong = base[index];
       if (!tpWrong) throw new Error("bad data");
       const wrong = structuredClone(ansTempl) as { correct: boolean, text: string };
@@ -131,10 +130,10 @@ export class MultiChoiceGenerator implements ContentGenerator {
  }*/
 
   }
-  generateQuestion(tp: TranslationPair): any {
-    return "<p>Listen and then select the correct answer<\/p>";
+  generateQuestion() {
+    return "<p>Listen and then select the correct answer</p>";
   }
-  generateAudioPath(tp: TranslationPair, type: SourceOrTranslation): any {
+  generateAudioPath(tp: TranslationPair, type: SourceOrTranslation) {
     return paths.getAudioH5pRelative(tp.translation, type);
   }
   getSupportedLibrary(): LibraryNames {
