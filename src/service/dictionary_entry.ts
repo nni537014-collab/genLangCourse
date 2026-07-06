@@ -12,20 +12,20 @@ export class DictionaryEntry {
     return this._data.pos === "verb";
   }
   hasFormOf(): [boolean, Set<string>] {
-    let hasFormOf = false;
-    let formsFound: string[] = [];
-    let forms = new Set<string>();
+    // let hasFormOf = false;
+    // const formsFound: string[] = [];
+    const forms = new Set<string>();
     //@todo
-    if (this._data.formof) {
-      console.log(this._data, "formof exiting");
-      process.exit();
-    }
+    // if (this._data.formof) {
+    //   console.log(this._data, "formof exiting");
+    //   process.exit();
+    // }
     // if (entry.tags?.includes("form-of"))
     //     hasFormOf = true;
     this._data.senses?.map((sense) => {
       if (sense.form_of) {
         sense.form_of.map((formOf: { word: string }) => {
-          hasFormOf = true;
+          // hasFormOf = true;
           forms.add(formOf.word);
           // formsFound.push(formOf.word);
         });

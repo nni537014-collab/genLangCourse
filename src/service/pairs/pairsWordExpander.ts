@@ -2,7 +2,7 @@ import type { DictionaryTranslationStructure } from "../../types/dictionary.ts";
 import type { TranslationPair } from "../../types/types.ts";
 
 import { Dictionary, DictionaryFactory } from "../dictionary.ts";
-import { DictionaryEntry } from "../dictionary_entry.ts";
+// import { DictionaryEntry } from "../dictionary_entry.ts";
 function splitAndClean(input: string): string[] {
   return input
     .trim()
@@ -37,7 +37,9 @@ export class PairsWordExpander {
     //@todo need factory to create modifier func
     return new PairsWordExpander(
       dictionary,
-      (words: string[], needsModified: boolean[]) => {},
+      (words: string[], needsModified: boolean[]) => {
+        
+      },
     );
   }
   expand(data: TranslationPair[]) {
@@ -96,7 +98,7 @@ export class PairsWordExpander {
         // console.log("finally"); process.exit();
         console.log("translations not found for word", word);
         const des = this.dictionary.findByWord(word.toLowerCase());
-        for (let de of des) {
+        for (const de of des) {
           const [hasFormOf, forms] = de.hasFormOf();
           if (hasFormOf) {
             expanded = true;

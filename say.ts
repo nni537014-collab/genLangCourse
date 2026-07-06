@@ -1,19 +1,18 @@
 import say from "say";
-import { execSync } from "child_process";
 
 const wavFile = "output.wav";
 const mp3File = "output.mp3";
 
 
-function listVoices() {
-  const ps = `
-Add-Type -AssemblyName System.Speech;
-$s = New-Object System.Speech.Synthesis.SpeechSynthesizer;
-$s.GetInstalledVoices() | ForEach-Object { $_.VoiceInfo.Name }
-`;
-const result = execSync(ps);
-  console.log("Installed voices:\n", result.toString().split("\n").map(v => v.trim().toLowerCase()).filter(v => v.length > 0).join("\n"));
-}
+// function listVoices() {
+//   const ps = `
+// Add-Type -AssemblyName System.Speech;
+// $s = New-Object System.Speech.Synthesis.SpeechSynthesizer;
+// $s.GetInstalledVoices() | ForEach-Object { $_.VoiceInfo.Name }
+// `;
+// const result = execSync(ps);
+//   console.log("Installed voices:\n", result.toString().split("\n").map(v => v.trim().toLowerCase()).filter(v => v.length > 0).join("\n"));
+// }
 
 //listVoices();
 

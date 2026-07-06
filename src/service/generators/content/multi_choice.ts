@@ -21,7 +21,7 @@ export class MultiChoiceGenerator implements ContentGenerator {
       if (typeof file !== "object") throw new Error("bad data");
       file.path = this.generateAudioPath(tp, "translation");
 
-      templClone.question = this.generateQuestion(tp);
+      templClone.question = this.generateQuestion();
       templClone.answers = this.generateAnswers(tp, base, templClone.answers);
       return templClone;
     });

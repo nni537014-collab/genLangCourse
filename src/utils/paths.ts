@@ -1,27 +1,27 @@
 //@todo move paths to separate file
-import { ZipArchive } from "archiver";
+// import { ZipArchive } from "archiver";
 
-import {
-  createReadStream,
-  mkdirSync,
-  rmSync,
-  readFileSync,
-  writeFileSync,
-  createWriteStream,
-  copyFileSync,
-  renameSync,
-  type PathLike,
-} from "fs";
+// import {
+//   createReadStream,
+//   mkdirSync,
+//   rmSync,
+//   readFileSync,
+//   writeFileSync,
+//   createWriteStream,
+//   copyFileSync,
+//   renameSync,
+//   type PathLike,
+// } from "fs";
 import path from "path";
 import {
   outDirName,
   assetsDirName,
   pairsFileName,
   dictionaryPath,
-  h5pAssetsDirName,
-  h5pJsonFileName,
-  h5pContentDir,
-  h5pContentFileName,
+  // h5pAssetsDirName,
+  // h5pJsonFileName,
+  // h5pContentDir,
+  // h5pContentFileName,
   h5pAudioDirName,
   writeDirName,
 } from "../config.ts";
@@ -29,11 +29,11 @@ import {
 import { fileURLToPath } from "url";
 import { createHash } from "crypto";
 import type {
-  JsonValue,
-  ContentGenerator,
-  LibraryNames,
-  ArchivedPaths,
-  WrittenH5PArchive,
+  // JsonValue,
+  // ContentGenerator,
+  // LibraryNames,
+  // ArchivedPaths,
+  // WrittenH5PArchive,
   SourceOrTranslation,
   AudioFileName,
 } from "../types/types.ts";
