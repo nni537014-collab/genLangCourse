@@ -50,11 +50,12 @@ export interface ConfirmStartingOver {
 export interface Dialog {
     text: string;
     answer: string;
-    tips: Tips;
+    tips: Record<string, unknown>;
+    audio?: AudioItem[] 
 }
 
-export interface Tips {
-}
+// export interface Tips {
+// }
 export interface Copyright {
     license: string;
 }
