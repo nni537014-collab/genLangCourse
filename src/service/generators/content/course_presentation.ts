@@ -7,9 +7,10 @@ import type {
 } from "../../../types/types.ts"
 import {
   coursePresentationSlideLibraries,
+  libraryNames,
 
 } from "../../../types/types.ts"
-import type { CoursePresentationContent } from "../../../types/H5P/course-presentation.ts";
+import type { CoursePresentationContent, Slide } from "../../../types/H5P/course-presentation.ts";
 
 class CoursePresentationGenerator implements ContentGenerator {
   actionLibraryRenderers: ContentGenerator[];
@@ -21,31 +22,36 @@ class CoursePresentationGenerator implements ContentGenerator {
   */
   generate(base: TranslationPair[], template: CoursePresentationContent) {
     template.presentation.slides.forEach((slide, i) => {
-      if (!Array.isArray(slide)) throw new Error("bad template - no elements array")
+      if (!Array.isArray(slide.elements)) throw new Error("bad template - no elements array")
+      if (this.cloneRequired(slide)) {
+        // @todo - generate multiple slides for this slide, e.g. MultiChoice etc.
+        //clone slide and add to presentation.slides
+      } else {
 
-      slide.forEach((element, j) => {
+      }
+      slide.elements.forEach((element, j) => {
         //@todo - using types but maybe zod validation would be better for this
         // if (typeof element.action !== "object") throw new Error("bad templ");
         const lib = element.action.library;
-        if (typeof lib === "string") {
-          const gen = this.actionLibraryRenderers.find((generator): boolean => {
-            const libName = element.action.library.trim().split(" ")[0];
 
-            return (generator.getSupportedLibrary() === libName)
-          })
-          if (gen) {
-            if (this.isSlideLibrary(gen.getSupportedLibrary())) {
-              // @todo - generate multiple slides for this slide, e.g. MultiChoice etc.
-              //clone slide and add to presentation.slides
-              
-            } else {
-              console.log(`slide no. ${i + 1}: generating ...${gen.getSupportedLibrary()}`)
-              element.action.params = gen.generate(base, element.action.params);
-            }
+        const gen = this.actionLibraryRenderers.find((generator): boolean => {
+          const libName = element.action.library.trim().split(" ")[0];
 
+          return (generator.getSupportedLibrary() === libName)
+        })
+        if (gen) {
+          if (this.isSlideLibrary(gen.getSupportedLibrary())) {
+            // @todo - generate multiple slides for this slide, e.g. MultiChoice etc.
+            //clone slide and add to presentation.slides
+
+          } else {
+            console.log(`slide no. ${i + 1}: generating ...${gen.getSupportedLibrary()}`)
+            element.action.params = gen.generate(base, element.action.params);
           }
 
         }
+
+
       })
 
     })
@@ -70,9 +76,27 @@ class CoursePresentationGenerator implements ContentGenerator {
   isSlideLibrary(libName: string) {
     return (coursePresentationSlideLibraries as readonly string[]).includes(libName);
   }
-  loadTemplate() {
-    return JSON.parse("");
+  isContentLibrary(libName: string) {
+    return (libraryNames as readonly string[]).includes(libName);
   }
+  cloneRequired(slide: Slide): boolean {
+    return slide.elements.some((element) => {
+      return this.isSlideLibrary(element.action.library);
+    });
+  }
+  findLibraryName(slide: Slide): string | undefined {
+    let libName: string | undefined;
+    slide.elements.forEach((element) => {
+      if (this.isContentLibrary(element.action.library)) {
+        if (typeof libName === "undefined") libName = element.action.library;
+        else throw new Error("multiple content libraries found in slide - cannot generate");
+      };
+    });
+    return libName;
+  }
+  // loadTemplate() {
+  //   return JSON.parse("");
+  // }
   getSupportedLibrary(): LibraryNames {
     return "H5P.CoursePresentation";
   }
