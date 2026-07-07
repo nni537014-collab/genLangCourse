@@ -3,14 +3,15 @@ import type {
   JsonValue,
   LibraryNames,
   TranslationPair,
-
-} from "../../../types/types.ts"
+} from "../../../types/types.ts";
 import {
   coursePresentationSlideLibraries,
   libraryNames,
-
-} from "../../../types/types.ts"
-import type { CoursePresentationContent, Slide } from "../../../types/H5P/course-presentation.ts";
+} from "../../../types/types.ts";
+import type {
+  CoursePresentationContent,
+  Slide,
+} from "../../../types/H5P/course-presentation.ts";
 
 class CoursePresentationGenerator implements ContentGenerator {
   actionLibraryRenderers: ContentGenerator[];
@@ -21,18 +22,33 @@ class CoursePresentationGenerator implements ContentGenerator {
     @todo some libraries should have multiple slides generated for them, e.g. MultiChoice, SingleChoiceSet, Blanks, etc.
   */
   generate(base: TranslationPair[], template: CoursePresentationContent) {
-    template.presentation.slides.forEach((slide, i) => {
+    for (let i = 0; template.presentation.slides.length; i++) {
+      const slide = template.presentation.slides[i];
+      if (!slide) throw new Error("bad data");
       const libName = this.findLibraryName(slide);
       if (libName) {
         const gen = this.actionLibraryRenderers.find((generator): boolean => {
-          return (generator.getSupportedLibrary() === libName)
-        })
-        if(!gen) throw new Error(`no generator found for library ${libName}`);
+          return generator.getSupportedLibrary() === libName;
+        });
+        if (!gen) throw new Error(`no generator found for library ${libName}`);
         if (this.isSlideLibrary(libName)) {
           // @todo - generate multiple slides for this slide, e.g. MultiChoice etc.
           //clone slide and add to presentation.slides
         } else {
-
+        }
+      }
+    }
+    template.presentation.slides.forEach((slide, i) => {
+      const libName = this.findLibraryName(slide);
+      if (libName) {
+        const gen = this.actionLibraryRenderers.find((generator): boolean => {
+          return generator.getSupportedLibrary() === libName;
+        });
+        if (!gen) throw new Error(`no generator found for library ${libName}`);
+        if (this.isSlideLibrary(libName)) {
+          // @todo - generate multiple slides for this slide, e.g. MultiChoice etc.
+          //clone slide and add to presentation.slides
+        } else {
         }
       }
 
@@ -44,24 +60,21 @@ class CoursePresentationGenerator implements ContentGenerator {
         const gen = this.actionLibraryRenderers.find((generator): boolean => {
           const libName = element.action.library.trim().split(" ")[0];
 
-          return (generator.getSupportedLibrary() === libName)
-        })
+          return generator.getSupportedLibrary() === libName;
+        });
         if (gen) {
           if (this.isSlideLibrary(gen.getSupportedLibrary())) {
             // @todo - generate multiple slides for this slide, e.g. MultiChoice etc.
             //clone slide and add to presentation.slides
-
           } else {
-            console.log(`slide no. ${i + 1}: generating ...${gen.getSupportedLibrary()}`)
+            console.log(
+              `slide no. ${i + 1}: generating ...${gen.getSupportedLibrary()}`,
+            );
             element.action.params = gen.generate(base, element.action.params);
           }
-
         }
-
-
-      })
-
-    })
+      });
+    });
     return template;
 
     //get template
@@ -81,7 +94,9 @@ class CoursePresentationGenerator implements ContentGenerator {
     // });
   }
   isSlideLibrary(libName: string) {
-    return (coursePresentationSlideLibraries as readonly string[]).includes(libName);
+    return (coursePresentationSlideLibraries as readonly string[]).includes(
+      libName,
+    );
   }
   isContentLibrary(libName: string) {
     return (libraryNames as readonly string[]).includes(libName);
@@ -91,14 +106,25 @@ class CoursePresentationGenerator implements ContentGenerator {
       return this.isSlideLibrary(element.action.library);
     });
   }
+  // @todo move to utils?
+  libToLibName(lib: string) {
+    const res = lib.trim().split(" ")[0];
+    if (res) {
+      if (this.isContentLibrary(res)) {
+        return res as LibraryNames;
+      }
+    }
+  }
+  findElementInSlide(slide: Slide) {
+    slide.elements.find((el) => this.isContentLibrary(el.action.library));
+  }
   findLibraryName(slide: Slide): string | undefined {
     let libName: string | undefined;
     slide.elements.forEach((element) => {
-      const canditate = element.action.library.trim().split(" ")[0]
-      if (canditate && this.isContentLibrary(canditate)) {
-        if (typeof libName === "undefined") libName = canditate;
-        else throw new Error("multiple content libraries found in slide - cannot generate");
-      };
+      const canditate = this.libToLibName(element.action.library);
+      if (canditate) {
+        libName = canditate;
+      }
     });
     return libName;
   }
