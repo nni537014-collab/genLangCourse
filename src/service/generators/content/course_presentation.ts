@@ -1,13 +1,13 @@
-import type { 
+import type {
   ContentGenerator,
   JsonValue,
   LibraryNames,
   TranslationPair,
-  
+
 } from "../../../types/types.ts"
-import { 
+import {
   coursePresentationSlideLibraries,
-  
+
 } from "../../../types/types.ts"
 import type { CoursePresentationContent } from "../../../types/H5P/course-presentation.ts";
 
@@ -34,9 +34,15 @@ class CoursePresentationGenerator implements ContentGenerator {
             return (generator.getSupportedLibrary() === libName)
           })
           if (gen) {
-            if(this.isSlideLibrary(gen.getSupportedLibrary())) return 
-            console.log(`slide no. ${i + 1}: generating ...${gen.getSupportedLibrary()}`)
-            element.action.params = gen.generate(base, element.action.params);
+            if (this.isSlideLibrary(gen.getSupportedLibrary())) {
+              // @todo - generate multiple slides for this slide, e.g. MultiChoice etc.
+              //clone slide and add to presentation.slides
+              
+            } else {
+              console.log(`slide no. ${i + 1}: generating ...${gen.getSupportedLibrary()}`)
+              element.action.params = gen.generate(base, element.action.params);
+            }
+
           }
 
         }
@@ -62,7 +68,7 @@ class CoursePresentationGenerator implements ContentGenerator {
     // });
   }
   isSlideLibrary(libName: string) {
-     return (coursePresentationSlideLibraries as readonly string[]).includes(libName);
+    return (coursePresentationSlideLibraries as readonly string[]).includes(libName);
   }
   loadTemplate() {
     return JSON.parse("");
