@@ -5,7 +5,7 @@ export class DialogCardsH5pGenerator implements H5pGenerator{
     getSupportedLibrary(): LibraryNames {
         return libraryNames[2];
     }
-    generate(index: number, template: H5PJSON): H5PJSON | H5PJSON[] {
+    generate(index: number, template: H5PJSON): H5PJSON {
         return template;
     }
 }
