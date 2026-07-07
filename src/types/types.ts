@@ -56,7 +56,7 @@ export interface ContentGenerator<TTemplate extends object = object> extends Gen
   ): TTemplate | TTemplate[];
 }
 export interface H5pGenerator extends Generator {
-  generate(index: number, template: H5PJSON): H5PJSON | H5PJSON[];
+  generate(index: number, template: H5PJSON): H5PJSON;
 }
 export type AudioFileName = `${string}.mp3`;
 

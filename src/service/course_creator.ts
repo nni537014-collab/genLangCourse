@@ -7,10 +7,12 @@ import type {
   LibraryNames,
   Creator,
   ArchivedPaths,
-  WrittenH5PArchive,
   AllSegmentArchivedPaths,
+  WrittenH5PArchive
 } from "../types/types.ts";
-import { loadStyle } from "../types/types.ts";
+import {
+  loadStyle
+} from "../types/types.ts";
 import { PairsWordExpander } from "./pairs/pairsWordExpander.ts";
 //@todo move pairsfilereaderwriter
 import { Pairs } from "./pairs/pairs.ts";
@@ -40,10 +42,10 @@ export class CourseCreator implements Creator<TranslationPair[]> {
   _pairs: Awaited<ReturnType<typeof CourseCreator.prepareBaseDataFromAssets>>;
   _pairsChunks: TranslationPair[][] = [];
   /**
-   * static factory
-   * @param config
-   * @returns
-   */
+ * static factory
+ * @param config 
+ * @returns 
+ */
   static async create(config: courseGenConfig) {
     return new CourseCreator(
       config,
@@ -57,6 +59,7 @@ export class CourseCreator implements Creator<TranslationPair[]> {
   constructor(config: courseGenConfig, pairs: Pairs, genSets: GenSet[]) {
     this._config = config;
     this._pairs = pairs;
+    this.chunkPairs();
     this._genSets = genSets;
     const chunkPrefix = "segment#";
     let chunkPostFix = 0;
@@ -88,7 +91,7 @@ export class CourseCreator implements Creator<TranslationPair[]> {
         genSet.content.getSupportedLibrary(),
       );
       const content = genSet.content.generate(chunk, templates.content);
-      const h5p = genSet.h5p.generate(templates.h5p, index);
+      const h5p = genSet.h5p.generate(index, templates.h5p);
       genSet.writer.write(content, h5p, index);
       //logging?
       //data structure for created h5p's for later report rendering
@@ -116,6 +119,8 @@ export class CourseCreator implements Creator<TranslationPair[]> {
     return this._pairsChunks;
   }
 
+
+
   static async prepareBaseDataFromAssets() {
     const expander = await PairsWordExpander.create("es");
     const pairs = new Pairs(
@@ -132,5 +137,10 @@ export class CourseCreator implements Creator<TranslationPair[]> {
     const audioRecords = await audioFileCreator.produceAllFiles((stored) => {});
 
     return pairs;
+
   }
+  extendBaseData() {
+
+  }
+
 }
