@@ -59,7 +59,7 @@ export class CourseCreator implements Creator<TranslationPair[]> {
   constructor(config: courseGenConfig, pairs: Pairs, genSets: GenSet[]) {
     this._config = config;
     this._pairs = pairs;
-    this.chunkPairs();
+
     this._genSets = genSets;
     const chunkPrefix = "segment#";
     let chunkPostFix = 0;
