@@ -22,13 +22,20 @@ class CoursePresentationGenerator implements ContentGenerator {
   */
   generate(base: TranslationPair[], template: CoursePresentationContent) {
     template.presentation.slides.forEach((slide, i) => {
-      if (!Array.isArray(slide.elements)) throw new Error("bad template - no elements array")
-      if (this.cloneRequired(slide)) {
-        // @todo - generate multiple slides for this slide, e.g. MultiChoice etc.
-        //clone slide and add to presentation.slides
-      } else {
+      const libName = this.findLibraryName(slide);
+      if (libName) {
+        const gen = this.actionLibraryRenderers.find((generator): boolean => {
+          return (generator.getSupportedLibrary() === libName)
+        })
+        if(!gen) throw new Error(`no generator found for library ${libName}`);
+        if (this.isSlideLibrary(libName)) {
+          // @todo - generate multiple slides for this slide, e.g. MultiChoice etc.
+          //clone slide and add to presentation.slides
+        } else {
 
+        }
       }
+
       slide.elements.forEach((element, j) => {
         //@todo - using types but maybe zod validation would be better for this
         // if (typeof element.action !== "object") throw new Error("bad templ");
@@ -87,8 +94,9 @@ class CoursePresentationGenerator implements ContentGenerator {
   findLibraryName(slide: Slide): string | undefined {
     let libName: string | undefined;
     slide.elements.forEach((element) => {
-      if (this.isContentLibrary(element.action.library)) {
-        if (typeof libName === "undefined") libName = element.action.library;
+      const canditate = element.action.library.trim().split(" ")[0]
+      if (canditate && this.isContentLibrary(canditate)) {
+        if (typeof libName === "undefined") libName = canditate;
         else throw new Error("multiple content libraries found in slide - cannot generate");
       };
     });
