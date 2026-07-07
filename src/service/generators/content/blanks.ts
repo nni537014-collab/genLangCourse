@@ -6,13 +6,13 @@ import type {
 
 } from "../../../types/types.ts";
 import su from "../../../utils/string.ts"
-
+import type { BlanksContent } from "../../../types/H5P/blanks.ts";
 export class BlanksGenerator implements ContentGenerator {
     /**
     params
 "questions": ["<p>oslo is the capital of *norway*<\/p>"]
    */
-  generate(base: TranslationPair[], template: JsonValue): JsonValue {
+  generate(base: TranslationPair[], template: BlanksContent): BlanksContent {
     (template as any).questions = base.map(tp => this.generateBlank)
     return template;
 

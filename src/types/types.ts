@@ -6,6 +6,7 @@ export type JsonObject = { [key: string]: JsonValue };
 
 export type JsonValue = JsonPrimitive | JsonValue[] | JsonObject;
 
+
 export type LibraryNames =
   | "H5P.Blanks"
   | "H5P.MultiMediaChoice"
@@ -15,13 +16,22 @@ export type LibraryNames =
   | "H5P.MultiMediaChoice"
   | "H5P.DragText"
   | "H5P.CoursePresentation";
+export type CoursePresentationSlideLibraries = Extract<
+  LibraryNames, 
+  "H5P.MultiChoice" | "H5P.MultiMediaChoice" | "H5P.DragText"
+>;
+export const coursePresentationSlideLibraries = [
+  "H5P.MultiMediaChoice",
+  "H5P.MultiChoice",
+  "H5P.DragText",
+] as const satisfies readonly CoursePresentationSlideLibraries[];
 export const libraryNames = [
   "H5P.Blanks",
   "H5P.MultiMediaChoice",
   "H5P.Dialogcards",
   "H5P.SingleChoiceSet",
   "H5P.MultiChoice",
-  "H5P.MultiMediaChoice",
+
   "H5P.DragText",
   "H5P.CoursePresentation",
 ] as const satisfies readonly LibraryNames[];
