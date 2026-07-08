@@ -1,4 +1,4 @@
-import type { LibraryNames } from "../types.ts";
+import type { LibraryNames } from "../../types.ts";
 import type { BlanksContent } from "./blanks.ts";
 import type { DialogcardsContent } from "./dialog-cards.ts";
 import type { SingleChoiceSetContent } from "./single-choice-set.ts";
@@ -74,6 +74,8 @@ export type Action =
     | BlanksAction
     | DialogCardsAction
     | SingleChoiceSetAction
+    // | DragTextAction
+    // | MultiChoiceAction
 
 interface BaseAction {
     subContentId: string;

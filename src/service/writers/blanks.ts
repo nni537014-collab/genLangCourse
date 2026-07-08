@@ -1,4 +1,4 @@
-import type { BlanksContent } from "../../types/H5P/blanks.ts";
+import type { BlanksContent } from "../../types/H5P/content/blanks.ts";
 import type { H5PJSON } from "../../types/H5P/h5p.ts";
 import { writeError } from "../../types/types.ts";
 import type {

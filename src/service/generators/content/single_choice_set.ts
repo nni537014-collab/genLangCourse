@@ -1,4 +1,4 @@
-import type { SingleChoiceSetContent } from "../../../types/H5P/single-choice-set.ts";
+import type { SingleChoiceSetContent } from "../../../types/H5P/content/single-choice-set.ts";
 import type {
   TranslationPair,
   ContentGenerator as ContentGenerator,

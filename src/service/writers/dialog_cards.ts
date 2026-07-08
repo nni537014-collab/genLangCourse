@@ -1,4 +1,4 @@
-import type { DialogcardsContent } from "../../types/H5P/dialog-cards.ts";
+import type { DialogcardsContent } from "../../types/H5P/content/dialog-cards.ts";
 import type { H5PJSON } from "../../types/H5P/h5p.ts";
 import { writeError, type WriteError, type Writer } from "../../types/types.ts"
 import type {

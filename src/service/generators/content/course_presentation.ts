@@ -11,7 +11,7 @@ import {
 import type {
   CoursePresentationContent,
   Slide,
-} from "../../../types/H5P/course-presentation.ts";
+} from "../../../types/H5P/content/course-presentation.ts";
 
 class CoursePresentationGenerator implements ContentGenerator {
   actionLibraryRenderers: ContentGenerator[];

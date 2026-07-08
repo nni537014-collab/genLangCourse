@@ -6,7 +6,7 @@ import type {
 
 } from "../../../types/types.ts";
 import su from "../../../utils/string.ts"
-import type { BlanksContent } from "../../../types/H5P/blanks.ts";
+import type { BlanksContent } from "../../../types/H5P/content/blanks.ts";
 export class BlanksGenerator implements ContentGenerator {
     /**
     params

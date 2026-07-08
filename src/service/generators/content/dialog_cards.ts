@@ -6,7 +6,7 @@ import type {
 
 } from "../../../types/types.ts";
 import { paths  } from "../../../utils/paths.ts"
-import type { DialogcardsContent } from "../../../types/H5P/dialog-cards.ts"
+import type { DialogcardsContent } from "../../../types/H5P/content/dialog-cards.ts"
 export class DialogCardsGenerator implements ContentGenerator<DialogcardsContent> {
   generate(base: TranslationPair[], template: DialogcardsContent): DialogcardsContent {
       if(template === null) throw new Error();
