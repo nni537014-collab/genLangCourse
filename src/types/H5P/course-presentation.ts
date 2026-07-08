@@ -1,3 +1,8 @@
+import type { LibraryNames } from "../types.ts";
+import type { BlanksContent } from "./blanks.ts";
+import type { DialogcardsContent } from "./dialog-cards.ts";
+import type { SingleChoiceSetContent } from "./single-choice-set.ts";
+
 export interface CoursePresentationContent {
     presentation: Presentation;
     override:     Override;
@@ -65,11 +70,30 @@ export interface Element {
     solution:              string;
 }
 
-export interface Action {
-    library:      string;
-    params:       ActionParams;
+export type Action =
+    | BlanksAction
+    | DialogCardsAction
+    | SingleChoiceSetAction
+
+interface BaseAction {
     subContentId: string;
-    metadata:     Metadata;
+    metadata: Metadata;
+}
+
+// 3. Create the individual action interfaces (The Discriminated Variants)
+interface BlanksAction extends BaseAction {
+    library: "H5P.Blanks";
+    params: BlanksContent; // Unique params for Blanks
+}
+
+interface DialogCardsAction extends BaseAction {
+    library: "H5P.Dialogcards";
+    params: DialogcardsContent; // Unique params for Blanks
+}
+
+interface SingleChoiceSetAction extends BaseAction {
+    library: "H5P.Dialogcards";
+    params: SingleChoiceSetContent; // Unique params for Blanks
 }
 
 export interface Metadata {

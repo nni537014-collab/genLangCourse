@@ -6,7 +6,7 @@ export type JsonObject = { [key: string]: JsonValue };
 
 export type JsonValue = JsonPrimitive | JsonValue[] | JsonObject;
 
-
+//@todo check if dialogcards should be camel case
 export type LibraryNames =
   | "H5P.Blanks"
   | "H5P.MultiMediaChoice"
