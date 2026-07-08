@@ -1,4 +1,6 @@
-import { writeError, type JsonValue, type WriteError, type Writer } from "../../types/types.ts"
+import type { H5PJSON } from "../../types/H5P/h5p.ts";
+import type { SingleChoiceSetContent } from "../../types/H5P/single-choice-set.ts";
+import { writeError, type WriteError, type Writer } from "../../types/types.ts"
 import type {
     
     ArchivedPaths,
@@ -16,7 +18,7 @@ export class SingleChoiceSetWriter implements Writer {
     getSupportedLibrary(): LibraryNames {
       return "H5P.SingleChoiceSet"; //@todo 
     }
-  write(generated: JsonValue, h5p: JsonValue, index: number): WriteError {
+  write(generated: SingleChoiceSetContent, h5p: H5PJSON, index: number): WriteError {
     // get h5p.json
     // another set of generators?
     // wrapper object from factory 

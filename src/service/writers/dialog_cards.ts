@@ -1,5 +1,6 @@
 import type { DialogcardsContent } from "../../types/H5P/dialog-cards.ts";
-import { writeError, type JsonValue, type WriteError, type Writer } from "../../types/types.ts"
+import type { H5PJSON } from "../../types/H5P/h5p.ts";
+import { writeError, type WriteError, type Writer } from "../../types/types.ts"
 import type {
 
   ArchivedPaths,
@@ -15,7 +16,7 @@ export class DialogCardsWriter implements Writer<DialogcardsContent> {
   getSupportedLibrary(): LibraryNames {
     return "H5P.Dialogcards"; //@todo 
   }
-  write(generated: DialogcardsContent, h5p: JsonValue, index: number): WriteError {
+  write(generated: DialogcardsContent, h5p: H5PJSON, index: number): WriteError {
     // get h5p.json
     // another set of generators?
     // wrapper object from factory 

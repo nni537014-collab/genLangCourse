@@ -1,6 +1,6 @@
+import type { SingleChoiceSetContent } from "../../../types/H5P/single-choice-set.ts";
 import type {
   TranslationPair,
-  JsonValue,
   ContentGenerator as ContentGenerator,
   LibraryNames,
  
@@ -10,9 +10,9 @@ import { randomUUID } from "crypto";
 
 export class SingleChoiceSetGenerator implements ContentGenerator{
   answerCount = 4;
-  generate(base: TranslationPair[], template: JsonValue): JsonValue {
+  generate(base: TranslationPair[], template: SingleChoiceSetContent): SingleChoiceSetContent {
 
-      (template as any).choices = base.map(this.generateSingleChoice);
+      template.choices = base.map(this.generateSingleChoice);
       return template;
 
   }

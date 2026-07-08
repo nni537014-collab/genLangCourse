@@ -23,7 +23,6 @@ import { SingleChoiceSetH5pGenerator } from "./generators/h5p/single_choice_set.
 import { MultiChoiceH5pGenerator } from "./generators/h5p/multi_choice.ts";
 import { DragTextH5pGenerator } from "./generators/h5p/drag_text.ts";
 
-import type { DialogcardsContent }  from "../types/H5P/dialog-cards.ts";
 export const createWrittenH5PArchive = (): WrittenH5PArchive => {
   return {
     "H5P.Blanks": new Set<string>(),
@@ -87,19 +86,9 @@ export function createGenSet(libraryName: LibraryNames) {
         writer: new MultiChoiceWriter(
           paths.getWrite(),
           writtenH5PArchive[libraryName],
-        ),
-      };
+        )}
       break;
-    case "H5P.MultiMediaChoice":
-      genSet = {
-        content: new MultiMediaChoiceGenerator(),
-        h5p: new MultiMediaChoiceH5pGenerator(),
-        writer: new MultiMediaChoiceWriter(
-          paths.getWrite(),
-          writtenH5PArchive[libraryName],
-        ),
-      };
-      break;
+
     case "H5P.DragText":
       genSet = {
         content: new DragTextGenerator(),

@@ -1,3 +1,4 @@
+import type { H5PJSON } from "../../types/H5P/h5p.ts";
 import { writeError, type JsonValue, type WriteError, type Writer } from "../../types/types.ts"
 import type {
     
@@ -17,7 +18,7 @@ export default class DragTextWriter implements Writer {
     return "H5P.DragText"; //@todo 
   }
 
-  write(generated: JsonValue, h5p: JsonValue, index: number): WriteError {
+  write(generated: JsonValue, h5p: H5PJSON, index: number): WriteError {
     // get h5p.json
     // another set of generators?
     // wrapper object from factory 

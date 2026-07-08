@@ -75,7 +75,7 @@ export const writeError = {
   ERROR: "ERROR",
 } as const;
 export type WriteError = (typeof writeError)[keyof typeof writeError];
-export interface Writer<TContent extends Object = Object> {
+export interface Writer<TContent extends object = object> {
   getSupportedLibrary(): LibraryNames;
   writeDirName: string;
   archivedPaths: ArchivedPaths;
