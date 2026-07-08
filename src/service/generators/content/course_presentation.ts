@@ -27,15 +27,18 @@ class CoursePresentationGenerator implements ContentGenerator {
       if (!slide) throw new Error("bad data");
       const libName = this.findLibraryName(slide);
       if (libName) {
-        const gen = this.actionLibraryRenderers.find((generator): boolean => {
-          return generator.getSupportedLibrary() === libName;
-        });
+        const gen = this.getGenerator(libName);
         if (!gen) throw new Error(`no generator found for library ${libName}`);
+        const el = this.findElementInSlide(slide);
+        if (!el) throw new Error("no element found in slide");
         if (this.isSlideLibrary(libName)) {
           // @todo - generate multiple slides for this slide, e.g. MultiChoice etc.
           //clone slide and add to presentation.slides
         } else {
-          ;
+          const generated = gen.generate(base, el.action.params);
+          if (Array.isArray(generated))
+            throw new Error("content should be object not array");
+          el.action.params = generated;
         }
       }
     }
@@ -59,11 +62,7 @@ class CoursePresentationGenerator implements ContentGenerator {
         // if (typeof element.action !== "object") throw new Error("bad templ");
         const lib = element.action.library;
 
-        const gen = this.actionLibraryRenderers.find((generator): boolean => {
-          const libName = element.action.library.trim().split(" ")[0];
-
-          return generator.getSupportedLibrary() === libName;
-        });
+        const gen = this.getGenerator(lib);
         if (gen) {
           if (this.isSlideLibrary(gen.getSupportedLibrary())) {
             // @todo - generate multiple slides for this slide, e.g. MultiChoice etc.
@@ -95,6 +94,11 @@ class CoursePresentationGenerator implements ContentGenerator {
 
     // });
   }
+  getGenerator(libName: LibraryNames) {
+    return this.actionLibraryRenderers.find((generator): boolean => {
+      return generator.getSupportedLibrary() === libName;
+    });
+  }
   isSlideLibrary(libName: string) {
     return (coursePresentationSlideLibraries as readonly string[]).includes(
       libName,
@@ -118,14 +122,17 @@ class CoursePresentationGenerator implements ContentGenerator {
     }
   }
   findElementInSlide(slide: Slide) {
-    slide.elements.find((el) => this.isContentLibrary(el.action.library));
+    return slide.elements.find((el) =>
+      this.isContentLibrary(el.action.library),
+    );
   }
-  findLibraryName(slide: Slide): string | undefined {
-    let libName: string | undefined;
+  findLibraryName(slide: Slide) {
+    let libName: LibraryNames | undefined;
     slide.elements.forEach((element) => {
       const canditate = this.libToLibName(element.action.library);
       if (canditate) {
-        libName = canditate;
+        if (!libName) libName = canditate;
+        else throw new Error("more than one content library in slide");
       }
     });
     return libName;
