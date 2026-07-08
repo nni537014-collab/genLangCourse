@@ -1,6 +1,6 @@
 import type {
   ContentGenerator,
-  JsonValue,
+ 
   LibraryNames,
   TranslationPair,
 } from "../../../types/types.ts";
@@ -35,6 +35,7 @@ class CoursePresentationGenerator implements ContentGenerator {
           // @todo - generate multiple slides for this slide, e.g. MultiChoice etc.
           //clone slide and add to presentation.slides
         } else {
+          ;
         }
       }
     }
@@ -49,6 +50,7 @@ class CoursePresentationGenerator implements ContentGenerator {
           // @todo - generate multiple slides for this slide, e.g. MultiChoice etc.
           //clone slide and add to presentation.slides
         } else {
+          ;
         }
       }
 

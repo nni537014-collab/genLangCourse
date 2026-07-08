@@ -13,6 +13,7 @@ export class MultiMediaChoiceGenerator implements ContentGenerator {
     prefix: "<h3>Select the matching audio<\/h3><p>",
     postfix: "<\/p>"
   };
+  //@todo types
     generate(base: TranslationPair[], template: JsonValue): JsonValue {
      
      base.map((tp, i) => {

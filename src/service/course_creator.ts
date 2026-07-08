@@ -2,7 +2,7 @@ import type {
   courseGenConfig,
   ContentGenerator,
   TranslationPair,
-  Writer,
+  // Writer,
   GenSet,
   LibraryNames,
   Creator,
@@ -39,7 +39,7 @@ export class CourseCreator implements Creator<TranslationPair[]> {
   /**
    * this structure is data that will be passed to generators
    */
-  _pairs: Awaited<ReturnType<typeof CourseCreator.prepareBaseDataFromAssets>>;
+  _pairs: Awaited<ReturnType<typeof CourseCreator.prepareBaseDataFromAssets>>[0];
   _pairsChunks: TranslationPair[][] = [];
   /**
  * static factory
@@ -47,9 +47,10 @@ export class CourseCreator implements Creator<TranslationPair[]> {
  * @returns 
  */
   static async create(config: courseGenConfig) {
+    const [pairs, audio] = await CourseCreator.prepareBaseDataFromAssets()
     return new CourseCreator(
       config,
-      await CourseCreator.prepareBaseDataFromAssets(),
+      pairs,
       CourseCreator.genSetFactory(),
     );
   }
@@ -63,7 +64,7 @@ export class CourseCreator implements Creator<TranslationPair[]> {
     this._genSets = genSets;
     const chunkPrefix = "segment#";
     let chunkPostFix = 0;
-    for (let chunk of this.chunk()) {
+    for (const chunk of this.chunk()) {
       ++chunkPostFix;
       this.segmentedArchivedPaths[chunkPrefix + chunkPostFix] =
         this.runGenerators(chunk, createWrittenH5PArchive());
@@ -78,6 +79,7 @@ export class CourseCreator implements Creator<TranslationPair[]> {
     //    call generators
   }
   map(allPaths: AllSegmentArchivedPaths): [Error | undefined] {
+//@todo
     return [undefined];
   }
   runGenerators(chunk: TranslationPair[], archive: WrittenH5PArchive) {
@@ -96,7 +98,7 @@ export class CourseCreator implements Creator<TranslationPair[]> {
       //logging?
       //data structure for created h5p's for later report rendering
     });
-    let rec: Record<LibraryNames, ArchivedPaths>;
+    // let rec: Record<LibraryNames, ArchivedPaths>;
     this._genSets.forEach((genSet) => {
       const p = new Set(genSet.writer.archivedPaths) as ArchivedPaths;
       archive[genSet.writer.getSupportedLibrary()] = p;
@@ -108,11 +110,11 @@ export class CourseCreator implements Creator<TranslationPair[]> {
   //chunk should return an array of T
   chunk() {
     const data = this._pairs.getPairs();
-    let i = 0;
-    let chunkSize = this._config.chunkSize;
+    // let i = 0;
+    // let chunkSize = this._config.chunkSize;
     this._pairsChunks = []; //reset
-    for (let i = 0; i < data.length; i += chunkSize) {
-      const chunk = data.slice(i, i + chunkSize);
+    for (let i = 0; i < data.length; i += this._config.chunkSize) {
+      const chunk = data.slice(i, i + this._config.chunkSize);
       this._pairsChunks.push(chunk);
     }
 
@@ -121,7 +123,7 @@ export class CourseCreator implements Creator<TranslationPair[]> {
 
 
 
-  static async prepareBaseDataFromAssets() {
+  static async prepareBaseDataFromAssets(): Promise<[Pairs, Record<string, string>]> {
     const expander = await PairsWordExpander.create("es");
     const pairs = new Pairs(
       expander,
@@ -136,7 +138,7 @@ export class CourseCreator implements Creator<TranslationPair[]> {
     const audioFileCreator = new AudioFileCreator(pairs.getPairs());
     const audioRecords = await audioFileCreator.produceAllFiles((stored) => {});
 
-    return pairs;
+    return [pairs, audioRecords];
 
   }
   extendBaseData() {
