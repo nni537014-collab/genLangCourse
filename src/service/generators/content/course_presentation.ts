@@ -1,6 +1,5 @@
 import type {
   ContentGenerator,
- 
   LibraryNames,
   TranslationPair,
 } from "../../../types/types.ts";
@@ -12,6 +11,7 @@ import type {
   CoursePresentationContent,
   Slide,
 } from "../../../types/H5P/content/course-presentation.ts";
+import { BlanksGenerator } from "./blanks.ts";
 
 class CoursePresentationGenerator implements ContentGenerator {
   actionLibraryRenderers: ContentGenerator[];
@@ -36,9 +36,13 @@ class CoursePresentationGenerator implements ContentGenerator {
           //clone slide and add to presentation.slides
         } else {
           const generated = gen.generate(base, el.action.params);
+          switch (el.action.library) {
+            case "H5P.Blanks":
+              if (!(gen instanceof BlanksGenerator)) throw Error("");
+              el.action.params = gen.generate(base, el.action.params);
+          }
           if (Array.isArray(generated))
             throw new Error("content should be object not array");
-          el.action.params = generated;
         }
       }
     }
@@ -53,7 +57,6 @@ class CoursePresentationGenerator implements ContentGenerator {
           // @todo - generate multiple slides for this slide, e.g. MultiChoice etc.
           //clone slide and add to presentation.slides
         } else {
-          ;
         }
       }
 
