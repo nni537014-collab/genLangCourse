@@ -74,7 +74,7 @@ export class CoursePresentationGenerator implements ContentGenerator {
             console.log(
               `slide no. ${i + 1}: generating ...${gen.getSupportedLibrary()}`,
             );
-            element.action.params = gen.generate(base, element.action.params);
+            // element.action.params = gen.generate(base, element.action.params);
           }
         }
       });
