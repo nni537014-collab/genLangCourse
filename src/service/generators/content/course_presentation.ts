@@ -29,7 +29,7 @@ export class CoursePresentationGenerator implements ContentGenerator {
       const slide = template.presentation.slides[i];
       if (!slide) throw new Error("bad data");
       const libName = this.findLibraryName(slide);
-      
+
       if (libName) {
         const gen = this.getGenerator(libName);
         if (!gen) throw new Error(`no generator found for library ${libName}`);
@@ -39,7 +39,14 @@ export class CoursePresentationGenerator implements ContentGenerator {
           switch (el.action.library) {
             case "H5P.MultiChoice":
               const generated = this.generatorRegistry[el.action.library].generate(base, el.action.params);
-              el.action.params = generated;
+              generated.forEach((gen, index) => {
+                const newSlide = structuredClone(slide) as Slide;
+                const newEl = this.findElementInSlide(newSlide);
+                if (!newEl) throw new Error("no element found in slide");
+                if(newEl.action.library !== "H5P.MultiChoice") throw new Error("bad data");
+                newEl.action.params = gen;
+              });
+              el.action.params;// = generated;
           }
           // @todo - generate multiple slides for this slide, e.g. MultiChoice etc.
           //clone slide and add to presentation.slides
@@ -51,7 +58,7 @@ export class CoursePresentationGenerator implements ContentGenerator {
         }
       }
     }
-return template;
+    return template;
     // template.presentation.slides.forEach((slide, i) => {
     //   const libName = this.findLibraryName(slide);
     //   if (libName) {
@@ -85,7 +92,7 @@ return template;
     //     }
     //   });
     // });
-    
+
 
     //get template
     // const templ = (template as any);
