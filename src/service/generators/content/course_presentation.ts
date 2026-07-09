@@ -13,7 +13,7 @@ import type {
 } from "../../../types/H5P/content/course-presentation.ts";
 import { BlanksGenerator } from "./blanks.ts";
 
-class CoursePresentationGenerator implements ContentGenerator {
+export class CoursePresentationGenerator implements ContentGenerator {
   actionLibraryRenderers: ContentGenerator[];
   constructor(libraryRenderers: ContentGenerator[]) {
     this.actionLibraryRenderers = libraryRenderers;
