@@ -1,6 +1,9 @@
 import type { LibraryNames } from "../../types.ts";
 import type { BlanksContent } from "./blanks.ts";
 import type { DialogcardsContent } from "./dialog-cards.ts";
+import type { DragTextContent } from "./drag-text.ts";
+import type { DragTextContent } from "./drag-text.ts";
+import type { MultiChoiceContent } from "./multi-choice.ts";
 import type { SingleChoiceSetContent } from "./single-choice-set.ts";
 
 export interface CoursePresentationContent {
@@ -69,9 +72,12 @@ export interface Element {
   solution: string;
 }
 
-export type Action = BlanksAction | DialogCardsAction | SingleChoiceSetAction;
-// | DragTextAction
-// | MultiChoiceAction
+export type Action = 
+    BlanksAction 
+    | DialogCardsAction 
+    | SingleChoiceSetAction 
+    | MultiChoiceAction 
+    | DragTextAction;
 
 interface BaseAction {
   subContentId: string;
@@ -93,7 +99,14 @@ interface SingleChoiceSetAction extends BaseAction {
   library: "H5P.SingleChoiceSet";
   params: SingleChoiceSetContent; // Unique params for Blanks
 }
-
+interface MultiChoiceAction extends BaseAction {
+  library: "H5P.MultiChoice";
+  params: MultiChoiceContent; // Unique params for Blanks
+}
+interface DragTextAction extends BaseAction {
+  library: "H5P.DragText";
+  params: DragTextContent; // Unique params for Blanks
+}
 export interface Metadata {
   contentType: string;
   license: License;

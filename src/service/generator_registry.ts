@@ -1,4 +1,4 @@
-import type { CoursePresentationLibraryNames, generatorMapping } from "../types/types.ts";
+import type { CoursePresentationGeneratorRegistry, CoursePresentationLibraryNames, generatorMapping } from "../types/types.ts";
 import { BlanksGenerator } from "./generators/content/blanks.ts";
 import { CoursePresentationGenerator } from "./generators/content/course_presentation.ts";
 import { DialogCardsGenerator } from "./generators/content/dialog_cards.ts";
@@ -7,7 +7,7 @@ import { MultiChoiceGenerator } from "./generators/content/multi_choice.ts";
 import { MultiMediaChoiceGenerator } from "./generators/content/multi_media_choice.ts";
 import { SingleChoiceSetGenerator } from "./generators/content/single_choice_set.ts";
 
-export const generatorRegistry: { [K in CoursePresentationLibraryNames]: generatorMapping[K] } = {
+export const generatorRegistry: CoursePresentationGeneratorRegistry = {
   "H5P.Blanks": new BlanksGenerator(),
   "H5P.SingleChoiceSet": new SingleChoiceSetGenerator(),
   "H5P.MultiMediaChoice": new MultiMediaChoiceGenerator(),

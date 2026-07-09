@@ -8,14 +8,15 @@ import type {
 } from "../../../types/types.ts";
 import {  genRandomNumbers,  } from "../../../utils/utils.ts"
 import {  paths, } from "../../../utils/paths.ts"
+import type { MultiChoiceContent } from "../../../types/H5P/content/multi-choice.ts";
 
 
 export class MultiChoiceGenerator implements ContentGenerator {
   numberOfWrongAnswers: number = 3;
-  generate(base: TranslationPair[], template: JsonValue): JsonValue[] {
+  generate(base: TranslationPair[], template: MultiChoiceContent): MultiChoiceContent[] {
     //creating an array of structuredClone of template
 
-    const ret: JsonValue[] = base.map(tp => {
+    const ret: MultiChoiceContent[] = base.map(tp => {
       const templClone = structuredClone(template) as any;
       const file = templClone.media.type.params.files[0];
       if (typeof file !== "object") throw new Error("bad data");

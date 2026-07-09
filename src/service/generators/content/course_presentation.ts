@@ -1,5 +1,6 @@
 import type {
   ContentGenerator,
+  CoursePresentationGeneratorRegistry,
   LibraryNames,
   TranslationPair,
 } from "../../../types/types.ts";
@@ -15,8 +16,10 @@ import { BlanksGenerator } from "./blanks.ts";
 
 export class CoursePresentationGenerator implements ContentGenerator {
   actionLibraryRenderers: ContentGenerator[];
-  constructor(libraryRenderers: ContentGenerator[]) {
+  generatorRegistry: CoursePresentationGeneratorRegistry;
+  constructor(libraryRenderers: ContentGenerator[], generatorRegistry: CoursePresentationGeneratorRegistry) {
     this.actionLibraryRenderers = libraryRenderers;
+    this.generatorRegistry = generatorRegistry;
   }
   /*
     @todo some libraries should have multiple slides generated for them, e.g. MultiChoice, SingleChoiceSet, Blanks, etc.
@@ -26,60 +29,63 @@ export class CoursePresentationGenerator implements ContentGenerator {
       const slide = template.presentation.slides[i];
       if (!slide) throw new Error("bad data");
       const libName = this.findLibraryName(slide);
+      
       if (libName) {
         const gen = this.getGenerator(libName);
         if (!gen) throw new Error(`no generator found for library ${libName}`);
         const el = this.findElementInSlide(slide);
         if (!el) throw new Error("no element found in slide");
         if (this.isSlideLibrary(libName)) {
+          switch (el.action.library) {
+            case "H5P.MultiChoice":
+              const generated = this.generatorRegistry[el.action.library].generate(base, el.action.params);
+              el.action.params = generated;
+          }
           // @todo - generate multiple slides for this slide, e.g. MultiChoice etc.
           //clone slide and add to presentation.slides
         } else {
-          const generated = gen.generate(base, el.action.params);
           switch (el.action.library) {
             case "H5P.Blanks":
-              if (!(gen instanceof BlanksGenerator)) throw Error("");
-              el.action.params = gen.generate(base, el.action.params);
+              el.action.params = this.generatorRegistry[el.action.library].generate(base, el.action.params);
           }
-          if (Array.isArray(generated))
-            throw new Error("content should be object not array");
         }
       }
     }
-    template.presentation.slides.forEach((slide, i) => {
-      const libName = this.findLibraryName(slide);
-      if (libName) {
-        const gen = this.actionLibraryRenderers.find((generator): boolean => {
-          return generator.getSupportedLibrary() === libName;
-        });
-        if (!gen) throw new Error(`no generator found for library ${libName}`);
-        if (this.isSlideLibrary(libName)) {
-          // @todo - generate multiple slides for this slide, e.g. MultiChoice etc.
-          //clone slide and add to presentation.slides
-        } else {
-        }
-      }
+return template;
+    // template.presentation.slides.forEach((slide, i) => {
+    //   const libName = this.findLibraryName(slide);
+    //   if (libName) {
+    //     const gen = this.actionLibraryRenderers.find((generator): boolean => {
+    //       return generator.getSupportedLibrary() === libName;
+    //     });
+    //     if (!gen) throw new Error(`no generator found for library ${libName}`);
+    //     if (this.isSlideLibrary(libName)) {
+    //       // @todo - generate multiple slides for this slide, e.g. MultiChoice etc.
+    //       //clone slide and add to presentation.slides
+    //     } else {
+    //     }
+    //   }
 
-      slide.elements.forEach((element, j) => {
-        //@todo - using types but maybe zod validation would be better for this
-        // if (typeof element.action !== "object") throw new Error("bad templ");
-        const lib = element.action.library;
+    //   slide.elements.forEach((element, j) => {
+    //     //@todo - using types but maybe zod validation would be better for this
+    //     // if (typeof element.action !== "object") throw new Error("bad templ");
+    //     const lib = element.action.library;
 
-        const gen = this.getGenerator(lib);
-        if (gen) {
-          if (this.isSlideLibrary(gen.getSupportedLibrary())) {
-            // @todo - generate multiple slides for this slide, e.g. MultiChoice etc.
-            //clone slide and add to presentation.slides
-          } else {
-            console.log(
-              `slide no. ${i + 1}: generating ...${gen.getSupportedLibrary()}`,
-            );
-            // element.action.params = gen.generate(base, element.action.params);
-          }
-        }
-      });
-    });
-    return template;
+    //     const gen = this.getGenerator(lib);
+    //     if (gen) {
+    //       if (this.isSlideLibrary(gen.getSupportedLibrary())) {
+    //         // @todo - generate multiple slides for this slide, e.g. MultiChoice etc.
+    //         //clone slide and add to presentation.slides
+    //       } else {
+    //         console.log(
+    //           `slide no. ${i + 1}: generating ...${gen.getSupportedLibrary()}`,
+    //         );
+    //         // element.action.params = gen.generate(base, element.action.params);
+    //       }
+    //     }
+    //   });
+    // });
+    
 
     //get template
     // const templ = (template as any);
