@@ -1,0 +1,135 @@
+{
+    "media": {
+        "disableImageZooming": false
+    },
+    "options": [
+        {
+            "media": {
+                "params": {
+                    "playerMode": "minimalistic",
+                    "fitToWrapper": false,
+                    "controls": true,
+                    "autoplay": false,
+                    "playAudio": "Play audio",
+                    "pauseAudio": "Pause audio",
+                    "contentName": "Audio",
+                    "audioNotSupported": "Your browser does not support this audio",
+                    "files": [
+                        {
+                            "path": "audios\/files-6a50c492c4587.mp3",
+                            "mime": "audio\/mpeg",
+                            "copyright": {
+                                "license": "U"
+                            }
+                        }
+                    ]
+                },
+                "library": "H5P.Audio 1.5",
+                "metadata": {
+                    "contentType": "Audio",
+                    "license": "U",
+                    "title": "Untitled Audio"
+                },
+                "subContentId": "c7d84dd1-3025-4350-83d4-f2f6a9cc8ec0"
+            },
+            "correct": true,
+            "poster": {
+                "path": "images\/poster-6a50c58be5256.png",
+                "mime": "image\/png",
+                "copyright": {
+                    "license": "U"
+                },
+                "width": 447,
+                "height": 447
+            }
+        },
+        {
+            "media": {
+                "params": {
+                    "playerMode": "minimalistic",
+                    "fitToWrapper": false,
+                    "controls": true,
+                    "autoplay": false,
+                    "playAudio": "Play audio",
+                    "pauseAudio": "Pause audio",
+                    "contentName": "Audio",
+                    "audioNotSupported": "Your browser does not support this audio",
+                    "files": [
+                        {
+                            "path": "audios\/files-6a50c4a997651.mp3",
+                            "mime": "audio\/mpeg",
+                            "copyright": {
+                                "license": "U"
+                            }
+                        }
+                    ]
+                },
+                "library": "H5P.Audio 1.5",
+                "metadata": {
+                    "contentType": "Audio",
+                    "license": "U",
+                    "title": "Untitled Audio"
+                },
+                "subContentId": "a2a48c1d-447e-4f3a-af18-28dd7946c344"
+            },
+            "correct": false,
+            "poster": {
+                "path": "images\/poster-6a50c5825689f.png",
+                "mime": "image\/png",
+                "copyright": {
+                    "license": "U"
+                },
+                "width": 447,
+                "height": 447
+            }
+        }
+    ],
+    "overallFeedback": [
+        {
+            "from": 0,
+            "to": 100
+        }
+    ],
+    "behaviour": {
+        "enableRetry": true,
+        "enableSolutionsButton": true,
+        "confirmCheckDialog": false,
+        "confirmRetryDialog": false,
+        "singlePoint": false,
+        "showSolutionsRequiresInput": true,
+        "questionType": "auto",
+        "aspectRatio": "auto",
+        "maxAlternativesPerRow": "4",
+        "passPercentage": 100
+    },
+    "l10n": {
+        "checkAnswerButtonText": "Check",
+        "submitAnswerButtonText": "Submit",
+        "checkAnswer": "Check the answers. The responses will be marked as correct, incorrect, or unanswered.",
+        "showSolutionButtonText": "Show solution",
+        "showSolution": "Show the solution. The correct options will be marked.",
+        "correctAnswer": "Correct answer",
+        "wrongAnswer": "Wrong answer",
+        "shouldCheck": "Should have been checked",
+        "shouldNotCheck": "Should not have been checked",
+        "noAnswer": "Please answer before viewing the solution",
+        "retryText": "Retry",
+        "retry": "Retry the task. Reset all responses and start the task over again.",
+        "result": "You got :num out of :total points",
+        "missingAltText": "Alt text missing",
+        "closeModalText": "Close modal",
+        "confirmCheck": {
+            "header": "Finish?",
+            "body": "Are you sure you want to finish?",
+            "cancelLabel": "Cancel",
+            "confirmLabel": "Finish"
+        },
+        "confirmRetry": {
+            "header": "Retry?",
+            "body": "Are you sure you wish to retry?",
+            "cancelLabel": "Cancel",
+            "confirmLabel": "Retry"
+        }
+    },
+    "question": "<p>question example for multimedia choice<\/p>"
+}
