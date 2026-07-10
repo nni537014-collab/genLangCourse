@@ -1,7 +1,6 @@
 import { randomUUID } from "crypto";
 import type {
   TranslationPair,
-  JsonValue,
   ContentGenerator,
   LibraryNames,
 
@@ -62,9 +61,11 @@ export class MultiMediaChoiceGenerator implements ContentGenerator {
       const option = structuredClone(optionTempl);
       option.media = this.generateMedia(
         current,
-        structuredClone(optionTempl.media),
+        option.media,
         "translation");
       option.correct = (i === 0);
+      //@todo option.poster? writer must write aditional files? 
+      
       ret.push(option);
     }
     return ret;

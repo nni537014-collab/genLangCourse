@@ -1,7 +1,6 @@
 import type {
   ContentGenerator,
   CoursePresentationGeneratorRegistry,
-  CoursePresentationLibraryNames,
   CoursePresentationSlideLibraries,
   LibraryNames,
   TranslationPair,
@@ -14,7 +13,10 @@ import type {
   CoursePresentationContent,
   Slide,
 } from "../../../types/H5P/content/course-presentation.ts";
-import { BlanksGenerator } from "./blanks.ts";
+// import type { MultiChoiceContent } from "../../../types/H5P/content/multi-choice.ts";
+// import type { MultimediaChoiceContent } from "../../../types/H5P/content/multimedia-choice.ts";
+// import type { DragTextContent } from "../../../types/H5P/content/drag-text.ts";
+// import { MultiMediaChoiceGenerator } from "./multi_media_choice.ts";
 
 export class CoursePresentationGenerator implements ContentGenerator {
   actionLibraryRenderers: ContentGenerator[];
@@ -39,19 +41,25 @@ export class CoursePresentationGenerator implements ContentGenerator {
         if (!el) throw new Error("no element found in slide");
         if (this.isSlideLibrary(libName)) {
           let generatedLength = 0;
-          const processSlide = (libName: CoursePresentationSlideLibraries) => {
-            const generated = this.generatorRegistry[libName].generate(base, el.action.params)
-            generated.forEach((gen, contentIndex) => {
-              const newSlide = structuredClone(slide) as Slide;
-              const newEl = this.findElementInSlide(newSlide);
-              if (!newEl) throw new Error("no element found in slide");
-              if (newEl.action.library !== "H5P.MultiChoice") throw new Error("bad data");
-              newEl.action.params = gen;
-              const insertIndex = slideIndex + contentIndex;
-              template.presentation.slides.splice(insertIndex, 0, newSlide)
-            });
-            generatedLength = generated.length;
-          }
+          // const processSlide = (libName: CoursePresentationSlideLibraries,
+          //   content: MultiChoiceContent | MultimediaChoiceContent | DragTextContent
+          // ) => {
+          //   const generator = this.generatorRegistry[libName];
+          
+          //   if(generator instanceof MultiMediaChoiceGenerator){
+          //     const generated =generator.generate(base, content)
+          //   }
+          //   generated.forEach((gen, contentIndex) => {
+          //     const newSlide = structuredClone(slide) as Slide;
+          //     const newEl = this.findElementInSlide(newSlide);
+          //     if (!newEl) throw new Error("no element found in slide");
+          //     if (newEl.action.library !== "H5P.MultiChoice") throw new Error("bad data");
+          //     newEl.action.params = gen;
+          //     const insertIndex = slideIndex + contentIndex;
+          //     template.presentation.slides.splice(insertIndex, 0, newSlide)
+          //   });
+          //   generatedLength = generated.length;
+          // }
           switch (el.action.library) {
             case "H5P.MultiChoice": {
               const generated = this.generatorRegistry[el.action.library].generate(base, el.action.params)
@@ -68,6 +76,20 @@ export class CoursePresentationGenerator implements ContentGenerator {
               break;
             }
             case "H5P.DragText": {
+              const generated = this.generatorRegistry[el.action.library].generate(base, el.action.params)
+              generated.forEach((gen, contentIndex) => {
+                const newSlide = structuredClone(slide) as Slide;
+                const newEl = this.findElementInSlide(newSlide);
+                if (!newEl) throw new Error("no element found in slide");
+                if (newEl.action.library !== "H5P.DragText") throw new Error("bad data");
+                newEl.action.params = gen;
+                const insertIndex = slideIndex + contentIndex;
+                template.presentation.slides.splice(insertIndex, 0, newSlide)
+              });
+              generatedLength += generated.length;
+              break;
+            }
+            case "H5P.MultiMediaChoice": {
               const generated = this.generatorRegistry[el.action.library].generate(base, el.action.params)
               generated.forEach((gen, contentIndex) => {
                 const newSlide = structuredClone(slide) as Slide;
