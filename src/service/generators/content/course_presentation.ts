@@ -41,25 +41,6 @@ export class CoursePresentationGenerator implements ContentGenerator {
         if (!el) throw new Error("no element found in slide");
         if (this.isSlideLibrary(libName)) {
           let generatedLength = 0;
-          // const processSlide = (libName: CoursePresentationSlideLibraries,
-          //   content: MultiChoiceContent | MultimediaChoiceContent | DragTextContent
-          // ) => {
-          //   const generator = this.generatorRegistry[libName];
-          
-          //   if(generator instanceof MultiMediaChoiceGenerator){
-          //     const generated =generator.generate(base, content)
-          //   }
-          //   generated.forEach((gen, contentIndex) => {
-          //     const newSlide = structuredClone(slide) as Slide;
-          //     const newEl = this.findElementInSlide(newSlide);
-          //     if (!newEl) throw new Error("no element found in slide");
-          //     if (newEl.action.library !== "H5P.MultiChoice") throw new Error("bad data");
-          //     newEl.action.params = gen;
-          //     const insertIndex = slideIndex + contentIndex;
-          //     template.presentation.slides.splice(insertIndex, 0, newSlide)
-          //   });
-          //   generatedLength = generated.length;
-          // }
           switch (el.action.library) {
             case "H5P.MultiChoice": {
               const generated = this.generatorRegistry[el.action.library].generate(base, el.action.params)
@@ -67,7 +48,7 @@ export class CoursePresentationGenerator implements ContentGenerator {
                 const newSlide = structuredClone(slide) as Slide;
                 const newEl = this.findElementInSlide(newSlide);
                 if (!newEl) throw new Error("no element found in slide");
-                if (newEl.action.library !== "H5P.MultiChoice") throw new Error("bad data");
+                // if (newEl.action.library !== "H5P.MultiChoice") throw new Error("bad data");
                 newEl.action.params = gen;
                 const insertIndex = slideIndex + contentIndex;
                 template.presentation.slides.splice(insertIndex, 0, newSlide)
@@ -81,7 +62,7 @@ export class CoursePresentationGenerator implements ContentGenerator {
                 const newSlide = structuredClone(slide) as Slide;
                 const newEl = this.findElementInSlide(newSlide);
                 if (!newEl) throw new Error("no element found in slide");
-                if (newEl.action.library !== "H5P.DragText") throw new Error("bad data");
+                // if (newEl.action.library !== "H5P.DragText") throw new Error("bad data");
                 newEl.action.params = gen;
                 const insertIndex = slideIndex + contentIndex;
                 template.presentation.slides.splice(insertIndex, 0, newSlide)
@@ -95,7 +76,7 @@ export class CoursePresentationGenerator implements ContentGenerator {
                 const newSlide = structuredClone(slide) as Slide;
                 const newEl = this.findElementInSlide(newSlide);
                 if (!newEl) throw new Error("no element found in slide");
-                if (newEl.action.library !== "H5P.DragText") throw new Error("bad data");
+                // if (newEl.action.library !== "H5P.MultiMediaChoice") throw new Error("bad data");
                 newEl.action.params = gen;
                 const insertIndex = slideIndex + contentIndex;
                 template.presentation.slides.splice(insertIndex, 0, newSlide)
@@ -111,6 +92,13 @@ export class CoursePresentationGenerator implements ContentGenerator {
           switch (el.action.library) {
             case "H5P.Blanks":
               el.action.params = this.generatorRegistry[el.action.library].generate(base, el.action.params);
+              break;
+            case "H5P.Dialogcards":
+              el.action.params = this.generatorRegistry[el.action.library].generate(base, el.action.params);
+            break;
+            case "H5P.SingleChoiceSet":
+              el.action.params = this.generatorRegistry[el.action.library].generate(base, el.action.params);
+              break;
           }
         }
       }
