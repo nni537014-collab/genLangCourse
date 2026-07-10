@@ -1,6 +1,6 @@
+import type { DragTextContent } from "../../../types/H5P/content/drag-text.ts";
 import type {
   TranslationPair,
-  JsonValue,
   ContentGenerator,
   LibraryNames,
 
@@ -11,7 +11,7 @@ import { genRandomNumbers } from "../../../utils/utils.ts"
 // import { off } from "process";
 
 export class DragTextGenerator implements ContentGenerator {
-  generate(base: TranslationPair[], template: JsonValue): JsonValue[] {
+  generate(base: TranslationPair[], template: DragTextContent): DragTextContent[] {
     /*
       params
         "textField": "Example one - replace *this* with\nexample two - repplace *that* with"
@@ -22,12 +22,12 @@ export class DragTextGenerator implements ContentGenerator {
       for this exercise
     */
     const longBase = base.filter(tp => (tp.translation.length < 4));
-    let remainder = longBase.length % 3;
+    const remainder = longBase.length % 3;
     let lastAvailIndexes = 3 - remainder;
     const completeSets = Math.floor(longBase.length / 3);
-    const ret: JsonValue[] = [];
+    const ret: DragTextContent[] = [];
     for (let i = 0; i < completeSets; i++) {
-      let offset = i * 3;
+      const offset = i * 3;
 
       const templInst = structuredClone(template) as any;
       if (i < completeSets) {
@@ -46,24 +46,24 @@ ${su.wrapLongestWord(part3.translation)}`
       } else {
         const parts: TranslationPair[] = [];
         let count = 0;
-        while(lastAvailIndexes > 0){
+        while (lastAvailIndexes > 0) {
           lastAvailIndexes--;
           const tp = longBase[offset + count];
-          if(!tp) throw new Error("bad data");
-          parts[offset + count] =  tp;
-          count++ 
+          if (!tp) throw new Error("bad data");
+          parts[offset + count] = tp;
+          count++
         }
         const randIndexes = genRandomNumbers(remainder, 0, offset, []);
-        for(let index of randIndexes){
+        for (const index of randIndexes) {
           const tp = longBase[index];
-          if(!tp) throw new Error("bad data");
-          parts[offset + count] = tp; 
+          if (!tp) throw new Error("bad data");
+          parts[offset + count] = tp;
           count++;
         }
         templInst.textField = "";
-        for(let part of parts){
-           templInst.textField += su.wrapLongestWord(part.translation);
-           templInst.textField += "\n";
+        for (const part of parts) {
+          templInst.textField += su.wrapLongestWord(part.translation);
+          templInst.textField += "\n";
         }
         ret.push(templInst);
         //@todo non complete sets require filling with

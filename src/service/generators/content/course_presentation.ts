@@ -49,6 +49,20 @@ export class CoursePresentationGenerator implements ContentGenerator {
                 template.presentation.slides.splice(insertIndex, 0, newSlide)
               });
               slideIndex += generated.length;
+              break;
+            }
+            case "H5P.DragText": {
+              const generated = this.generatorRegistry[el.action.library].generate(base, el.action.params)
+              generated.forEach((gen, contentIndex) => {
+                const newSlide = structuredClone(slide) as Slide;
+                const newEl = this.findElementInSlide(newSlide);
+                if (!newEl) throw new Error("no element found in slide");
+                if (newEl.action.library !== "H5P.DragText") throw new Error("bad data");
+                newEl.action.params = gen;
+                const insertIndex = slideIndex + contentIndex;
+                template.presentation.slides.splice(insertIndex, 0, newSlide)
+              });
+              slideIndex += generated.length;
             }
           }
           
