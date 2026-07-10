@@ -25,8 +25,8 @@ export class CoursePresentationGenerator implements ContentGenerator {
     @todo some libraries should have multiple slides generated for them, e.g. MultiChoice, SingleChoiceSet, Blanks, etc.
   */
   generate(base: TranslationPair[], template: CoursePresentationContent) {
-    for (let i = 0; template.presentation.slides.length; i++) {
-      const slide = template.presentation.slides[i];
+    for (let slideIndex = 0; template.presentation.slides.length; slideIndex++) {
+      const slide = template.presentation.slides[slideIndex];
       if (!slide) throw new Error("bad data");
       const libName = this.findLibraryName(slide);
 
@@ -37,17 +37,21 @@ export class CoursePresentationGenerator implements ContentGenerator {
         if (!el) throw new Error("no element found in slide");
         if (this.isSlideLibrary(libName)) {
           switch (el.action.library) {
-            case "H5P.MultiChoice":
-              const generated = this.generatorRegistry[el.action.library].generate(base, el.action.params);
-              generated.forEach((gen, index) => {
+            case "H5P.MultiChoice": {
+              const generated = this.generatorRegistry[el.action.library].generate(base, el.action.params)
+              generated.forEach((gen, contentIndex) => {
                 const newSlide = structuredClone(slide) as Slide;
                 const newEl = this.findElementInSlide(newSlide);
                 if (!newEl) throw new Error("no element found in slide");
-                if(newEl.action.library !== "H5P.MultiChoice") throw new Error("bad data");
+                if (newEl.action.library !== "H5P.MultiChoice") throw new Error("bad data");
                 newEl.action.params = gen;
+                const insertIndex = slideIndex + contentIndex;
+                template.presentation.slides.splice(insertIndex, 0, newSlide)
               });
-              el.action.params;// = generated;
+              slideIndex += generated.length;
+            }
           }
+          
           // @todo - generate multiple slides for this slide, e.g. MultiChoice etc.
           //clone slide and add to presentation.slides
         } else {
