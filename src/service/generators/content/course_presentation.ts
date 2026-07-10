@@ -1,6 +1,7 @@
 import type {
   ContentGenerator,
   CoursePresentationGeneratorRegistry,
+  CoursePresentationLibraryNames,
   LibraryNames,
   TranslationPair,
 } from "../../../types/types.ts";
@@ -36,6 +37,20 @@ export class CoursePresentationGenerator implements ContentGenerator {
         const el = this.findElementInSlide(slide);
         if (!el) throw new Error("no element found in slide");
         if (this.isSlideLibrary(libName)) {
+          let generatedLength = 0;
+          const processSlide = (libName: CoursePresentationLibraryNames) => {
+            const generated = this.generatorRegistry[libName].generate(base, el.action.params)
+            generated.forEach((gen, contentIndex) => {
+              const newSlide = structuredClone(slide) as Slide;
+              const newEl = this.findElementInSlide(newSlide);
+              if (!newEl) throw new Error("no element found in slide");
+              if (newEl.action.library !== "H5P.MultiChoice") throw new Error("bad data");
+              newEl.action.params = gen;
+              const insertIndex = slideIndex + contentIndex;
+              template.presentation.slides.splice(insertIndex, 0, newSlide)
+            });
+            generatedLength = generated.length;
+          }
           switch (el.action.library) {
             case "H5P.MultiChoice": {
               const generated = this.generatorRegistry[el.action.library].generate(base, el.action.params)
@@ -48,7 +63,7 @@ export class CoursePresentationGenerator implements ContentGenerator {
                 const insertIndex = slideIndex + contentIndex;
                 template.presentation.slides.splice(insertIndex, 0, newSlide)
               });
-              slideIndex += generated.length;
+              generatedLength = generated.length;
               break;
             }
             case "H5P.DragText": {
@@ -62,10 +77,11 @@ export class CoursePresentationGenerator implements ContentGenerator {
                 const insertIndex = slideIndex + contentIndex;
                 template.presentation.slides.splice(insertIndex, 0, newSlide)
               });
-              slideIndex += generated.length;
+              generatedLength += generated.length;
             }
           }
-          
+          slideIndex += generatedLength;
+
           // @todo - generate multiple slides for this slide, e.g. MultiChoice etc.
           //clone slide and add to presentation.slides
         } else {
