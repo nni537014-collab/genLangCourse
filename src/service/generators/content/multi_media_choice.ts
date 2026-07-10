@@ -7,6 +7,7 @@ import type {
 
 } from "../../../types/types.ts";
 import { audioFileName } from "../../../utils/paths.ts"
+import type { MultiChoiceContent } from "../../../types/H5P/content/multi-choice.ts";
 
 export class MultiMediaChoiceGenerator implements ContentGenerator {
   _question = {
@@ -14,16 +15,17 @@ export class MultiMediaChoiceGenerator implements ContentGenerator {
     postfix: "<\/p>"
   };
   //@todo types
-    generate(base: TranslationPair[], template: JsonValue): JsonValue {
+    generate(base: TranslationPair[], template: MultiChoiceContent): MultiChoiceContent[] {
      
      base.map((tp, i) => {
 
-       const templ = structuredClone(template) as any;
+       const templ = structuredClone(template);
        templ.question = `${this._question.prefix}${tp.source}${this._question.postfix}`
+       
        templ.media.type = this.generateMedia(tp, templ.media.type, "source");
        templ.options = this.generateOptions(tp, i, base, templ.options);
      });
-     return template;
+     return [template];
   }
   generateMedia(tp: TranslationPair, template: JsonValue, type: "source"|"translation"): JsonValue{
          

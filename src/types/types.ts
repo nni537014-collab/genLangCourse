@@ -53,6 +53,7 @@ export interface generatorMapping {
   "H5P.CoursePresentation": CoursePresentationGenerator;
 }
 export type CoursePresentationLibraryNames = Exclude<LibraryNames, "H5P.CoursePresentation">;
+
 export type CoursePresentationGeneratorRegistry = { [K in CoursePresentationLibraryNames]: generatorMapping[K] };
 //@TODO - consider using a Map instead of an object for generatorRegistry, so that we can use the LibraryNames type as the key type
 //@todo move to better place, e.g. service/generators/generatorRegistry.ts

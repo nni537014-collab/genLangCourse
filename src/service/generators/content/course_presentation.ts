@@ -2,6 +2,7 @@ import type {
   ContentGenerator,
   CoursePresentationGeneratorRegistry,
   CoursePresentationLibraryNames,
+  CoursePresentationSlideLibraries,
   LibraryNames,
   TranslationPair,
 } from "../../../types/types.ts";
@@ -38,7 +39,7 @@ export class CoursePresentationGenerator implements ContentGenerator {
         if (!el) throw new Error("no element found in slide");
         if (this.isSlideLibrary(libName)) {
           let generatedLength = 0;
-          const processSlide = (libName: CoursePresentationLibraryNames) => {
+          const processSlide = (libName: CoursePresentationSlideLibraries) => {
             const generated = this.generatorRegistry[libName].generate(base, el.action.params)
             generated.forEach((gen, contentIndex) => {
               const newSlide = structuredClone(slide) as Slide;
