@@ -97,5 +97,5 @@ export const paths = {
   getAssetPairs: getAssetPairsPath,
   audioDir: audioDir,
   getAudioH5pRelative: getAudioH5pRelativePath,
-  getAudio: getAudioPath,
+  getAudioPath: getAudioPath,
 };

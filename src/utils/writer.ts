@@ -5,45 +5,26 @@ import {
 
     createReadStream,
     mkdirSync,
-    rmSync,
-    readFileSync,
     writeFileSync,
     createWriteStream,
-    copyFileSync,
     renameSync,
-    type PathLike
 } from "fs"
 import path from "path"
-import {
-    outDirName,
-    assetsDirName,
-    pairsFileName,
-    dictionaryPath,
-    h5pAssetsDirName,
-    h5pJsonFileName,
-    h5pContentDir,
-    h5pContentFileName,
-    h5pAudioDirName,
-    writeDirName
-} from "../config.ts"
 
 import { fileURLToPath } from "url";
-import { createHash } from "crypto";
 import type {
     JsonValue,
     ContentGenerator,
     LibraryNames,
     ArchivedPaths,
-    WrittenH5PArchive
+    GeneratorAudioSet,
 } from "../types/types.ts";
 import { paths } from "./paths.ts";
 import { stripVersionFromLibraryName } from "./utils.ts";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const utilsToBase = "../../";
 export function h5pWrite(
     content: JsonValue,
+    audio: GeneratorAudioSet,
     h5p: JsonValue,
     index: number,
     libraryName: LibraryNames,
@@ -57,6 +38,16 @@ export function h5pWrite(
     mkdirSync(contentFolderPath, { recursive: true });
     writeFileSync(h5pFilePath, JSON.stringify(h5p));
     writeFileSync(contentFilePath, JSON.stringify(content));
+    //@TODO copy all files from audio folder to content folder
+    if (audio) {
+        audio.forEach((ga) => {
+            const audioFileFromPath = paths.getAudioPath(ga.tp.source, ga.sourceOrTranslation);
+            const audioFileRelToPath = paths.getAudioH5pRelative(ga.tp.source, ga.sourceOrTranslation);
+            const audioFileToPath = path.join(writePath, audioFileRelToPath);
+        
+            createReadStream(audioFileFromPath).pipe(createWriteStream(audioDestPath));
+        }
+    }
     h5pFolderToArchive(writePath, index, libraryName);
     //@todo fix all this for proper error handling and async
     return writtenPaths.add(writePath + ".h5p")

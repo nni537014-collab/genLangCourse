@@ -51,7 +51,7 @@ export class AudioFileCreator {
     });
   }
   protected key(type: "source" | "translation", input: string) {
-    return paths.getAudio(input, type);
+    return paths.getAudioPath(input, type);
   }
 }
 
