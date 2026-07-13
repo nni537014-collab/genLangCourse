@@ -18,6 +18,7 @@ import { PairsFileReaderWriter } from "./pairs/pairsFileReaderWriter.ts";
 import { generatorTemplateFinder } from "../utils/utils.ts";
 import { AudioFileCreator } from "./writers/audio_file.ts";
 import { createGenSet, createWrittenH5PArchive } from "./gen_set_factory.ts";
+
 export class CourseCreator implements Creator<TranslationPair[]> {
   static supportedLibraryNames: LibraryNames[] = ["H5P.CoursePresentation"];
   _config: courseGenConfig;
@@ -38,7 +39,7 @@ export class CourseCreator implements Creator<TranslationPair[]> {
    * this structure is data that will be passed to generators
    */
   _pairs: Awaited<
-    ReturnType<typeof CourseCreator.prepareBaseDataFromAssets>
+    ReturnType<typeof prepareBaseDataFromAssets>
   >[0];
   _pairsChunks: TranslationPair[][] = [];
   /**
@@ -46,13 +47,8 @@ export class CourseCreator implements Creator<TranslationPair[]> {
    * @param config
    * @returns
    */
-  static async create(config: courseGenConfig) {
-    const [pairs, audio] = await CourseCreator.prepareBaseDataFromAssets();
-    return new CourseCreator(config, pairs, CourseCreator.genSetFactory());
-  }
-  static genSetFactory() {
-    return CourseCreator.supportedLibraryNames.map(createGenSet);
-  }
+
+
   constructor(config: courseGenConfig, pairs: Pairs, genSets: GenSet[]) {
     this._config = config;
     this._pairs = pairs;
@@ -117,24 +113,35 @@ export class CourseCreator implements Creator<TranslationPair[]> {
     return this._pairsChunks;
   }
 
-  static async prepareBaseDataFromAssets(): Promise<
-    [Pairs, Record<string, string>]
-  > {
-    const expander = await PairsWordExpander.create("es");
-    const pairs = new Pairs(
-      expander,
-      loadStyle.LOAD_FROM_DISK,
-      new PairsFileReaderWriter({
-        dir: "tmp",
-        name: "pairs.json",
-      }),
-    );
-    //console.log(pairs.getPairs());
-    console.log("pairs length:", pairs.getPairs().length);
-    const audioFileCreator = new AudioFileCreator(pairs.getPairs());
-    const audioRecords = await audioFileCreator.produceAllFiles((stored) => {});
 
-    return [pairs, audioRecords];
-  }
-  extendBaseData() {}
+  extendBaseData() { }
+}
+
+///////////////////////////
+export async function courseCreatorFactory(config: courseGenConfig) {
+  const [pairs, audio] = await prepareBaseDataFromAssets();
+  return new CourseCreator(config, pairs, genSetFactory());
+}
+async function prepareBaseDataFromAssets(): Promise<
+  [Pairs, Record<string, string>]
+> {
+  const expander = await PairsWordExpander.create("es");
+  const pairs = new Pairs(
+    expander,
+    loadStyle.LOAD_FROM_DISK,
+    new PairsFileReaderWriter({
+      dir: "tmp",
+      name: "pairs.json",
+    }),
+  );
+  //console.log(pairs.getPairs());
+  console.log("pairs length:", pairs.getPairs().length);
+  const audioFileCreator = new AudioFileCreator(pairs.getPairs());
+  const audioRecords = await audioFileCreator.produceAllFiles((stored) => { });
+
+  return [pairs, audioRecords];
+}
+
+function genSetFactory() {
+  return CourseCreator.supportedLibraryNames.map(createGenSet);
 }

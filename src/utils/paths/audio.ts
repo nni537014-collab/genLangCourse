@@ -20,7 +20,7 @@ export function getAudioH5pRelativePath(input: string, type: SourceOrTranslation
   return path.join("audio", audioFileName(input, type)) as AudioFileName;
 }
 export function generatorAudioToPath(ga: GeneratorAudio, pathType: "h5p" | "absolute") {
-  let subject = ga.sourceOrTranslation === "source" ? ga.tp.source : ga.tp.translation;
+  const subject = ga.sourceOrTranslation === "source" ? ga.tp.source : ga.tp.translation;
   if (pathType === "h5p") {
     return getAudioH5pRelativePath(subject, ga.sourceOrTranslation);
   } else {

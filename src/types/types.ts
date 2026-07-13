@@ -64,7 +64,9 @@ export type CoursePresentationGeneratorRegistry = {
 //@todo move to better place, e.g. service/generators/generatorRegistry.ts
 
 export type SourceOrTranslation = "source" | "translation";
+
 export type ArchivedPaths = Set<string>;
+
 export type WrittenH5PArchive = Record<LibraryNames, ArchivedPaths>;
 
 export type PairsFileWriterConfig = {
@@ -73,9 +75,12 @@ export type PairsFileWriterConfig = {
 };
 interface Generator {
   getSupportedLibrary(): LibraryNames;
-}
+};
+
 export type segmentId = string;
+
 export type segmentArchivedPaths = Record<LibraryNames, ArchivedPaths>;
+
 export type AllSegmentArchivedPaths = Record<segmentId, segmentArchivedPaths>;
 export interface Creator<T> {
   segmentedArchivedPaths: Record<segmentId, segmentArchivedPaths>;
@@ -85,7 +90,8 @@ export interface Creator<T> {
     archive: WrittenH5PArchive,
   ): Record<LibraryNames, ArchivedPaths>;
   map(allPaths: AllSegmentArchivedPaths): [Error | undefined];
-}
+};
+
 export interface ContentGenerator<
   TTemplate extends object = object,
 > extends Generator {
@@ -93,16 +99,20 @@ export interface ContentGenerator<
     base: TranslationPair[],
     template: TTemplate,
   ): generatorWriteData<TTemplate>;
-}
+};
+
 export type generatorWriteData<TTemplate> = {
   content: TTemplate | TTemplate[];
   audio?: GeneratorAudioSet;
 };
+
 export type GeneratorAudio = {
   tp: TranslationPair;
   sourceOrTranslation: SourceOrTranslation;
 };
+
 export type GeneratorAudioSet = Set<GeneratorAudio>;
+
 export interface H5pGenerator extends Generator {
   generate(index: number, template: H5PJSON): H5PJSON;
 }

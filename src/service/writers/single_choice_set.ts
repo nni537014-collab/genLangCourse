@@ -1,6 +1,6 @@
 import type { H5PJSON } from "../../types/H5P/h5p.ts";
 import type { SingleChoiceSetContent } from "../../types/H5P/content/single-choice-set.ts";
-import { writeError, type WriteError, type Writer } from "../../types/types.ts"
+import type { Writer } from "../../types/types.ts"
 import type {
 
   ArchivedPaths,

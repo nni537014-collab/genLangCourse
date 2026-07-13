@@ -1,41 +1,41 @@
 //@todo move paths to separate file
-import { ZipArchive } from "archiver"
+// import { ZipArchive } from "archiver"
 
 import {
 
-    createReadStream,
-    mkdirSync,
+    //createReadStream,
+    //mkdirSync,
     rmSync,
     readFileSync,
-    writeFileSync,
-    createWriteStream,
-    copyFileSync,
-    renameSync,
-    type PathLike
+    // writeFileSync,
+    // createWriteStream,
+    // copyFileSync,
+    // renameSync,
+    // type PathLike
 } from "fs"
 import path from "path"
 import {
-    outDirName,
+    // outDirName,
     assetsDirName,
-    pairsFileName,
-    dictionaryPath,
+    // pairsFileName,
+    // dictionaryPath,
     h5pAssetsDirName,
     h5pJsonFileName,
     h5pContentDir,
     h5pContentFileName,
-    h5pAudioDirName,
-    writeDirName
+    // h5pAudioDirName,
+    // writeDirName
 } from "../config.ts"
 
 import { fileURLToPath } from "url";
-import { createHash } from "crypto";
-import type {
-    JsonValue,
-    ContentGenerator,
-    LibraryNames,
-    ArchivedPaths,
-    WrittenH5PArchive
-} from "../types/types.ts";
+// import { createHash } from "crypto";
+// import type {
+//     JsonValue,
+//     ContentGenerator,
+//     LibraryNames,
+//     ArchivedPaths,
+//     WrittenH5PArchive
+// } from "../types/types.ts";
 import { paths } from "./paths.ts";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -94,7 +94,7 @@ export const genRandomNumbers = (
     if (upperLimit - lowerLimit - skip.length < count) throw new Error("not possible to generate solutions");
     if (upperLimit < 0 || lowerLimit < 0) throw new Error("positive limits required");
     const generated: number[] = [];
-    let repLimit = 10000;
+    const repLimit = 10000;
     let repCount = 0;
     while (generated.length < count) {
         const candidate = Math.random() * (upperLimit - lowerLimit) + lowerLimit;

@@ -6,7 +6,7 @@ import { PairsFileReaderWriter } from "./service/pairs/pairsFileReaderWriter.ts"
 import type { /*TranslationPair, JsonValue, ContentGenerator,*/ courseGenConfig } from "./types/types.ts";
 // import { DialogCardsGenerator } from "./service/generators/content/dialog_cards.ts"
 // import { SingleChoiceSetGenerator } from "./service/generators/content/single_choice_set.ts"
-import { CourseCreator } from "./service/course_creator.ts";
+import { CourseCreator, courseCreatorFactory } from "./service/course_creator.ts";
 
 
 
@@ -76,7 +76,7 @@ switch (mode) {
       chunkSize: 10
     };
     //@todo remove static methods - add factory funcs
-    const courseCreator = await CourseCreator.create(config);
+    const courseCreator = await courseCreatorFactory(config);
     console.log(courseCreator);
     // courseCreator.
   }

@@ -56,10 +56,10 @@ export async function h5pWrite(
     //@todo fix all this for proper error handling and async
     return writtenPaths;
 }
-export function h5pFolderToArchive(folderPath: string, index: number, libraryName: LibraryNames) {
-    //@todo
-    const h5pArchivePath = path.join(folderPath);
-}
+// export function h5pFolderToArchive(folderPath: string, index: number, libraryName: LibraryNames) {
+//     //@todo
+//     const h5pArchivePath = path.join(folderPath);
+// }
 
 // const archiveContent = (dir: string, archivedPaths: ArchivedPaths) => {
 //     // create a file to stream archive data to.
@@ -162,7 +162,7 @@ const archiveContent = (dir: string, archivedPaths: ArchivedPaths): Promise<void
     });
 };
 
-export function generatorWriterFinder(generator: ContentGenerator) {
-    const libraryName = stripVersionFromLibraryName(generator.getSupportedLibrary());
-    //@todo    
-}
+// export function generatorWriterFinder(generator: ContentGenerator) {
+//     const libraryName = stripVersionFromLibraryName(generator.getSupportedLibrary());
+//     //@todo    
+// }

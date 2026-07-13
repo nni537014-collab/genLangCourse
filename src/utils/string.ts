@@ -6,7 +6,7 @@ const stringUtils = {
         input = input.split(wrapChar).join(wrapCharReplacement);
 
         const parts = input.split(" ");
-        let longest: { index: number, length: number } = {
+        const longest: { index: number, length: number } = {
             index: 0,
             length: 0
         }
