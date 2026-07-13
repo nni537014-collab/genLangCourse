@@ -1,7 +1,6 @@
 import type { TranslationPair, AudioFileName } from "./../../types/types.ts";
 
-import { paths, md5Filename, audioFileName } from "../../utils/paths.ts";
-import fs from "fs";
+import { paths } from "../../utils/paths.ts";
 import say from "say";
 import { execSync } from "child_process";
 
@@ -52,7 +51,7 @@ export class AudioFileCreator {
     });
   }
   protected key(type: "source" | "translation", input: string) {
-    return audioFileName(input, type);
+    return paths.getAudio(input, type);
   }
 }
 
