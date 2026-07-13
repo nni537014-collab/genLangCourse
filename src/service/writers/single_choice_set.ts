@@ -4,6 +4,7 @@ import { writeError, type WriteError, type Writer } from "../../types/types.ts"
 import type {
     
     ArchivedPaths,
+    GeneratorAudioSet,
     LibraryNames,
 } from "../../types/types.ts";
 
@@ -18,7 +19,12 @@ export class SingleChoiceSetWriter implements Writer {
     getSupportedLibrary(): LibraryNames {
       return "H5P.SingleChoiceSet"; //@todo 
     }
-  write(generated: SingleChoiceSetContent, h5p: H5PJSON, index: number): WriteError {
+  write(
+    generated: SingleChoiceSetContent, 
+    audio: GeneratorAudioSet,
+     h5p: H5PJSON, 
+     index: number
+    ): WriteError {
     // get h5p.json
     // another set of generators?
     // wrapper object from factory 
