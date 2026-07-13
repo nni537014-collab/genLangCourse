@@ -113,6 +113,7 @@ const archiveContent = (dir: string, archivedPaths: ArchivedPaths) => {
     // archive.append(createReadStream(h5pJsonFilename), { name: "h5p.json" });
     // // append a file from string
     // archive.append(createReadStream(contentJsonFilename), { name: "content/content.json" });
+    //@todo check this doesn't cause h5p import to fail
     archive.directory(dir, false);
     // finalize the archive (ie we are done appending files but streams have to finish yet)
     // 'close', 'end' or 'finish' may be fired right after calling this method so register to them beforehand
