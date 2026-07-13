@@ -44,32 +44,7 @@ const __dirname = path.dirname(__filename);
 const utilsToBase = "../../";
 
 ///////////////////////////////////////////
-export function md5Filename(input: string): string {
-  return createHash("md5").update(input).digest("hex");
-}
-function audioFileName(
-  input: string,
-  type: "source" | "translation",
-): AudioFileName {
-  return `${md5Filename(type + input)}.mp3`;
-}
-function getAudioPath(input: string, type: SourceOrTranslation) {
-  return path.join(audioDir(), audioFileName(input, type)) as AudioFileName;
-}
-function getAudioH5pRelativePath(input: string, type: SourceOrTranslation) {
-  return path.join("audio", audioFileName(input, type)) as AudioFileName;
-}
-export function generatorAudioToPath(ga: GeneratorAudio, pathType: "h5p" | "absolute") {
-  let subject = ga.sourceOrTranslation === "source" ? ga.tp.source : ga.tp.translation;
-  if (pathType === "h5p") {
-    return getAudioH5pRelativePath(subject, ga.sourceOrTranslation);
-  } else {
-    return getAudioPath(subject, ga.sourceOrTranslation);
-  }
-}
-function audioDir() {
-  return path.join(getBasePath(), assetsDirName, h5pAudioDirName);
-}
+
 ///////////////////////////////
 const getAssetPairsPath = () => {
   return path.join(getAssetsPath(), pairsFileName);
@@ -96,7 +71,4 @@ export const paths = {
   getWrite: getWritePath,
   getOut: getOutPath,
   getAssetPairs: getAssetPairsPath,
-  audioDir: audioDir,
-  getAudioH5pRelative: getAudioH5pRelativePath,
-  getAudioPath: getAudioPath,
 };

@@ -1,8 +1,7 @@
 import type { TranslationPair, AudioFileName } from "./../../types/types.ts";
-
-import { paths } from "../../utils/paths.ts";
 import say from "say";
 import { execSync } from "child_process";
+import { getAudioPath } from "../../utils/paths/audio.ts";
 
 export type FlatBase = Record<AudioFileName, string>;
 export class AudioFileCreator {
@@ -51,7 +50,7 @@ export class AudioFileCreator {
     });
   }
   protected key(type: "source" | "translation", input: string) {
-    return paths.getAudioPath(input, type);
+    return getAudioPath(input, type);
   }
 }
 
