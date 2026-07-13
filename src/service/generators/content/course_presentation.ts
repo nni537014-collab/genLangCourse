@@ -7,12 +7,16 @@ import type {
 } from "../../../types/types.ts";
 import {
   coursePresentationSlideLibraries,
+  type GeneratorAudio,
   libraryNames,
 } from "../../../types/types.ts";
 import type {
   CoursePresentationContent,
   Slide,
 } from "../../../types/H5P/content/course-presentation.ts";
+import type { MultiChoiceContent } from "../../../types/H5P/content/multi-choice.ts";
+import type { DragTextContent } from "../../../types/H5P/content/drag-text.ts";
+import type { MultimediaChoiceContent } from "../../../types/H5P/content/multimedia-choice.ts";
 // import type { MultiChoiceContent } from "../../../types/H5P/content/multi-choice.ts";
 // import type { MultimediaChoiceContent } from "../../../types/H5P/content/multimedia-choice.ts";
 // import type { DragTextContent } from "../../../types/H5P/content/drag-text.ts";
@@ -21,7 +25,11 @@ import type {
 export class CoursePresentationGenerator implements ContentGenerator {
   actionLibraryRenderers: ContentGenerator[];
   generatorRegistry: CoursePresentationGeneratorRegistry;
-  constructor(libraryRenderers: ContentGenerator[], generatorRegistry: CoursePresentationGeneratorRegistry) {
+  audio = new Set<GeneratorAudio>();
+  constructor(
+    libraryRenderers: ContentGenerator[],
+    generatorRegistry: CoursePresentationGeneratorRegistry,
+  ) {
     this.actionLibraryRenderers = libraryRenderers;
     this.generatorRegistry = generatorRegistry;
   }
@@ -29,7 +37,11 @@ export class CoursePresentationGenerator implements ContentGenerator {
     @todo some libraries should have multiple slides generated for them, e.g. MultiChoice, SingleChoiceSet, Blanks, etc.
   */
   generate(base: TranslationPair[], template: CoursePresentationContent) {
-    for (let slideIndex = 0; template.presentation.slides.length; slideIndex++) {
+    for (
+      let slideIndex = 0;
+      template.presentation.slides.length;
+      slideIndex++
+    ) {
       const slide = template.presentation.slides[slideIndex];
       if (!slide) throw new Error("bad data");
       const libName = this.findLibraryName(slide);
@@ -43,45 +55,66 @@ export class CoursePresentationGenerator implements ContentGenerator {
           let generatedLength = 0;
           switch (el.action.library) {
             case "H5P.MultiChoice": {
-              const generated = this.generatorRegistry[el.action.library].generate(base, el.action.params)
-              generated.forEach((gen, contentIndex) => {
+              let generated = this.generatorRegistry[
+                el.action.library
+              ].generate(base, el.action.params);
+              let content: MultiChoiceContent[];
+              if (!Array.isArray(generated.content))
+                content = [generated.content];
+              else content = generated.content;
+              content.forEach((gen, contentIndex) => {
                 const newSlide = structuredClone(slide) as Slide;
                 const newEl = this.findElementInSlide(newSlide);
                 if (!newEl) throw new Error("no element found in slide");
                 // if (newEl.action.library !== "H5P.MultiChoice") throw new Error("bad data");
                 newEl.action.params = gen;
                 const insertIndex = slideIndex + contentIndex;
-                template.presentation.slides.splice(insertIndex, 0, newSlide)
+                template.presentation.slides.splice(insertIndex, 0, newSlide);
               });
-              generatedLength = generated.length;
+              this.mergeAudio(generated.audio);
+              generatedLength = content.length;
               break;
             }
             case "H5P.DragText": {
-              const generated = this.generatorRegistry[el.action.library].generate(base, el.action.params)
-              generated.forEach((gen, contentIndex) => {
+              const generated = this.generatorRegistry[
+                el.action.library
+              ].generate(base, el.action.params);
+              let content: DragTextContent[];
+              if (!Array.isArray(generated.content))
+                content = [generated.content];
+              else content = generated.content;
+              content.forEach((gen, contentIndex) => {
                 const newSlide = structuredClone(slide) as Slide;
                 const newEl = this.findElementInSlide(newSlide);
                 if (!newEl) throw new Error("no element found in slide");
                 // if (newEl.action.library !== "H5P.DragText") throw new Error("bad data");
                 newEl.action.params = gen;
                 const insertIndex = slideIndex + contentIndex;
-                template.presentation.slides.splice(insertIndex, 0, newSlide)
+                template.presentation.slides.splice(insertIndex, 0, newSlide);
               });
-              generatedLength += generated.length;
+              this.mergeAudio(generated.audio);
+              generatedLength += content.length;
               break;
             }
             case "H5P.MultiMediaChoice": {
-              const generated = this.generatorRegistry[el.action.library].generate(base, el.action.params)
-              generated.forEach((gen, contentIndex) => {
+              const generated = this.generatorRegistry[
+                el.action.library
+              ].generate(base, el.action.params);
+              let content: MultimediaChoiceContent[];
+              if (!Array.isArray(generated.content))
+                content = [generated.content];
+              else content = generated.content;
+              content.forEach((gen, contentIndex) => {
                 const newSlide = structuredClone(slide) as Slide;
                 const newEl = this.findElementInSlide(newSlide);
                 if (!newEl) throw new Error("no element found in slide");
                 // if (newEl.action.library !== "H5P.MultiMediaChoice") throw new Error("bad data");
                 newEl.action.params = gen;
                 const insertIndex = slideIndex + contentIndex;
-                template.presentation.slides.splice(insertIndex, 0, newSlide)
+                template.presentation.slides.splice(insertIndex, 0, newSlide);
               });
-              generatedLength += generated.length;
+              this.mergeAudio(generated.audio);
+              generatedLength += content.length;
             }
           }
           slideIndex += generatedLength;
@@ -90,20 +123,51 @@ export class CoursePresentationGenerator implements ContentGenerator {
           //clone slide and add to presentation.slides
         } else {
           switch (el.action.library) {
-            case "H5P.Blanks":
-              el.action.params = this.generatorRegistry[el.action.library].generate(base, el.action.params);
+            case "H5P.Blanks": {
+              const gen = this.generatorRegistry[el.action.library].generate(
+                base,
+                el.action.params,
+              );
+              const content = Array.isArray(gen.content)
+                ? gen.content.pop()
+                : gen.content;
+              if (!content) throw new Error("bad generator");
+              this.mergeAudio(gen.audio);
+              el.action.params = content;
               break;
-            case "H5P.Dialogcards":
-              el.action.params = this.generatorRegistry[el.action.library].generate(base, el.action.params);
-            break;
-            case "H5P.SingleChoiceSet":
-              el.action.params = this.generatorRegistry[el.action.library].generate(base, el.action.params);
+            }
+            case "H5P.Dialogcards": {
+              const gen = this.generatorRegistry[el.action.library].generate(
+                base,
+                el.action.params,
+              );
+              const content = Array.isArray(gen.content)
+                ? gen.content.pop()
+                : gen.content;
+              if (!content) throw new Error("bad generator");
+              this.mergeAudio(gen.audio);
+              el.action.params = content;
               break;
+            }
+            case "H5P.SingleChoiceSet": {
+              const gen = this.generatorRegistry[el.action.library].generate(
+                base,
+                el.action.params,
+              );
+
+              const content = Array.isArray(gen.content)
+                ? gen.content.pop()
+                : gen.content;
+              if (!content) throw new Error("bad generator");
+              this.mergeAudio(gen.audio);
+              el.action.params = content;
+              break;
+            }
           }
         }
       }
     }
-    return template;
+    return { content: template, audio: this.audio };
     // template.presentation.slides.forEach((slide, i) => {
     //   const libName = this.findLibraryName(slide);
     //   if (libName) {
@@ -137,7 +201,6 @@ export class CoursePresentationGenerator implements ContentGenerator {
     //     }
     //   });
     // });
-
 
     //get template
     // const templ = (template as any);
@@ -201,6 +264,10 @@ export class CoursePresentationGenerator implements ContentGenerator {
   // loadTemplate() {
   //   return JSON.parse("");
   // }
+  mergeAudio(audio: Set<GeneratorAudio> | undefined) {
+    if (!audio) return;
+    this.audio = this.audio.union(audio);
+  }
   getSupportedLibrary(): LibraryNames {
     return "H5P.CoursePresentation";
   }

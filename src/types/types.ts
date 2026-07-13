@@ -24,7 +24,7 @@ export type LibraryNames =
   | "H5P.DragText"
   | "H5P.CoursePresentation";
 export type CoursePresentationSlideLibraries = Extract<
-  LibraryNames, 
+  LibraryNames,
   "H5P.MultiChoice" | "H5P.MultiMediaChoice" | "H5P.DragText"
 >;
 export const coursePresentationSlideLibraries = [
@@ -52,9 +52,14 @@ export interface generatorMapping {
   "H5P.DragText": DragTextGenerator;
   "H5P.CoursePresentation": CoursePresentationGenerator;
 }
-export type CoursePresentationLibraryNames = Exclude<LibraryNames, "H5P.CoursePresentation">;
+export type CoursePresentationLibraryNames = Exclude<
+  LibraryNames,
+  "H5P.CoursePresentation"
+>;
 
-export type CoursePresentationGeneratorRegistry = { [K in CoursePresentationLibraryNames]: generatorMapping[K] };
+export type CoursePresentationGeneratorRegistry = {
+  [K in CoursePresentationLibraryNames]: generatorMapping[K];
+};
 //@TODO - consider using a Map instead of an object for generatorRegistry, so that we can use the LibraryNames type as the key type
 //@todo move to better place, e.g. service/generators/generatorRegistry.ts
 
@@ -81,12 +86,23 @@ export interface Creator<T> {
   ): Record<LibraryNames, ArchivedPaths>;
   map(allPaths: AllSegmentArchivedPaths): [Error | undefined];
 }
-export interface ContentGenerator<TTemplate extends object = object> extends Generator {
+export interface ContentGenerator<
+  TTemplate extends object = object,
+> extends Generator {
   generate(
     base: TranslationPair[],
     template: TTemplate,
-  ): TTemplate | TTemplate[];
+  ): generatorWriteData<TTemplate>;
 }
+export type generatorWriteData<TTemplate> = {
+  content: TTemplate | TTemplate[];
+  audio?: GeneratorAudioSet;
+};
+export type GeneratorAudio = {
+  tp: TranslationPair;
+  sourceOrTranslation: SourceOrTranslation;
+};
+export type GeneratorAudioSet = Set<GeneratorAudio>;
 export interface H5pGenerator extends Generator {
   generate(index: number, template: H5PJSON): H5PJSON;
 }
@@ -101,7 +117,12 @@ export interface Writer<TContent extends object = object> {
   getSupportedLibrary(): LibraryNames;
   writeDirName: string;
   archivedPaths: ArchivedPaths;
-  write(content: TContent, h5p: H5PJSON, index: number): WriteError;
+  write(
+    content: TContent,
+    audio: GeneratorAudioSet | undefined,
+    h5p: H5PJSON,
+    index: number,
+  ): WriteError;
 }
 export type GenSet = {
   content: ContentGenerator;
@@ -150,6 +171,12 @@ export type MultiMediaChoice = {
   correctAudio: TranslationPairAudioName;
   wrong: TranslationPair[];
   wrongAudio: TranslationPairAudioName[];
+};
+export type writerInfo = {
+  audio: {
+    toCopyAbsPath: string;
+    destRelPath: string;
+  };
 };
 export type blankWordsIncluded = Set<string>;
 export type SingleCoiceTranslationPairsChunk = SingleCoiceTranslationPairs[];

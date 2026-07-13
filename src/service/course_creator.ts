@@ -8,11 +8,9 @@ import type {
   Creator,
   ArchivedPaths,
   AllSegmentArchivedPaths,
-  WrittenH5PArchive
+  WrittenH5PArchive,
 } from "../types/types.ts";
-import {
-  loadStyle
-} from "../types/types.ts";
+import { loadStyle } from "../types/types.ts";
 import { PairsWordExpander } from "./pairs/pairsWordExpander.ts";
 //@todo move pairsfilereaderwriter
 import { Pairs } from "./pairs/pairs.ts";
@@ -39,20 +37,18 @@ export class CourseCreator implements Creator<TranslationPair[]> {
   /**
    * this structure is data that will be passed to generators
    */
-  _pairs: Awaited<ReturnType<typeof CourseCreator.prepareBaseDataFromAssets>>[0];
+  _pairs: Awaited<
+    ReturnType<typeof CourseCreator.prepareBaseDataFromAssets>
+  >[0];
   _pairsChunks: TranslationPair[][] = [];
   /**
- * static factory
- * @param config 
- * @returns 
- */
+   * static factory
+   * @param config
+   * @returns
+   */
   static async create(config: courseGenConfig) {
-    const [pairs, audio] = await CourseCreator.prepareBaseDataFromAssets()
-    return new CourseCreator(
-      config,
-      pairs,
-      CourseCreator.genSetFactory(),
-    );
+    const [pairs, audio] = await CourseCreator.prepareBaseDataFromAssets();
+    return new CourseCreator(config, pairs, CourseCreator.genSetFactory());
   }
   static genSetFactory() {
     return CourseCreator.supportedLibraryNames.map(createGenSet);
@@ -79,7 +75,7 @@ export class CourseCreator implements Creator<TranslationPair[]> {
     //    call generators
   }
   map(allPaths: AllSegmentArchivedPaths): [Error | undefined] {
-//@todo
+    //@todo
     return [undefined];
   }
   runGenerators(chunk: TranslationPair[], archive: WrittenH5PArchive) {
@@ -94,7 +90,7 @@ export class CourseCreator implements Creator<TranslationPair[]> {
       );
       const content = genSet.content.generate(chunk, templates.content);
       const h5p = genSet.h5p.generate(index, templates.h5p);
-      genSet.writer.write(content, h5p, index);
+      genSet.writer.write(content.content, content.audio, h5p, index);
       //logging?
       //data structure for created h5p's for later report rendering
     });
@@ -121,9 +117,9 @@ export class CourseCreator implements Creator<TranslationPair[]> {
     return this._pairsChunks;
   }
 
-
-
-  static async prepareBaseDataFromAssets(): Promise<[Pairs, Record<string, string>]> {
+  static async prepareBaseDataFromAssets(): Promise<
+    [Pairs, Record<string, string>]
+  > {
     const expander = await PairsWordExpander.create("es");
     const pairs = new Pairs(
       expander,
@@ -139,10 +135,6 @@ export class CourseCreator implements Creator<TranslationPair[]> {
     const audioRecords = await audioFileCreator.produceAllFiles((stored) => {});
 
     return [pairs, audioRecords];
-
   }
-  extendBaseData() {
-
-  }
-
+  extendBaseData() {}
 }

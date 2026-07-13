@@ -6,6 +6,7 @@ import type {
   LibraryNames,
   WriteError,
   Writer,
+  GeneratorAudioSet,
 } from "../../types/types.ts";
 // import { h5pWrite } from "../../utils/utils.ts";
 export class BlanksWriter implements Writer {
@@ -13,11 +14,16 @@ export class BlanksWriter implements Writer {
     public writeDirName: string,
     public archivedPaths: ArchivedPaths,
   ) {}
-  
-    getSupportedLibrary(): LibraryNames {
-      return "H5P.Blanks"; //@todo 
-    }
-  write(generated: BlanksContent, h5p: H5PJSON, index: number): WriteError {
+
+  getSupportedLibrary(): LibraryNames {
+    return "H5P.Blanks"; //@todo
+  }
+  write(
+    generated: BlanksContent,
+    audio: GeneratorAudioSet,
+    h5p: H5PJSON,
+    index: number,
+  ): WriteError {
     // get h5p.json
     // another set of generators?
     // wrapper object from factory

@@ -3,15 +3,18 @@ import type {
   TranslationPair,
   ContentGenerator,
   LibraryNames,
-
+  generatorWriteData,
 } from "../../../types/types.ts";
-import su from "../../../utils/string.ts"
-import { genRandomNumbers } from "../../../utils/utils.ts"
+import su from "../../../utils/string.ts";
+import { genRandomNumbers } from "../../../utils/utils.ts";
 // import { md5Filename } from "../../utils/utils.ts"
 // import { off } from "process";
 
 export class DragTextGenerator implements ContentGenerator {
-  generate(base: TranslationPair[], template: DragTextContent): DragTextContent[] {
+  generate(
+    base: TranslationPair[],
+    template: DragTextContent,
+  ): generatorWriteData<DragTextContent> {
     /*
       params
         "textField": "Example one - replace *this* with\nexample two - repplace *that* with"
@@ -21,7 +24,7 @@ export class DragTextGenerator implements ContentGenerator {
       base param filtered for length as it makes sense
       for this exercise
     */
-    const longBase = base.filter(tp => (tp.translation.length < 4));
+    const longBase = base.filter((tp) => tp.translation.length < 4);
     const remainder = longBase.length % 3;
     let lastAvailIndexes = 3 - remainder;
     const completeSets = Math.floor(longBase.length / 3);
@@ -31,14 +34,13 @@ export class DragTextGenerator implements ContentGenerator {
 
       const templInst = structuredClone(template) as any;
       if (i < completeSets) {
-        const part1 = longBase[offset]
-        const part2 = longBase[offset + 1]
-        const part3 = longBase[offset + 2]
+        const part1 = longBase[offset];
+        const part2 = longBase[offset + 1];
+        const part3 = longBase[offset + 2];
         if (part1 && part2 && part3) {
-          templInst.textField =
-            `${su.wrapLongestWord(part1.translation)}
+          templInst.textField = `${su.wrapLongestWord(part1.translation)}
 ${su.wrapLongestWord(part2.translation)}
-${su.wrapLongestWord(part3.translation)}`
+${su.wrapLongestWord(part3.translation)}`;
           ret.push(templInst);
         }
         //@todo skip param
@@ -51,7 +53,7 @@ ${su.wrapLongestWord(part3.translation)}`
           const tp = longBase[offset + count];
           if (!tp) throw new Error("bad data");
           parts[offset + count] = tp;
-          count++
+          count++;
         }
         const randIndexes = genRandomNumbers(remainder, 0, offset, []);
         for (const index of randIndexes) {
@@ -67,13 +69,12 @@ ${su.wrapLongestWord(part3.translation)}`
         }
         ret.push(templInst);
         //@todo non complete sets require filling with
-        // repeated examples  
+        // repeated examples
       }
     }
-    return ret;
+    return { content: ret };
   }
   getSupportedLibrary(): LibraryNames {
-    return "H5P.DragText"; //@todo 
+    return "H5P.DragText"; //@todo
   }
 }
-
