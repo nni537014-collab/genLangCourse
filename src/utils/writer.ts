@@ -20,7 +20,8 @@ import type {
     ArchivedPaths,
     GeneratorAudioSet,
 } from "../types/types.ts";
-import { generatorAudioToPath, paths } from "./paths.ts";
+import { paths } from "./paths.ts";
+import { generatorAudioToPath } from "./paths/audio.ts";
 import { stripVersionFromLibraryName } from "./utils.ts";
 
 export function h5pWrite(

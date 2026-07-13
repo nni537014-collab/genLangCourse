@@ -43,6 +43,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const utilsToBase = "../../";
 
+///////////////////////////////////////////
 export function md5Filename(input: string): string {
   return createHash("md5").update(input).digest("hex");
 }
@@ -69,7 +70,7 @@ export function generatorAudioToPath(ga: GeneratorAudio, pathType: "h5p" | "abso
 function audioDir() {
   return path.join(getBasePath(), assetsDirName, h5pAudioDirName);
 }
-
+///////////////////////////////
 const getAssetPairsPath = () => {
   return path.join(getAssetsPath(), pairsFileName);
 };
@@ -86,7 +87,7 @@ const getAssetsPath = () => {
 const getAssetDictionaryPath = () => {
   return path.join(getAssetsPath(), dictionaryPath);
 };
-const getBasePath = () => {
+export const getBasePath = () => {
   return path.resolve(__dirname, utilsToBase);
 };
 export const paths = {

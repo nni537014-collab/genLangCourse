@@ -7,11 +7,11 @@ import type {
   generatorWriteData,
 } from "../../../types/types.ts";
 import { genRandomNumbers } from "../../../utils/utils.ts";
-import { paths } from "../../../utils/paths.ts";
 import type {
   Answer,
   MultiChoiceContent,
 } from "../../../types/H5P/content/multi-choice.ts";
+import { getAudioH5pRelativePath } from "../../../utils/paths/audio.ts";
 
 export class MultiChoiceGenerator implements ContentGenerator {
   numberOfWrongAnswers: number = 3;
@@ -84,7 +84,7 @@ export class MultiChoiceGenerator implements ContentGenerator {
       tp: tp,
       sourceOrTranslation: type,
     });
-    return paths.getAudioH5pRelative(tp.translation, type);
+    return getAudioH5pRelativePath(tp.translation, type);
   }
   getSupportedLibrary(): LibraryNames {
     return "H5P.MultiChoice"; //@todo

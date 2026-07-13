@@ -7,12 +7,12 @@ import type {
   GeneratorAudioSet,
   GeneratorAudio,
 } from "../../../types/types.ts";
-import { paths } from "../../../utils/paths.ts";
 import type {
   MultimediaChoiceContent,
   Option,
   OptionMedia,
 } from "../../../types/H5P/content/multimedia-choice.ts";
+import { getAudioH5pRelativePath } from "../../../utils/paths/audio.ts";
 
 export class MultiMediaChoiceGenerator implements ContentGenerator {
   _question = {
@@ -87,7 +87,7 @@ export class MultiMediaChoiceGenerator implements ContentGenerator {
   generateFilePath(input: string, type: "source" | "translation") {
     //@todo 
     this.audioSet.add({ tp: { source: input, translation: input }, sourceOrTranslation: type });  
-    return paths.getAudioH5pRelative(input, type);
+    return getAudioH5pRelativePath(input, type);
   }
   getSupportedLibrary(): LibraryNames {
     return "H5P.MultiMediaChoice"; //@todo

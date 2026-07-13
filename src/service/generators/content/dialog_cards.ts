@@ -5,8 +5,8 @@ import type {
   LibraryNames,
   generatorWriteData,
 } from "../../../types/types.ts";
-import { paths } from "../../../utils/paths.ts";
 import type { DialogcardsContent } from "../../../types/H5P/content/dialog-cards.ts";
+import { getAudioH5pRelativePath } from "../../../utils/paths/audio.ts";
 export class DialogCardsGenerator implements ContentGenerator<DialogcardsContent> {
   generate(
     base: TranslationPair[],
@@ -24,7 +24,7 @@ export class DialogCardsGenerator implements ContentGenerator<DialogcardsContent
         tips: {},
         audio: [
           {
-            path: `${paths.getAudioH5pRelative(tp.translation, "translation")}`,
+            path: `${getAudioH5pRelativePath(tp.translation, "translation")}`,
             mime: "audio\/mpeg",
             copyright: {
               license: "U",
