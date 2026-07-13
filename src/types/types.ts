@@ -122,7 +122,7 @@ export interface Writer<TContent extends object = object> {
     audio: GeneratorAudioSet | undefined,
     h5p: H5PJSON,
     index: number,
-  ): WriteError;
+  ): Promise<ArchivedPaths>;
 }
 export type GenSet = {
   content: ContentGenerator;

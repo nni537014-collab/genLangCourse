@@ -1,8 +1,6 @@
 //@todo move paths to separate file
 import { ZipArchive } from "archiver"
-
 import {
-
     createReadStream,
     mkdirSync,
     writeFileSync,
@@ -11,10 +9,7 @@ import {
     existsSync,
 } from "fs"
 import path from "path"
-
-import { fileURLToPath } from "url";
 import type {
-    JsonValue,
     ContentGenerator,
     LibraryNames,
     ArchivedPaths,
@@ -23,11 +18,13 @@ import type {
 import { paths } from "./paths.ts";
 import { generatorAudioToPath } from "./paths/audio.ts";
 import { stripVersionFromLibraryName } from "./utils.ts";
+import type { H5PContent } from "../types/H5P/content/content.ts";
+import type { H5PJSON } from "../types/H5P/h5p.ts";
 
-export function h5pWrite(
-    content: JsonValue,
+export async function h5pWrite(
+    content: H5PContent,
     audio: GeneratorAudioSet,
-    h5p: JsonValue,
+    h5p: H5PJSON,
     index: number,
     libraryName: LibraryNames,
     writtenPaths: ArchivedPaths
@@ -55,72 +52,115 @@ export function h5pWrite(
             createReadStream(audioFileFromPath).pipe(createWriteStream(audioFileToPath));
         });
     }
-    h5pFolderToArchive(writePath, index, libraryName);
+    await archiveContent(writePath, writtenPaths);
     //@todo fix all this for proper error handling and async
-    return writtenPaths.add(writePath + ".h5p")
+    return writtenPaths;
 }
 export function h5pFolderToArchive(folderPath: string, index: number, libraryName: LibraryNames) {
     //@todo
     const h5pArchivePath = path.join(folderPath);
 }
 
-const archiveContent = (dir: string, archivedPaths: ArchivedPaths) => {
-    // create a file to stream archive data to.
-    //@todo path.join to replace path concat below
-    const zipPath = `${dir}.zip`;
-    const h5pPath = `${dir}.h5p`;
-    // const h5pJsonFilename = `${dir}/h5p.json`;
-    // const contentJsonFilename = `${dir}/content/content.json`;
-    const output = createWriteStream(zipPath);
-    const archive = new ZipArchive({
-        zlib: { level: 9 }, // Sets the compression level.
-    });
+// const archiveContent = (dir: string, archivedPaths: ArchivedPaths) => {
+//     // create a file to stream archive data to.
+//     //@todo path.join to replace path concat below
+//     const zipPath = `${dir}.zip`;
+//     const h5pPath = `${dir}.h5p`;
+//     const output = createWriteStream(zipPath);
+//     const archive = new ZipArchive({
+//         zlib: { level: 9 }, // Sets the compression level.
+//     });
 
-    // listen for all archive data to be written
-    // 'close' event is fired only when a file descriptor is involved
-    output.on("close", function () {
-        console.log(archive.pointer() + " total bytes");
-        console.log(
-            "archiver has been finalized and the output file descriptor has closed.",
-        );
-        renameSync(zipPath, h5pPath);
-        console.log("renamed ZIP to H5P:", h5pPath);
-    });
+//     output.on("close", function () {
+//         console.log(archive.pointer() + " total bytes");
+//         console.log(
+//             "archiver has been finalized and the output file descriptor has closed.",
+//         );
+//         renameSync(zipPath, h5pPath);
+//         archivedPaths.add(h5pPath);
+//         console.log("renamed ZIP to H5P:", h5pPath);
+//     });
 
-    // This event is fired when the data source is drained no matter what was the data source.
-    // It is not part of this library but rather from the NodeJS Stream API.
-    // @see: https://nodejs.org/api/stream.html#stream_event_end
-    output.on("end", function () {
-        console.log("Data has been drained");
-    });
+//     output.on("end", function () {
+//         console.log("Data has been drained");
+//     });
 
-    // good practice to catch warnings (ie stat failures and other non-blocking errors)
-    archive.on("warning", function (err) {
-        if (err.code === "ENOENT") {
-            // log warning
-        } else {
-            // throw error
-            throw err;
-        }
-    });
-    // good practice to catch this error explicitly
-    archive.on("error", function (err) {
-        throw err;
-    });
-    // pipe archive data to the file
-    archive.pipe(output);
-    // append a file from stream
+//     archive.on("warning", function (err) {
+//         if (err.code === "ENOENT") {
+//             // log warning
+//         } else {
+//             // throw error
+//             throw err;
+//         }
+//     });
+//     archive.on("error", function (err) {
+//         throw err;
+//     });
+//     archive.pipe(output);
+//     // append a file from stream
 
-    // archive.append(createReadStream(h5pJsonFilename), { name: "h5p.json" });
-    // // append a file from string
-    // archive.append(createReadStream(contentJsonFilename), { name: "content/content.json" });
-    //@todo check this doesn't cause h5p import to fail
-    archive.directory(dir, false);
-    // finalize the archive (ie we are done appending files but streams have to finish yet)
-    // 'close', 'end' or 'finish' may be fired right after calling this method so register to them beforehand
-    archive.finalize();
-}
+//     //@todo check this doesn't cause h5p import to fail
+//     archive.directory(dir, false);
+//     // finalize the archive (ie we are done appending files but streams have to finish yet)
+//     // 'close', 'end' or 'finish' may be fired right after calling this method so register to them beforehand
+//     archive.finalize();
+// }
 
+// import { createWriteStream, renameSync } from "fs";
+// import path from "path"; // Added for the path.join @todo
+
+const archiveContent = (dir: string, archivedPaths: ArchivedPaths): Promise<void> => {
+    return new Promise((resolve, reject) => {
+        // Resolved @todo: Used path.join instead of string concatenation
+        const zipPath = path.join(path.dirname(dir), `${path.basename(dir)}.zip`);
+        const h5pPath = path.join(path.dirname(dir), `${path.basename(dir)}.h5p`);
+        
+        const output = createWriteStream(zipPath);
+        const archive = new ZipArchive({
+            zlib: { level: 9 }, 
+        });
+
+        // Resolve the promise when the file descriptor is fully closed
+        output.on("close", function () {
+            try {
+                console.log(archive.pointer() + " total bytes");
+                console.log("archiver has been finalized and the output file descriptor has closed.");
+                
+                renameSync(zipPath, h5pPath);
+                archivedPaths.add(h5pPath);
+                console.log("renamed ZIP to H5P:", h5pPath);
+                
+                resolve(); // Promise finishes successfully
+            } catch (renameError) {
+                reject(renameError); // Catch filesystem errors during rename
+            }
+        });
+
+        output.on("end", function () {
+            console.log("Data has been drained");
+        });
+
+        archive.on("warning", function (err) {
+            if (err.code === "ENOENT") {
+                console.warn("Archiver warning:", err);
+            } else {
+                reject(err); // Reject promise on critical warning
+            }
+        });
+
+        archive.on("error", function (err) {
+            reject(err); // Reject promise on archive error
+        });
+
+        output.on("error", function (err) {
+            reject(err); // Reject promise on stream write error
+        });
+
+        archive.pipe(output);
+        archive.directory(dir, false);
+        archive.finalize();
+    });
+};
 
 export function generatorWriterFinder(generator: ContentGenerator) {
     const libraryName = stripVersionFromLibraryName(generator.getSupportedLibrary());

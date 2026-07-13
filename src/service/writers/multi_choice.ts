@@ -11,25 +11,22 @@ import type {
   ArchivedPaths,
   LibraryNames,
 } from "../../types/types.ts";
+import { h5pWrite } from "../../utils/writer.ts";
 
 export class MultiChoiceWriter implements Writer {
   constructor(
     public writeDirName: string,
     public archivedPaths: ArchivedPaths,
-  ) {}
+  ) { }
   getSupportedLibrary(): LibraryNames {
     return "H5P.MultiChoice"; //@todo
   }
-  write(
+  async write(
     generated: MultiChoiceContent,
     audio: GeneratorAudioSet,
     h5p: H5PJSON,
     index: number,
-  ): WriteError {
-    // get h5p.json
-    // another set of generators?
-    // wrapper object from factory
-
-    return writeError.NO_ERROR;
+  ) {
+    return await h5pWrite(generated, audio, h5p, index, this.getSupportedLibrary(), this.archivedPaths);
   }
 }

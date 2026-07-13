@@ -8,6 +8,7 @@ import type {
   Writer,
   GeneratorAudioSet,
 } from "../../types/types.ts";
+import { h5pWrite } from "../../utils/writer.ts";
 // import { h5pWrite } from "../../utils/utils.ts";
 export class BlanksWriter implements Writer {
   constructor(
@@ -18,16 +19,16 @@ export class BlanksWriter implements Writer {
   getSupportedLibrary(): LibraryNames {
     return "H5P.Blanks"; //@todo
   }
-  write(
+  async write(
     generated: BlanksContent,
     audio: GeneratorAudioSet,
     h5p: H5PJSON,
     index: number,
-  ): WriteError {
+  ): Promise<ArchivedPaths> {
     // get h5p.json
     // another set of generators?
     // wrapper object from factory
-
-    return writeError.NO_ERROR;
+    return await h5pWrite(generated, audio, h5p, index, this.getSupportedLibrary(), this.archivedPaths);
+    
   }
 }

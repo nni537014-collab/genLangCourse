@@ -37,6 +37,7 @@ export class AudioFileCreator {
       .filter((value) => value) as unknown as Record<string, string>;
     return ret;
   }
+  
   createAudioFile(text: string, filePath: AudioFileName) {
     const wavFile = `${filePath}.wav`;
     return new Promise<Record<AudioFileName, string>>((resolve, reject) => {
