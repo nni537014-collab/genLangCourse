@@ -8,6 +8,7 @@ import {
     writeFileSync,
     createWriteStream,
     renameSync,
+    existsSync,
 } from "fs"
 import path from "path"
 
@@ -19,7 +20,7 @@ import type {
     ArchivedPaths,
     GeneratorAudioSet,
 } from "../types/types.ts";
-import { paths } from "./paths.ts";
+import { generatorAudioToPath, paths } from "./paths.ts";
 import { stripVersionFromLibraryName } from "./utils.ts";
 
 export function h5pWrite(
@@ -41,12 +42,17 @@ export function h5pWrite(
     //@TODO copy all files from audio folder to content folder
     if (audio) {
         audio.forEach((ga) => {
-            const audioFileFromPath = paths.getAudioPath(ga.tp.source, ga.sourceOrTranslation);
-            const audioFileRelToPath = paths.getAudioH5pRelative(ga.tp.source, ga.sourceOrTranslation);
-            const audioFileToPath = path.join(writePath, audioFileRelToPath);
-        
-            createReadStream(audioFileFromPath).pipe(createWriteStream(audioDestPath));
-        }
+            const audioFileFromPath = generatorAudioToPath(ga, "absolute");
+            const audioFileRelToPath = generatorAudioToPath(ga, "h5p");
+            const audioFileToPath = path.join(contentFolderPath, audioFileRelToPath) as typeof audioFileRelToPath;
+            const targetDir = path.dirname(audioFileToPath);
+
+            // 2. Create the directory if it does not exist
+            if (!existsSync(targetDir)) {
+                mkdirSync(targetDir, { recursive: true });
+            }
+            createReadStream(audioFileFromPath).pipe(createWriteStream(audioFileToPath));
+        });
     }
     h5pFolderToArchive(writePath, index, libraryName);
     //@todo fix all this for proper error handling and async
@@ -62,8 +68,8 @@ const archiveContent = (dir: string, archivedPaths: ArchivedPaths) => {
     //@todo path.join to replace path concat below
     const zipPath = `${dir}.zip`;
     const h5pPath = `${dir}.h5p`;
-    const h5pJsonFilename = `${dir}/h5p.json`;
-    const contentJsonFilename = `${dir}/content/content.json`;
+    // const h5pJsonFilename = `${dir}/h5p.json`;
+    // const contentJsonFilename = `${dir}/content/content.json`;
     const output = createWriteStream(zipPath);
     const archive = new ZipArchive({
         zlib: { level: 9 }, // Sets the compression level.
@@ -104,10 +110,10 @@ const archiveContent = (dir: string, archivedPaths: ArchivedPaths) => {
     archive.pipe(output);
     // append a file from stream
 
-    archive.append(createReadStream(h5pJsonFilename), { name: "h5p.json" });
-    // append a file from string
-    archive.append(createReadStream(contentJsonFilename), { name: "content/content.json" });
-
+    // archive.append(createReadStream(h5pJsonFilename), { name: "h5p.json" });
+    // // append a file from string
+    // archive.append(createReadStream(contentJsonFilename), { name: "content/content.json" });
+    archive.directory(dir, false);
     // finalize the archive (ie we are done appending files but streams have to finish yet)
     // 'close', 'end' or 'finish' may be fired right after calling this method so register to them beforehand
     archive.finalize();
