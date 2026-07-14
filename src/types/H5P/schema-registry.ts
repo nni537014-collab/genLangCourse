@@ -3,6 +3,11 @@ import { dragTextContentSchema } from "./content/drag-text.ts"; // Your schemas
 import { blanksContentSchema } from "./content/blanks.ts";
 import type { LibraryNames } from "../types.ts";
 import { generatorTemplateFinder } from "../../utils/utils.ts";
+import { coursePresentationContentSchema } from "./content/course-presentation.ts";
+import { multimediaChoiceContentSchema } from "./content/multimedia-choice.ts";
+import { dialogcardsContentSchema } from "./content/dialog-cards.ts";
+import { singleChoiceSetContentSchema } from "./content/single-choice-set.ts";
+import { multiChoiceContentSchema } from "./content/multi-choice.ts";
 
 // 1. Define the union of your H5P string literals
 // export type H5PLibraryName = "H5P.DragText" | "H5P.Blanks"; // Add others here
@@ -11,11 +16,11 @@ import { generatorTemplateFinder } from "../../utils/utils.ts";
 const schemaRegistry = {
   "H5P.DragText": dragTextContentSchema,
   "H5P.Blanks": blanksContentSchema,
-  "H5P.CoursePresentation": z.object({}), // Placeholder for CoursePresentation schema
-  "H5P.MultiMediaChoice": z.object({}), // Placeholder for MultiMediaChoice schema
-  "H5P.Dialogcards": z.object({}), // Placeholder for Dialogcards schema
-  "H5P.SingleChoiceSet": z.object({}), // Placeholder for SingleChoiceSet schema
-  "H5P.MultiChoice": z.object({}), // Placeholder for MultiChoice schema
+  "H5P.CoursePresentation": coursePresentationContentSchema, // Placeholder for CoursePresentation schema
+  "H5P.MultiMediaChoice": multimediaChoiceContentSchema, // Placeholder for MultiMediaChoice schema
+  "H5P.Dialogcards": dialogcardsContentSchema, // Placeholder for Dialogcards schema
+  "H5P.SingleChoiceSet": singleChoiceSetContentSchema, // Placeholder for SingleChoiceSet schema
+  "H5P.MultiChoice": multiChoiceContentSchema, // Placeholder for MultiChoice schema
 } as const satisfies Record<LibraryNames, z.ZodTypeAny>;
 
 // 3. Create a helper utility type to automatically map the return shape
@@ -32,4 +37,4 @@ export function getValidatedTemplate<T extends LibraryNames>(library: T): InferT
   // Using .parse() throws an explicit error if the JSON is corrupted or invalid.
   return schema.parse(rawData);
 }
-const blanksContent = getValidatedTemplate("H5P.Blanks");
+const blanksContent = getValidatedTemplate("H5P.SingleChoiceSet");
