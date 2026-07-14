@@ -78,3 +78,10 @@ ${su.wrapLongestWord(part3.translation)}`;
     return "H5P.DragText"; //@todo
   }
 }
+
+const generator = new DragTextGenerator();
+const tp: TranslationPair = {
+  source: "this is a test",
+  translation: "esto es una prueba",
+};
+const template: DragTextContent;

@@ -16,7 +16,7 @@ import { PairsWordExpander } from "./pairs/pairsWordExpander.ts";
 import { Pairs } from "./pairs/pairs.ts";
 import { PairsFileReaderWriter } from "./pairs/pairsFileReaderWriter.ts";
 import { generatorTemplateFinder } from "../utils/utils.ts";
-import { AudioFileCreator } from "./writers/audio_file.ts";
+import { AudioFileCreator, audioFileCreatorFactory, type FlatBase } from "./writers/audio_file.ts";
 import { createGenSet, createWrittenH5PArchive } from "./gen_set_factory.ts";
 
 export class CourseCreator implements Creator<TranslationPair[]> {
@@ -92,7 +92,7 @@ export class CourseCreator implements Creator<TranslationPair[]> {
     });
     // let rec: Record<LibraryNames, ArchivedPaths>;
     this._genSets.forEach((genSet) => {
-      const p = new Set(genSet.writer.archivedPaths) as ArchivedPaths;
+      const p: ArchivedPaths = new Set(genSet.writer.archivedPaths);
       archive[genSet.writer.getSupportedLibrary()] = p;
       genSet.writer.archivedPaths.clear();
     });
@@ -123,12 +123,14 @@ export async function courseCreatorFactory(config: courseGenConfig) {
   return new CourseCreator(config, pairs, genSetFactory());
 }
 async function prepareBaseDataFromAssets(): Promise<
-  [Pairs, Record<string, string>]
+  [Pairs, FlatBase]
 > {
+  //@todo string!!!!
   const expander = await PairsWordExpander.create("es");
   const pairs = new Pairs(
     expander,
     loadStyle.LOAD_FROM_DISK,
+      //@todo string!!!!
     new PairsFileReaderWriter({
       dir: "tmp",
       name: "pairs.json",
@@ -136,7 +138,7 @@ async function prepareBaseDataFromAssets(): Promise<
   );
   //console.log(pairs.getPairs());
   console.log("pairs length:", pairs.getPairs().length);
-  const audioFileCreator = new AudioFileCreator(pairs.getPairs());
+  const audioFileCreator = audioFileCreatorFactory(pairs.getPairs());
   const audioRecords = await audioFileCreator.produceAllFiles((stored) => { });
 
   return [pairs, audioRecords];

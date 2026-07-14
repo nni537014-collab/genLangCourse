@@ -1,7 +1,8 @@
 import type { TranslationPair, AudioFileName } from "./../../types/types.ts";
 import say from "say";
 import { execSync } from "child_process";
-import { getAudioPath } from "../../utils/paths/audio.ts";
+import { getAudioAbsPath } from "../../utils/paths/audio.ts";
+import { existsSync } from "fs";
 
 export type FlatBase = Record<AudioFileName, string>;
 export class AudioFileCreator {
@@ -21,8 +22,8 @@ export class AudioFileCreator {
   async produceAllFiles(allSettled: (stored: string[]) => void) {
     const created: Promise<Record<AudioFileName, string>>[] = [];
     for (const filename of Object.keys(this._flatBase) as AudioFileName[]) {
-      const text  = this._flatBase[filename];
-      if(!text) throw new Error("bad data");
+      const text = this._flatBase[filename];
+      if (!text) throw new Error("bad data");
       created.push(this.createAudioFile(text, filename));
     }
     const set = await Promise.allSettled(created);
@@ -34,27 +35,33 @@ export class AudioFileCreator {
           return undefined;
         }
       })
-      .filter((value) => value) as unknown as Record<string, string>;
+      .filter((value) => value) as unknown as FlatBase;
     return ret;
   }
-  
+
   createAudioFile(text: string, filePath: AudioFileName) {
     const wavFile = `${filePath}.wav`;
-    return new Promise<Record<AudioFileName, string>>((resolve, reject) => {
+    return new Promise<FlatBase>((resolve, reject) => {
+      // skip if exists already
+      if (existsSync(filePath)) {
+        return resolve({ [filePath]: text });
+      }
       say.export(text, this.voice, 1, wavFile, (err) => {
         if (err) reject(err);
+        //@todo check if ffmpeg is installed and in path
         execSync(`ffmpeg -y -i ${wavFile} ${filePath}`);
-        const res: Record<string, string> = {};
-        res[filePath] = text;
-        resolve(res);
+        resolve({
+          [filePath]: text
+        });
       });
     });
   }
   protected key(type: "source" | "translation", input: string) {
-    return getAudioPath(input, type);
+    return getAudioAbsPath(input, type);
   }
 }
 
 
-
-
+export function audioFileCreatorFactory(base: TranslationPair[]) {
+  return new AudioFileCreator(base);
+}

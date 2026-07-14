@@ -13,7 +13,7 @@ export function audioFileName(
 ): AudioFileName {
   return `${md5Filename(type + input)}.mp3`;
 }
-export function getAudioPath(input: string, type: SourceOrTranslation) {
+export function getAudioAbsPath(input: string, type: SourceOrTranslation) {
   return path.join(audioDir(), audioFileName(input, type)) as AudioFileName;
 }
 export function getAudioH5pRelativePath(input: string, type: SourceOrTranslation) {
@@ -24,7 +24,7 @@ export function generatorAudioToPath(ga: GeneratorAudio, pathType: "h5p" | "abso
   if (pathType === "h5p") {
     return getAudioH5pRelativePath(subject, ga.sourceOrTranslation);
   } else {
-    return getAudioPath(subject, ga.sourceOrTranslation);
+    return getAudioAbsPath(subject, ga.sourceOrTranslation);
   }
 }
 export function audioDir() {
