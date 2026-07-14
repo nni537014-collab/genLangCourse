@@ -38,6 +38,8 @@ import { fileURLToPath } from "url";
 // } from "../types/types.ts";
 import { paths } from "./paths.ts";
 import type { LibraryNames } from "../types/types.ts";
+import { schemaRegistry, type InferTemplateType } from "../types/H5P/schema-registry.ts";
+import type zod from "zod";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -83,6 +85,17 @@ export function generatorTemplateFinder(supportedLibrary: LibraryNames) {
     // check required files can load
     // return tuple - [h5pJson, contentJson]
 
+}
+export function getValidatedTemplate<T extends LibraryNames>(library: T, rawData: any): InferTemplateType<T> {
+  // 1. Fetch the raw un-typed data
+//   const rawData = generatorTemplateFinder(library);
+  
+  // 2. Pull the matching schema safely from the registry
+  const schema = schemaRegistry[library] as unknown as zod.ZodType<InferTemplateType<T>>;
+  
+  // 3. Parse and validate. This instantly destroys the 'any' type.
+  // Using .parse() throws an explicit error if the JSON is corrupted or invalid.
+  return schema.parse(rawData.content);
 }
 export const clearPreviousGeneratedData = () => {
     return rmSync(paths.getOut(), { recursive: true, force: true })

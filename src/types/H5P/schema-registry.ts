@@ -37,4 +37,3 @@ export function getValidatedTemplate<T extends LibraryNames>(library: T): InferT
   // Using .parse() throws an explicit error if the JSON is corrupted or invalid.
   return schema.parse(rawData);
 }
-const blanksContent = getValidatedTemplate("H5P.SingleChoiceSet");

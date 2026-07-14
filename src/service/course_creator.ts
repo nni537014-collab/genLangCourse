@@ -15,7 +15,7 @@ import { PairsWordExpander } from "./pairs/pairsWordExpander.ts";
 //@todo move pairsfilereaderwriter
 import { Pairs } from "./pairs/pairs.ts";
 import { PairsFileReaderWriter } from "./pairs/pairsFileReaderWriter.ts";
-import { generatorTemplateFinder } from "../utils/utils.ts";
+import { generatorTemplateFinder, getValidatedTemplate } from "../utils/utils.ts";
 import { AudioFileCreator, audioFileCreatorFactory, type FlatBase } from "./writers/audio_file.ts";
 import { createGenSet, createWrittenH5PArchive } from "./gen_set_factory.ts";
 
@@ -84,7 +84,8 @@ export class CourseCreator implements Creator<TranslationPair[]> {
       const templates = generatorTemplateFinder(
         genSet.content.getSupportedLibrary(),
       );
-      const content = genSet.content.generate(chunk, templates.content);
+      const contentTempl = getValidatedTemplate(genSet.content.getSupportedLibrary(), templates.content);
+      const content = genSet.content.generate(chunk, contentTempl);
       const h5p = genSet.h5p.generate(index, templates.h5p);
       genSet.writer.write(content.content, content.audio, h5p, index);
       //logging?
