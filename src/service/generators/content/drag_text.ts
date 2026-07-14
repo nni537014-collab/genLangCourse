@@ -1,4 +1,5 @@
 import type { DragTextContent } from "../../../types/H5P/content/drag-text.ts";
+import { dragTextContentSchema } from "../../../types/H5P/content/drag-text.ts";
 import type {
   TranslationPair,
   ContentGenerator,
@@ -7,6 +8,7 @@ import type {
 } from "../../../types/types.ts";
 import su from "../../../utils/string.ts";
 import { genRandomNumbers } from "../../../utils/utils.ts";
+import { generatorTemplateFinder } from "../../../utils/utils.ts";
 // import { md5Filename } from "../../utils/utils.ts"
 // import { off } from "process";
 
@@ -84,4 +86,7 @@ const tp: TranslationPair = {
   source: "this is a test",
   translation: "esto es una prueba",
 };
-const template: DragTextContent;
+const template: DragTextContent = dragTextContentSchema.parse(generatorTemplateFinder("H5P.DragText"))  ;
+generator.generate([tp], template);
+const wtfTemp = generatorTemplateFinder("H5P.DragText").content;
+generator.generate([tp], wtfTemp);

@@ -37,6 +37,7 @@ import { fileURLToPath } from "url";
 //     WrittenH5PArchive
 // } from "../types/types.ts";
 import { paths } from "./paths.ts";
+import type { LibraryNames } from "../types/types.ts";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -55,7 +56,7 @@ export function stripVersionFromLibraryName(input: string) {
     if (!name || name.length < 1) throw new Error("bad input");
     return name;
 }
-export function generatorTemplateFinder(supportedLibrary: string) {
+export function generatorTemplateFinder(supportedLibrary: LibraryNames) {
     const libraryName = stripVersionFromLibraryName(supportedLibrary);
     const templPath = path.join(
         __dirname,
