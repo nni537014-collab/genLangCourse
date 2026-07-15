@@ -59,6 +59,9 @@ export function stripVersionFromLibraryName(input: string) {
     return name;
 }
 export function generatorTemplateFinder(supportedLibrary: LibraryNames) {
+    const __filename = fileURLToPath(import.meta.url);
+    const __dirname = path.dirname(__filename);
+    const utilsToBase = "../../";
     const libraryName = stripVersionFromLibraryName(supportedLibrary);
     const templPath = path.join(
         __dirname,
@@ -86,16 +89,9 @@ export function generatorTemplateFinder(supportedLibrary: LibraryNames) {
     // return tuple - [h5pJson, contentJson]
 
 }
-export function getValidatedTemplate<T extends LibraryNames>(library: T, rawData: any): InferTemplateType<T> {
-  // 1. Fetch the raw un-typed data
-//   const rawData = generatorTemplateFinder(library);
-  
-  // 2. Pull the matching schema safely from the registry
-  const schema = schemaRegistry[library] as unknown as zod.ZodType<InferTemplateType<T>>;
-  
-  // 3. Parse and validate. This instantly destroys the 'any' type.
-  // Using .parse() throws an explicit error if the JSON is corrupted or invalid.
-  return schema.parse(rawData.content);
+export function getValidatedContentTemplate<T extends LibraryNames>(library: T, rawData: any): InferTemplateType<T> {
+    const schema = schemaRegistry[library] as unknown as zod.ZodType<InferTemplateType<T>>;
+    return schema.parse(rawData.content);
 }
 export const clearPreviousGeneratedData = () => {
     return rmSync(paths.getOut(), { recursive: true, force: true })

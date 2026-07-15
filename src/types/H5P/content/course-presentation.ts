@@ -390,7 +390,7 @@ import { singleChoiceSetContentSchema } from "./single-choice-set.ts"; // Adjust
 import { multiChoiceContentSchema } from "./multi-choice.ts";
 import { multimediaChoiceContentSchema } from "./multimedia-choice.ts";
 import { dragTextContentSchema } from "./drag-text.ts";
-import { generatorTemplateFinder } from "../../../utils/utils.ts";
+// import { generatorTemplateFinder } from "../../../utils/utils.ts";
 export const facebookShareSchema = z.object({
     url: z.string(),
     quote: z.string()
@@ -830,10 +830,10 @@ export type Slide = z.infer<typeof slideSchema>;
 export type Presentation = z.infer<typeof presentationSchema>;
 export type CoursePresentationContent = z.infer<typeof coursePresentationContentSchema>;
 
-const {h5p, content} = generatorTemplateFinder("H5P.CoursePresentation");
-const cpc = coursePresentationContentSchema.parse(content);
-const element = cpc.presentation.slides.pop()?.elements.pop();
-if(element && element.action.library === "H5P.Blanks") {
-   element.action.params = blanksContentSchema.parse(element.action.params);
+// const {h5p, content} = generatorTemplateFinder("H5P.CoursePresentation");
+// const cpc = coursePresentationContentSchema.parse(content);
+// const element = cpc.presentation.slides.pop()?.elements.pop();
+// if(element && element.action.library === "H5P.Blanks") {
+//    element.action.params = blanksContentSchema.parse(element.action.params);
 
-}
+// }

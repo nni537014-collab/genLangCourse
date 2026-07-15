@@ -1,6 +1,5 @@
 import type {
   TranslationPair,
-  JsonValue,
   ContentGenerator,
   LibraryNames,
   generatorWriteData,

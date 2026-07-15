@@ -1,5 +1,4 @@
 import type { DragTextContent } from "../../../types/H5P/content/drag-text.ts";
-import { dragTextContentSchema } from "../../../types/H5P/content/drag-text.ts";
 import type {
   TranslationPair,
   ContentGenerator,
@@ -7,20 +6,16 @@ import type {
   generatorWriteData,
 } from "../../../types/types.ts";
 import su from "../../../utils/string.ts";
-import { genRandomNumbers } from "../../../utils/utils.ts";
+import { genRandomNumbers, getValidatedContentTemplate } from "../../../utils/utils.ts";
 import { generatorTemplateFinder } from "../../../utils/utils.ts";
-// import { md5Filename } from "../../utils/utils.ts"
-// import { off } from "process";
+
 
 export class DragTextGenerator implements ContentGenerator {
   generate(
     base: TranslationPair[],
     template: DragTextContent,
   ): generatorWriteData<DragTextContent> {
-    /*
-      params
-        "textField": "Example one - replace *this* with\nexample two - repplace *that* with"
-    */
+  
     /**
       @todo add simlr funcionality to other generators
       base param filtered for length as it makes sense
@@ -86,7 +81,7 @@ const tp: TranslationPair = {
   source: "this is a test",
   translation: "esto es una prueba",
 };
-const template: DragTextContent = dragTextContentSchema.parse(generatorTemplateFinder("H5P.DragText"))  ;
-generator.generate([tp], template);
-const wtfTemp = generatorTemplateFinder("H5P.DragText").content;
-generator.generate([tp], wtfTemp);
+// const template: DragTextContent = dragTextContentSchema.parse(generatorTemplateFinder("H5P.DragText"))  ;
+// generator.generate([tp], template);
+const wtfTemp = getValidatedContentTemplate("H5P.DragText", generatorTemplateFinder("H5P.DragText"));
+console.log(generator.generate([tp], wtfTemp));

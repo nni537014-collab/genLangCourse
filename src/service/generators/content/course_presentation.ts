@@ -1,6 +1,6 @@
 import type {
   ContentGenerator,
-  CoursePresentationGeneratorRegistry,
+
   CoursePresentationSlideLibraries,
   LibraryNames,
   TranslationPair,
@@ -17,6 +17,7 @@ import type {
 import type { MultiChoiceContent } from "../../../types/H5P/content/multi-choice.ts";
 import type { DragTextContent } from "../../../types/H5P/content/drag-text.ts";
 import type { MultimediaChoiceContent } from "../../../types/H5P/content/multimedia-choice.ts";
+import type { CoursePresentationGeneratorRegistry } from "../../../types/H5P/generator-mapping.ts";
 // import type { MultiChoiceContent } from "../../../types/H5P/content/multi-choice.ts";
 // import type { MultimediaChoiceContent } from "../../../types/H5P/content/multimedia-choice.ts";
 // import type { DragTextContent } from "../../../types/H5P/content/drag-text.ts";
