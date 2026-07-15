@@ -76,23 +76,27 @@ ${su.wrapLongestWord(part3.translation)}`;
   }
 }
 
-const generator = new DragTextGenerator();
-const tp: TranslationPair[] = [
-  {
-    source: "this is a test",
-    translation: "esto es una prueba",
-  },
-  {
-    source: "this is a test",
-    translation: "esto es una prueba",
-  },
-  {
-    source: "this is a test",
-    translation: "esto es una prueba",
-  }
-]
-// const template: DragTextContent = dragTextContentSchema.parse(generatorTemplateFinder("H5P.DragText"))  ;
-// generator.generate([tp], template);
-const wtfTemp = getValidatedContentTemplate("H5P.DragText", generatorTemplateFinder("H5P.DragText"));
-console.log(wtfTemp);
-console.log(generator.generate(tp, wtfTemp));
+// const generator = new DragTextGenerator();
+// const tp: TranslationPair[] = [
+//   {
+//     source: "this is a test",
+//     translation: "esto es una, LA VERDAD ES QUE NO SE QUE PONER, PERO ESTO ES UNA PRUEBA",
+//   },
+//   {
+//     source: "this is a test",
+//     translation: "esto es una prueba",
+//   },
+//   {
+//     source: "this is a test",
+//     translation: "esto es una prueba",
+//   }
+// ]
+// // const template: DragTextContent = dragTextContentSchema.parse(generatorTemplateFinder("H5P.DragText"))  ;
+// // generator.generate([tp], template);
+// const wtfTemp = getValidatedContentTemplate("H5P.DragText", generatorTemplateFinder("H5P.DragText"));
+// console.log(wtfTemp);
+// const ret = generator.generate(tp, wtfTemp).content;
+// if(!Array.isArray(ret)) throw new Error("bad data");
+// ret.forEach((c) => {
+//   console.log(c.textField);
+// })
