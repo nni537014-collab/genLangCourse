@@ -1,5 +1,5 @@
 import type { BlanksGenerator } from "../../service/generators/content/blanks.ts";
-import type { CoursePresentationGenerator } from "../../service/generators/content/course_presentation.ts";
+// import type { CoursePresentationGenerator } from "../../service/generators/content/course_presentation.ts";
 import type { DialogCardsGenerator } from "../../service/generators/content/dialog_cards.ts";
 import type { DragTextGenerator } from "../../service/generators/content/drag_text.ts";
 import type { MultiChoiceGenerator } from "../../service/generators/content/multi_choice.ts";
@@ -14,7 +14,7 @@ export interface generatorMapping {
   "H5P.Dialogcards": DialogCardsGenerator;
   "H5P.MultiChoice": MultiChoiceGenerator;
   "H5P.DragText": DragTextGenerator;
-  "H5P.CoursePresentation": CoursePresentationGenerator;
+//   "H5P.CoursePresentation": CoursePresentationGenerator;
 }
 export type CoursePresentationLibraryNames = Exclude<
   LibraryNames,
