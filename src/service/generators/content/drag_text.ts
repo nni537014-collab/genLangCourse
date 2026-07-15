@@ -15,21 +15,22 @@ export class DragTextGenerator implements ContentGenerator {
     base: TranslationPair[],
     template: DragTextContent,
   ): generatorWriteData<DragTextContent> {
-  
+
     /**
       @todo add simlr funcionality to other generators
       base param filtered for length as it makes sense
       for this exercise
     */
-    const longBase = base.filter((tp) => tp.translation.length < 4);
+    const longBase = base.filter((tp) => tp.translation.length > 3);
     const remainder = longBase.length % 3;
     let lastAvailIndexes = 3 - remainder;
     const completeSets = Math.floor(longBase.length / 3);
     const ret: DragTextContent[] = [];
+    console.log("longbase", longBase.length, "completeSets", completeSets, "remainder", remainder, "lastAvailIndexes", lastAvailIndexes);
     for (let i = 0; i < completeSets; i++) {
       const offset = i * 3;
 
-      const templInst = structuredClone(template) as any;
+      const templInst = structuredClone(template);
       if (i < completeSets) {
         const part1 = longBase[offset];
         const part2 = longBase[offset + 1];
@@ -40,8 +41,7 @@ ${su.wrapLongestWord(part2.translation)}
 ${su.wrapLongestWord(part3.translation)}`;
           ret.push(templInst);
         }
-        //@todo skip param
-        // const additional = genRandomNumbers(remainder, 0, offset, skip)
+
       } else {
         const parts: TranslationPair[] = [];
         let count = 0;
@@ -77,11 +77,22 @@ ${su.wrapLongestWord(part3.translation)}`;
 }
 
 const generator = new DragTextGenerator();
-const tp: TranslationPair = {
-  source: "this is a test",
-  translation: "esto es una prueba",
-};
+const tp: TranslationPair[] = [
+  {
+    source: "this is a test",
+    translation: "esto es una prueba",
+  },
+  {
+    source: "this is a test",
+    translation: "esto es una prueba",
+  },
+  {
+    source: "this is a test",
+    translation: "esto es una prueba",
+  }
+]
 // const template: DragTextContent = dragTextContentSchema.parse(generatorTemplateFinder("H5P.DragText"))  ;
 // generator.generate([tp], template);
 const wtfTemp = getValidatedContentTemplate("H5P.DragText", generatorTemplateFinder("H5P.DragText"));
-console.log(generator.generate([tp], wtfTemp));
+console.log(wtfTemp);
+console.log(generator.generate(tp, wtfTemp));
