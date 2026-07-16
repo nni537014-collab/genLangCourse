@@ -15,13 +15,17 @@
   "type": "module",
   "main": "src/main.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
     "@types/node": "^24.13.2",
+    "dependency-cruiser": "^18.1.0",
     "eslint": "^10.6.0",
-    "typescript-eslint": "^8.62.1"
+    "madge": "^8.0.0",
+    "typescript-eslint": "^8.62.1",
+    "vitest": "^4.1.10"
   },
   "dependencies": {
     "archiver": "^8.0.0",
