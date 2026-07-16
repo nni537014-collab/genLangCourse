@@ -2,11 +2,12 @@ import { createReadStream } from "fs";
 import { paths } from "../utils/paths.ts";
 import { createInterface } from "readline";
 import type {
-  DictionaryEntryStructure,
+  // DictionaryEntryStructure,
   DictionaryTranslationStructure,
   // Sense,
 } from "./../types/dictionary.ts";
 import { DictionaryEntry } from "./dictionary_entry.ts";
+import { DictionaryEntryStructureElement } from "../types/dictionary/dictionary-entry-structure.ts";
 
 const readlineCreateInterface = () => {
   return createInterface({
@@ -16,8 +17,8 @@ const readlineCreateInterface = () => {
 };
 export const loadFromDisk = async (
   langCode: string,
-): Promise<[DictionaryEntryStructure[], DictionaryEntry[]]> => {
-  const ret: DictionaryEntryStructure[] = [];
+): Promise<[DictionaryEntryStructureElement[], DictionaryEntry[]]> => {
+  const ret: DictionaryEntryStructureElement[] = [];
   const dictionaryEntries: DictionaryEntry[] = [];
   const rl = readlineCreateInterface();
 
@@ -37,7 +38,7 @@ export const loadFromDisk = async (
   });
 };
 
-function processLine(line: string): DictionaryEntryStructure | undefined {
+function processLine(line: string): DictionaryEntryStructureElement | undefined {
   //remove empty lines
   if (!line.trim()) return;
 
@@ -71,12 +72,12 @@ export async function DictionaryFactory(langCode: string) {
 }
 export class Dictionary {
   // uniqueWordsInCards: Set<string>;
-  _data: DictionaryEntryStructure[];
+  _data: DictionaryEntryStructureElement[];
   _dictionaryEntries: DictionaryEntry[];
   langCode: string;
   constructor(
     langCode: string,
-    data: DictionaryEntryStructure[],
+    data: DictionaryEntryStructureElement[],
     dictionaryEntries: DictionaryEntry[],
   ) {
     this._data = data;
@@ -103,7 +104,7 @@ export class Dictionary {
   //         rl.on("error", reject);
   //     });
   // }
-  processLine(line: string): DictionaryEntryStructure | undefined {
+  processLine(line: string): DictionaryEntryStructureElement | undefined {
     //remove empty lines
     if (!line.trim()) return;
     try {
@@ -189,7 +190,7 @@ export class Dictionary {
     });
     return ret;
   }
-  static isVerb(wordUnderTest: DictionaryEntryStructure) {
+  static isVerb(wordUnderTest: DictionaryEntryStructureElement) {
     return wordUnderTest.pos === "verb";
   }
 }

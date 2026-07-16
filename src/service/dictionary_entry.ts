@@ -1,10 +1,10 @@
-import type {
-  DictionaryEntryStructure,
-  DictionaryTranslationStructure,
-} from "../types/dictionary.ts";
+import { 
+  DictionaryEntryStructureElement,
+  Translation 
+} from "../types/dictionary/dictionary-entry-structure.ts";
 export class DictionaryEntry {
-  protected readonly _data: DictionaryEntryStructure;
-  constructor(data: DictionaryEntryStructure) {
+  protected readonly _data: DictionaryEntryStructureElement;
+  constructor(data: DictionaryEntryStructureElement) {
     this._data = data;
   }
   isVerb() {
@@ -37,7 +37,7 @@ export class DictionaryEntry {
     return this._data.word === word;
   }
   getFilteredTranslation(langCode: string | undefined) {
-    const res: DictionaryTranslationStructure[] = [];
+    const res: Translation[] = [];
     if (typeof langCode === "string") {
       const filtered = this._data.translations?.filter(
         (det) => det.lang_code === langCode,
