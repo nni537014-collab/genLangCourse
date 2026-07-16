@@ -1,3 +1,4 @@
+//@todo delete this file
 export type DictionaryTranslationStructure = {
   word: string;
   lang_code: string;

@@ -1,4 +1,4 @@
-import type { DictionaryTranslationStructure } from "../../types/dictionary.ts";
+import { Translation } from "../../types/dictionary/dictionary-entry-structure.ts";
 import type { TranslationPair } from "../../types/types.ts";
 
 import { Dictionary, DictionaryFactory } from "../dictionary.ts";
@@ -204,7 +204,7 @@ export class PairsWordExpander {
     return translationPairs;
   }
   addTranslationPair(
-    dts: DictionaryTranslationStructure[],
+    dts: Translation[],
     word: string,
     translationPairs: TranslationPair[],
   ) {

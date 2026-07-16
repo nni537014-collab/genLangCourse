@@ -3,11 +3,14 @@ import { paths } from "../utils/paths.ts";
 import { createInterface } from "readline";
 import type {
   // DictionaryEntryStructure,
-  DictionaryTranslationStructure,
+  // DictionaryTranslationStructure,
   // Sense,
 } from "./../types/dictionary.ts";
 import { DictionaryEntry } from "./dictionary_entry.ts";
-import { DictionaryEntryStructureElement } from "../types/dictionary/dictionary-entry-structure.ts";
+import type {
+  DictionaryEntryStructureElement,
+  Translation
+} from "../types/dictionary/dictionary-entry-structure.ts";
 
 const readlineCreateInterface = () => {
   return createInterface({
@@ -157,7 +160,7 @@ export class Dictionary {
   }
   findExactTranslations(word: string, langCode: string | undefined) {
     const des = this.findByWord(word);
-    const r: [DictionaryTranslationStructure[], DictionaryEntry][] = des.map(
+    const r:[Translation[], DictionaryEntry][] = des.map(
       (de) => {
         return [de.getFilteredTranslation(langCode), de];
       },
