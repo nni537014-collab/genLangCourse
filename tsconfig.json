@@ -1,13 +1,17 @@
-
 {
   "compilerOptions": {
-    "target": "ES2022",
+    "target": "ES2024",
+    "lib": [
+      "ES2024",
+      "ESNext.Collection"
+    ],
     "module": "ESNext",
     "moduleResolution": "bundler",
     "esModuleInterop": true,
     "types": [
       "node"
     ],
+    "skipLibCheck": true,
     // Outputs
     "sourceMap": true,
     "declaration": true,
@@ -18,11 +22,9 @@
     "noUncheckedIndexedAccess": true,
     "exactOptionalPropertyTypes": true,
     "isolatedModules": true,
-    // Ecosystem Integration (Vitest/Vite)
-    "jsx": "react-jsx",
+    // Ecosystem
     "allowImportingTsExtensions": true,
-    "moduleDetection": "force",
-    "skipLibCheck": true
+    "moduleDetection": "force"
   },
   "include": [
     "src/**/*"

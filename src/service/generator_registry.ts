@@ -1,6 +1,11 @@
-import type { CoursePresentationGeneratorRegistry, CoursePresentationLibraryNames, generatorMapping } from "../types/types.ts";
+// import type { 
+//   CoursePresentationGeneratorRegistry,
+//   CoursePresentationLibraryNames,
+//   generatorMapping
+// } from "../types/types.ts";
+import { CoursePresentationGeneratorRegistry } from "../types/H5P/generator-mapping.ts";
 import { BlanksGenerator } from "./generators/content/blanks.ts";
-import { CoursePresentationGenerator } from "./generators/content/course_presentation.ts";
+// import { CoursePresentationGenerator } from "./generators/content/course_presentation.ts";
 import { DialogCardsGenerator } from "./generators/content/dialog_cards.ts";
 import { DragTextGenerator } from "./generators/content/drag_text.ts";
 import { MultiChoiceGenerator } from "./generators/content/multi_choice.ts";

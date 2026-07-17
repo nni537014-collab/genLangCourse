@@ -20,10 +20,11 @@
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
-    "@types/node": "^24.13.2",
+    "@types/node": "^22.20.1",
     "dependency-cruiser": "^18.1.0",
     "eslint": "^10.6.0",
     "madge": "^8.0.0",
+    "typescript": "^5.8.2",
     "typescript-eslint": "^8.62.1",
     "vitest": "^4.1.10"
   },

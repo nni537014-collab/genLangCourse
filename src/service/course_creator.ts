@@ -1,6 +1,6 @@
 import type {
   courseGenConfig,
-  ContentGenerator,
+  // ContentGenerator,
   TranslationPair,
   // Writer,
   GenSet,
@@ -16,7 +16,7 @@ import { PairsWordExpander } from "./pairs/pairsWordExpander.ts";
 import { Pairs } from "./pairs/pairs.ts";
 import { PairsFileReaderWriter } from "./pairs/pairsFileReaderWriter.ts";
 import { generatorTemplateFinder, getValidatedContentTemplate } from "../utils/utils.ts";
-import { AudioFileCreator, audioFileCreatorFactory, type FlatBase } from "./writers/audio_file.ts";
+import { /* AudioFileCreator ,*/ audioFileCreatorFactory, type FlatBase } from "./writers/audio_file.ts";
 import { createGenSet, createWrittenH5PArchive } from "./gen_set_factory.ts";
 
 export class CourseCreator implements Creator<TranslationPair[]> {
@@ -120,7 +120,7 @@ export class CourseCreator implements Creator<TranslationPair[]> {
 
 ///////////////////////////
 export async function courseCreatorFactory(config: courseGenConfig) {
-  const [pairs, audio] = await prepareBaseDataFromAssets();
+  const [pairs] = await prepareBaseDataFromAssets();
   return new CourseCreator(config, pairs, genSetFactory());
 }
 async function prepareBaseDataFromAssets(): Promise<

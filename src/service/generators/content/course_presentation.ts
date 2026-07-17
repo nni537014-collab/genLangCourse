@@ -41,6 +41,7 @@ export class CoursePresentationGenerator implements ContentGenerator {
   ) {
     this.actionLibraryRenderers = libraryRenderers;
     this.generatorRegistry = generatorRegistry;
+  
   }
   /*
     @todo some libraries should have multiple slides generated for them, e.g. MultiChoice, SingleChoiceSet, Blanks, etc.

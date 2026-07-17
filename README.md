@@ -1,6 +1,7 @@
 # genLangCourse
 @todo
 
+src\service\dictionary.ts -- validation
 types for h5p content
 drag text
 multimediachoice
