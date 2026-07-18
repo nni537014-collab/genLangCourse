@@ -7,9 +7,10 @@ import type {
   // Sense,
 } from "./../types/dictionary.ts";
 import { DictionaryEntry } from "./dictionary_entry.ts";
-import type {
-  DictionaryEntryStructureElement,
-  Translation
+import {
+  DictionaryEntryStructureElementSchema,
+  type DictionaryEntryStructureElement,
+  type Translation
 } from "../types/dictionary/dictionary-entry-structure.ts";
 
 const readlineCreateInterface = () => {
@@ -47,24 +48,9 @@ function processLine(line: string): DictionaryEntryStructureElement | undefined 
 
   try {
     const obj = JSON.parse(line);
-    // if(!obj.translations){
-    //    const [hasFormOf, formOf] = Dictionary.hasFormOf(obj);
-    //    if(hasFormOf && obj.pos === "verb"){
-    //      console.log("form of", obj.word, formOf);
-    //    }
-    // }
-    //@todo validate
-    return {
-      word: obj.word,
-      pos: obj.pos,
-      lang_code: obj.lang_code,
-      senses: Array.isArray(obj.senses) ? obj.senses : undefined,
-      translations: Array.isArray(obj.translations)
-        ? obj.translations
-        : undefined,
-      tags: Array.isArray(obj.tags) ? obj.tags : undefined,
-    };
+    return  DictionaryEntryStructureElementSchema.parse(obj);
   } catch (err) {
+
     console.error("Bad JSON:", err);
     return undefined;
   }

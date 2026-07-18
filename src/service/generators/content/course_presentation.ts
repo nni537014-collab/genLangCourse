@@ -65,7 +65,7 @@ export class CoursePresentationGenerator implements ContentGenerator {
           let generatedLength = 0;
           switch (el.action.library) {
             case "H5P.MultiChoice": {
-              let generated = this.generatorRegistry[
+              const generated = this.generatorRegistry[
                 el.action.library
               ].generate(base, el.action.params);
               let content: MultiChoiceContent[];
@@ -178,55 +178,7 @@ export class CoursePresentationGenerator implements ContentGenerator {
       }
     }
     return { content: template, audio: this.audio };
-    // template.presentation.slides.forEach((slide, i) => {
-    //   const libName = this.findLibraryName(slide);
-    //   if (libName) {
-    //     const gen = this.actionLibraryRenderers.find((generator): boolean => {
-    //       return generator.getSupportedLibrary() === libName;
-    //     });
-    //     if (!gen) throw new Error(`no generator found for library ${libName}`);
-    //     if (this.isSlideLibrary(libName)) {
-    //       // @todo - generate multiple slides for this slide, e.g. MultiChoice etc.
-    //       //clone slide and add to presentation.slides
-    //     } else {
-    //     }
-    //   }
 
-    //   slide.elements.forEach((element, j) => {
-    //     //@todo - using types but maybe zod validation would be better for this
-    //     // if (typeof element.action !== "object") throw new Error("bad templ");
-    //     const lib = element.action.library;
-
-    //     const gen = this.getGenerator(lib);
-    //     if (gen) {
-    //       if (this.isSlideLibrary(gen.getSupportedLibrary())) {
-    //         // @todo - generate multiple slides for this slide, e.g. MultiChoice etc.
-    //         //clone slide and add to presentation.slides
-    //       } else {
-    //         console.log(
-    //           `slide no. ${i + 1}: generating ...${gen.getSupportedLibrary()}`,
-    //         );
-    //         // element.action.params = gen.generate(base, element.action.params);
-    //       }
-    //     }
-    //   });
-    // });
-
-    //get template
-    // const templ = (template as any);
-    // if (!templ.presentation) throw new Error("bad template - no presentation in template");
-
-    // if (!Array.isArray(templ.presentation.slides))
-    //   throw Error("bad template - no slides in json")
-
-    // const slides = templ.presentation.slides as any[];
-
-    // slides.forEach((slide, i) => {
-
-    //   //trasverse template for know generatable types
-    //   //generate for base data
-
-    // });
   }
   getGenerator(libName: LibraryNames) {
     return this.actionLibraryRenderers.find((generator): boolean => {

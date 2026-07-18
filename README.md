@@ -7,6 +7,8 @@ drag text
 multimediachoice
 multichoice
 
+const file = templClone.media.type.params.files[0]; // type not correct src\service\generators\content\multi_choice.ts
+validate parsed json for redirect type - log parse errors that don't match src\service\dictionary.ts
 finish discrimated union for all course presentation 
 
 Write (util func) h5p.json implementation
