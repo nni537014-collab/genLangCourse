@@ -387,7 +387,7 @@ import { z } from "zod";
 import { blanksContentSchema } from "./blanks.ts";
 import { dialogcardsContentSchema } from "./dialog-cards.ts";
 import { singleChoiceSetContentSchema } from "./single-choice-set.ts"; // Adjust file paths
-import { multiChoiceContentSchema } from "./multi-choice.ts";
+import { MultiChoiceContentSchema } from "./multi-choice.ts";
 import { multimediaChoiceContentSchema } from "./multimedia-choice.ts";
 import { dragTextContentSchema } from "./drag-text.ts";
 // import { generatorTemplateFinder } from "../../../utils/utils.ts";
@@ -700,7 +700,7 @@ export const singleChoiceSetActionSchema = baseActionSchema.extend({
 
 export const multiChoiceActionSchema = baseActionSchema.extend({
   library: z.literal("H5P.MultiChoice"),
-  params: multiChoiceContentSchema,
+  params: MultiChoiceContentSchema,
 });
 
 export const multiMediaChoiceActionSchema = baseActionSchema.extend({

@@ -6,7 +6,7 @@ import { coursePresentationContentSchema } from "./content/course-presentation.t
 import { multimediaChoiceContentSchema } from "./content/multimedia-choice.ts";
 import { dialogcardsContentSchema } from "./content/dialog-cards.ts";
 import { singleChoiceSetContentSchema } from "./content/single-choice-set.ts";
-import { multiChoiceContentSchema } from "./content/multi-choice.ts";
+import { MultiChoiceContentSchema } from "./content/multi-choice.ts";
 
 // 1. Define the union of your H5P string literals
 // export type H5PLibraryName = "H5P.DragText" | "H5P.Blanks"; // Add others here
@@ -19,7 +19,7 @@ export const schemaRegistry = {
   "H5P.MultiMediaChoice": multimediaChoiceContentSchema, // Placeholder for MultiMediaChoice schema
   "H5P.Dialogcards": dialogcardsContentSchema, // Placeholder for Dialogcards schema
   "H5P.SingleChoiceSet": singleChoiceSetContentSchema, // Placeholder for SingleChoiceSet schema
-  "H5P.MultiChoice": multiChoiceContentSchema, // Placeholder for MultiChoice schema
+  "H5P.MultiChoice": MultiChoiceContentSchema, // Placeholder for MultiChoice schema
 } as const satisfies Record<LibraryNames, z.ZodTypeAny>;
 
 // 3. Create a helper utility type to automatically map the return shape

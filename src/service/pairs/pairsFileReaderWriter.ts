@@ -6,13 +6,19 @@ import { paths } from "../../utils/paths.ts";
 
 export class PairsFileReaderWriter {
     _writePath: string;
+    config: PairsFileWriterConfig = {
+        dir: "tmp",
+        name: "pairs.json"
+    }
     constructor(config: PairsFileWriterConfig = {}) {
-        const {
-            dir = "tmp",
-            name = "pairs.json"
-        } = config;
-        if (config.dir && config.name)
-            this._writePath = path.join(__dirname, "../../", config.dir, config.name);
+        this.config = config;
+        if (this.config.dir && this.config.name)
+            this._writePath = path.join(
+                __dirname,
+                "../../",
+                this.config.dir,
+                this.config.name
+            );
         else
             throw new Error("bad config");
     }

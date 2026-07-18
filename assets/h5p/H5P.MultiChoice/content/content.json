@@ -1,6 +1,34 @@
 {
     "media": {
-        "disableImageZooming": false
+        "disableImageZooming": false,
+        "type": {
+            "params": {
+                "playerMode": "minimalistic",
+                "fitToWrapper": false,
+                "controls": true,
+                "autoplay": false,
+                "playAudio": "Play audio",
+                "pauseAudio": "Pause audio",
+                "contentName": "Audio",
+                "audioNotSupported": "Your browser does not support this audio",
+                "files": [
+                    {
+                        "path": "audios\/files-6a3a4467a3f91.mp3",
+                        "mime": "audio\/mpeg",
+                        "copyright": {
+                            "license": "U"
+                        }
+                    }
+                ]
+            },
+            "library": "H5P.Audio 1.5",
+            "metadata": {
+                "contentType": "Audio",
+                "license": "U",
+                "title": "Untitled Audio"
+            },
+            "subContentId": "823aa57d-c970-4f38-a747-0ac17f4fb65f"
+        }
     },
     "answers": [
         {

@@ -10,14 +10,14 @@ import {
 } from "fs"
 import path from "path"
 import type {
-    ContentGenerator,
+    // ContentGenerator,
     LibraryNames,
     ArchivedPaths,
     GeneratorAudioSet,
 } from "../types/types.ts";
 import { paths } from "./paths.ts";
 import { generatorAudioToPath } from "./paths/audio.ts";
-import { stripVersionFromLibraryName } from "./utils.ts";
+// import { stripVersionFromLibraryName } from "./utils.ts";
 import type { H5PContent } from "../types/H5P/content/content.ts";
 import type { H5PJSON } from "../types/H5P/h5p.ts";
 

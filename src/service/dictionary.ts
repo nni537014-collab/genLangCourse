@@ -1,11 +1,11 @@
 import { createReadStream } from "fs";
 import { paths } from "../utils/paths.ts";
 import { createInterface } from "readline";
-import type {
-  // DictionaryEntryStructure,
-  // DictionaryTranslationStructure,
-  // Sense,
-} from "./../types/dictionary.ts";
+// import type {
+//   // DictionaryEntryStructure,
+//   // DictionaryTranslationStructure,
+//   // Sense,
+// } from "./../types/dictionary.ts";
 import { DictionaryEntry } from "./dictionary_entry.ts";
 import {
   DictionaryEntryStructureElementSchema,
@@ -93,18 +93,18 @@ export class Dictionary {
   //         rl.on("error", reject);
   //     });
   // }
-  processLine(line: string): DictionaryEntryStructureElement | undefined {
-    //remove empty lines
-    if (!line.trim()) return;
-    try {
-      const obj = JSON.parse(line);
-      //@todo validate
-      return obj;
-    } catch (err) {
-      console.error("Bad JSON:", err);
-      return undefined;
-    }
-  }
+  // processLine(line: string): DictionaryEntryStructureElement | undefined {
+  //   //remove empty lines
+  //   if (!line.trim()) return;
+  //   try {
+  //     const obj = JSON.parse(line);
+  //     //@todo validate
+  //     return obj;
+  //   } catch (err) {
+  //     console.error("Bad JSON:", err);
+  //     return undefined;
+  //   }
+  // }
   // static hasTranslations(
   //   toTest: DictionaryEntryStructure | DictionaryEntryStructure[],
   // ) {

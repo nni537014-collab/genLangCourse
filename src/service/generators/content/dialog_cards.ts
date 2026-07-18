@@ -1,6 +1,6 @@
 import type {
   TranslationPair,
-  JsonValue,
+  // JsonValue,
   ContentGenerator,
   LibraryNames,
   generatorWriteData,
@@ -13,19 +13,19 @@ export class DialogCardsGenerator implements ContentGenerator<DialogcardsContent
     template: DialogcardsContent,
   ): generatorWriteData<DialogcardsContent> {
     if (template === null) throw new Error();
-    (template as any).dialogs = this.createDialogs(base);
+    template.dialogs = this.createDialogs(base);
     return { content: template };
   }
   createDialogs(base: TranslationPair[]) {
     return base.map((tp) => {
       return {
-        text: `<p style=\"text-align:center;\">${tp.source}<\/p>`,
-        answer: `<p style=\"text-align:center;\">${tp.translation}<\/p>`,
+        text: `<p style="text-align:center;">${tp.source}</p>`,
+        answer: `<p style="text-align:center;">${tp.translation}</p>`,
         tips: {},
         audio: [
           {
             path: `${getAudioH5pRelativePath(tp.translation, "translation")}`,
-            mime: "audio\/mpeg",
+            mime: "audio/mpeg",
             copyright: {
               license: "U",
             },

@@ -1,6 +1,14 @@
 import type { MultimediaChoiceContent as MultiMediaChoiceContent } from "../../types/H5P/content/multimedia-choice.ts";
 import type { H5PJSON } from "../../types/H5P/h5p.ts";
-import { writeError, type ArchivedPaths, type GeneratorAudioSet, type JsonValue, type LibraryNames, type WriteError, type Writer } from "../../types/types.ts"
+import {
+  // writeError,
+  type ArchivedPaths,
+  type GeneratorAudioSet,
+  // type JsonValue,
+  type LibraryNames,
+  // type WriteError,
+  type Writer
+} from "../../types/types.ts"
 import { h5pWrite } from "../../utils/writer.ts";
 
 export class MultiMediaChoiceWriter implements Writer {

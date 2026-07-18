@@ -1,18 +1,18 @@
-import { readFileSync } from "fs";
+// import { readFileSync } from "fs";
 import type { TranslationPair, LoadStyle } from "../../types/types.ts";
 import { loadStyle } from "../../types/types.ts";
-import { paths } from "../../utils/paths.ts";
+// import { paths } from "../../utils/paths.ts";
 import { PairsWordExpander } from "./pairsWordExpander.ts"
-import path from "path";
-import { fileURLToPath } from 'node:url';
-import { writeFileSync, mkdirSync } from 'fs';
-import { dirname } from 'path';
+// import path from "path";
+// import { fileURLToPath } from 'node:url';
+// import { writeFileSync, mkdirSync } from 'fs';
+// import { dirname } from 'path';
 import type { PairsFileReaderWriter } from "./pairsFileReaderWriter.ts";
 
 // 1. Convert the current ES module URL to a standard file path
-const __filename = fileURLToPath(import.meta.url);
+// const __filename = fileURLToPath(import.meta.url);
 // 2. Extract the directory name from the file path
-const __dirname = path.dirname(__filename);
+// const __dirname = path.dirname(__filename);
 
 
 export class Pairs {

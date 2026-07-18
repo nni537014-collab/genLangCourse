@@ -41,9 +41,9 @@ import type { LibraryNames } from "../types/types.ts";
 import { schemaRegistry, type InferTemplateType } from "../types/H5P/schema-registry.ts";
 import type zod from "zod";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const utilsToBase = "../../";
+// const __filename = fileURLToPath(import.meta.url);
+// const __dirname = path.dirname(__filename);
+// const utilsToBase = "../../";
 
 
 
@@ -89,9 +89,16 @@ export function generatorTemplateFinder(supportedLibrary: LibraryNames) {
     // return tuple - [h5pJson, contentJson]
 
 }
-export function getValidatedContentTemplate<T extends LibraryNames>(library: T, rawData: any): InferTemplateType<T> {
+export function getValidatedContentTemplate<T extends LibraryNames>(library: T, rawData: unknown): InferTemplateType<T> {
     const schema = schemaRegistry[library] as unknown as zod.ZodType<InferTemplateType<T>>;
-    return schema.parse(rawData.content);
+
+    // Type guard: ensure rawData is an object that contains a 'content' property
+    if (rawData && typeof rawData === 'object' && 'content' in rawData) {
+        return schema.parse((rawData as { content: unknown }).content);
+    }
+
+    throw new Error("Invalid rawData structure: missing 'content' property.");   
+    // return schema.parse(rawData.content);
 }
 export const clearPreviousGeneratedData = () => {
     return rmSync(paths.getOut(), { recursive: true, force: true })

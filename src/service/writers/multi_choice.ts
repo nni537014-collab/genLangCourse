@@ -1,9 +1,9 @@
 import type { MultiChoiceContent } from "../../types/H5P/content/multi-choice.ts";
 import type { H5PJSON } from "../../types/H5P/h5p.ts";
 import {
-  writeError,
-  type JsonValue,
-  type WriteError,
+  // writeError,
+  // type JsonValue,
+  // type WriteError,
   type Writer,
 } from "../../types/types.ts";
 import type {
