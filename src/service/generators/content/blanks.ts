@@ -15,7 +15,7 @@ export class BlanksGenerator implements ContentGenerator<BlanksContent> {
     base: TranslationPair[],
     template: BlanksContent,
   ): generatorWriteData<BlanksContent> {
-    (template as any).questions = base.map((tp) => this.generateBlank);
+    template.questions = base.map((tp) => this.generateBlank(tp));
     return { content: template };
   }
   generateBlank(tp: TranslationPair) {

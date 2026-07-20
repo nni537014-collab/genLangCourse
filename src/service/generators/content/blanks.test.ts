@@ -1,0 +1,79 @@
+import { describe, it, expect, vi, beforeEach } from "vitest";
+import { BlanksGenerator } from "./blanks.ts";
+import su from "../../../utils/string.ts";
+import type { TranslationPair } from "../../../types/types.ts";
+import type { BlanksContent } from "../../../types/H5P/content/blanks.ts";
+
+// Mock the string utility
+vi.mock("../../../utils/string.ts", () => ({
+  default: {
+    wrap: vi.fn(),
+    wrapLongestWord: vi.fn(),
+  },
+}));
+
+describe("BlanksGenerator", () => {
+  let generator: BlanksGenerator;
+  let mockTemplate: BlanksContent;
+
+  beforeEach(() => {
+    generator = new BlanksGenerator();
+    mockTemplate = { questions: [] } as unknown as BlanksContent;
+    vi.clearAllMocks();
+  });
+
+  describe("getSupportedLibrary", () => {
+    it("should return the correct library name", () => {
+      expect(generator.getSupportedLibrary()).toBe("h5p.blanks");
+    });
+  });
+
+  describe("generateBlank", () => {
+    it("should wrap the longest word of the translation", () => {
+      const tp: TranslationPair = {
+        source: "Oslo is the capital of Norway",
+        translation: "Oslo er hovedstaden i Norge",
+      };
+
+      vi.mocked(su.wrapLongestWord).mockReturnValue(
+        "<p>Oslo er *hovedstaden* i Norge</p>",
+      );
+      vi.mocked(su.wrap).mockReturnValue(
+        "<p>Oslo er *hovedstaden* i Norge</p>",
+      );
+
+      const result = generator.generateBlank(tp);
+
+      expect(su.wrapLongestWord).toHaveBeenCalledWith(
+        "Oslo er hovedstaden i Norge",
+      );
+      expect(su.wrap).toHaveBeenCalledWith(
+        "<p>Oslo er *hovedstaden* i Norge</p>",
+      );
+      expect(result).toBe("<p>Oslo er *hovedstaden* i Norge</p>");
+    });
+  });
+
+  describe("generate", () => {
+    it("should map translation pairs to questions and return the updated template", () => {
+      const base: TranslationPair[] = [
+        { source: "Hello", translation: "Hei" },
+        { source: "World", translation: "Verden" },
+      ];
+
+      // Spy on generateBlank to control its output
+      vi.spyOn(generator, "generateBlank")
+        .mockReturnValueOnce("<p>*Hei*</p>")
+        .mockReturnValueOnce("<p>*Verden*</p>");
+
+      const result = generator.generate(base, mockTemplate);
+      result.content;
+      expect(generator.generateBlank).toHaveBeenCalledTimes(2);
+      expect(result.content.questions).toEqual([
+        "<p>*Hei*</p>",
+        "<p>*Verden*</p>",
+      ]);
+      expect(result.content).toBe(mockTemplate);
+    });
+  });
+});
