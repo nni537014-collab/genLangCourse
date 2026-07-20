@@ -11,6 +11,9 @@ import { genRandomNumbers } from "../../../utils/utils.ts";
 
 
 export class DragTextGenerator implements ContentGenerator {
+  public getNumberIncluded(){
+    return 3;
+  }
   generate(
     base: TranslationPair[],
     template: DragTextContent,
@@ -22,42 +25,54 @@ export class DragTextGenerator implements ContentGenerator {
       for this exercise
     */
     const longBase = base.filter((tp) => tp.translation.length > 3);
-    const remainder = longBase.length % 3;
-    let lastAvailIndexes = 3 - remainder;
-    const completeSets = Math.floor(longBase.length / 3);
+    const remainder = longBase.length % this.getNumberIncluded();
+    let lastAvailIndexes = this.getNumberIncluded() - remainder;
+    const completeSets = Math.floor(longBase.length / this.getNumberIncluded());
     const ret: DragTextContent[] = [];
     console.log("longbase", longBase.length, "completeSets", completeSets, "remainder", remainder, "lastAvailIndexes", lastAvailIndexes);
     for (let i = 0; i < completeSets; i++) {
-      const offset = i * 3;
+      const offset = i * this.getNumberIncluded();
 
       const templInst = structuredClone(template);
-
-      const part1 = longBase[offset];
-      const part2 = longBase[offset + 1];
-      const part3 = longBase[offset + 2];
-      if (part1 && part2 && part3) {
-        templInst.textField = `${su.wrapLongestWord(part1.translation)}
-${su.wrapLongestWord(part2.translation)}
-${su.wrapLongestWord(part3.translation)}`;
-        ret.push(templInst);
+      const parts: TranslationPair[] = []
+      for (let j = 0; j < this.getNumberIncluded(); j++){
+        const candidate = longBase[offset + j]
+        if(!candidate) throw new Error("bad logic");
+        parts.push(candidate);
       }
+      templInst.textField = "";
+      templInst.textField = parts
+        .map((p) => su.wrapLongestWord(p.translation))
+        .join("\n");
+      ret.push(templInst);
+//       const part1 = longBase[offset];
+//       const part2 = longBase[offset + 1];
+//       const part3 = longBase[offset + 2];
+//       if (part1 && part2 && part3) {
+//         templInst.textField = `${su.wrapLongestWord(part1.translation)}
+// ${su.wrapLongestWord(part2.translation)}
+// ${su.wrapLongestWord(part3.translation)}`;
+//         ret.push(templInst);
+//       }/
     }
     if (remainder > 0) {
-      const offset = completeSets * 3;
+      const templInst = structuredClone(template);
+
+      const offset = completeSets * this.getNumberIncluded();
       const parts: TranslationPair[] = [];
       let count = 0;
       while (lastAvailIndexes > 0) {
         lastAvailIndexes--;
         const tp = longBase[offset + count];
         if (!tp) throw new Error("bad data");
-        parts[offset + count] = tp;
+        parts.push(tp);
         count++;
       }
       const randIndexes = genRandomNumbers(remainder, 0, offset, []);
       for (const index of randIndexes) {
         const tp = longBase[index];
         if (!tp) throw new Error("bad data");
-        parts[offset + count] = tp;
+        parts.push(tp);
         count++;
       }
       templInst.textField = "";
