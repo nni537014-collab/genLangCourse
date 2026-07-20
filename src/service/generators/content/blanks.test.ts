@@ -29,31 +29,8 @@ describe("BlanksGenerator", () => {
     });
   });
   testGetSupportedLibrary(()=> generator, "H5P.Blanks");
-  // describe("generateBlank", () => {
-  //   it("should wrap the longest word of the translation", () => {
-  //     const tp: TranslationPair = {
-  //       source: "Oslo is the capital of Norway",
-  //       translation: "Oslo er hovedstaden i Norge",
-  //     };
 
-  //     vi.mocked(su.wrapLongestWord).mockReturnValue(
-  //       "<p>Oslo er *hovedstaden* i Norge</p>",
-  //     );
-  //     vi.mocked(su.wrap).mockReturnValue(
-  //       "<p>Oslo er *hovedstaden* i Norge</p>",
-  //     );
 
-  //     const result = generator.generateBlank(tp);
-
-  //     expect(su.wrapLongestWord).toHaveBeenCalledWith(
-  //       "Oslo er hovedstaden i Norge",
-  //     );
-  //     expect(su.wrap).toHaveBeenCalledWith(
-  //       "<p>Oslo er *hovedstaden* i Norge</p>",
-  //     );
-  //     expect(result).toBe("<p>Oslo er *hovedstaden* i Norge</p>");
-  //   });
-  // });
 
   describe("generate", () => {
     it("should map translation pairs to questions and return the updated template", () => {
