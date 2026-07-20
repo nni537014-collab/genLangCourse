@@ -128,3 +128,4 @@ export type BehaviourConfig = z.infer<typeof behaviourConfigSchema>;
 export type Confirm = z.infer<typeof confirmSchema>;
 
 export type BlanksContent = z.infer<typeof blanksContentSchema>;
+

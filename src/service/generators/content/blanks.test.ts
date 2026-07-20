@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { BlanksGenerator } from "./blanks.ts";
 import su from "../../../utils/string.ts";
-import type { TranslationPair } from "../../../types/types.ts";
+import type { generatorWriteData, TranslationPair } from "../../../types/types.ts";
 import type { BlanksContent } from "../../../types/H5P/content/blanks.ts";
 
 // Mock the string utility
@@ -63,11 +63,13 @@ describe("BlanksGenerator", () => {
 
       // Spy on generateBlank to control its output
       vi.spyOn(generator, "generateBlank")
+      
         .mockReturnValueOnce("<p>*Hei*</p>")
         .mockReturnValueOnce("<p>*Verden*</p>");
 
-      const result = generator.generate(base, mockTemplate);
-      result.content;
+      const result: generatorWriteData<BlanksContent> = generator.generate(base, mockTemplate);
+      //@todo remove the need for this
+      if(Array.isArray(result.content)) throw new Error("need to sort this ");
       expect(generator.generateBlank).toHaveBeenCalledTimes(2);
       expect(result.content.questions).toEqual([
         "<p>*Hei*</p>",
