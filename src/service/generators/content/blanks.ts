@@ -18,7 +18,7 @@ export class BlanksGenerator implements ContentGenerator<BlanksContent> {
     template.questions = base.map((tp) => this.generateBlank(tp));
     return { content: template };
   }
-  generateBlank(tp: TranslationPair) {
+  protected generateBlank(tp: TranslationPair) {
     //find longest word start and wrap in **
     return su.wrap(su.wrapLongestWord(tp.translation));
   }
