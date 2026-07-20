@@ -31,7 +31,7 @@ describe("DialogCardsGenerator", () => {
         vi.clearAllMocks();
 
         vi.mocked(getAudioH5pRelativePath).mockImplementation(
-            (text: string) => `audio/${text}.mp3`,
+            (text: string, type ) => `audio/${type+text}.mp3`,
         );
     });
 

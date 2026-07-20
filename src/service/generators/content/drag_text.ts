@@ -6,8 +6,8 @@ import type {
   generatorWriteData,
 } from "../../../types/types.ts";
 import su from "../../../utils/string.ts";
-import { genRandomNumbers, getValidatedContentTemplate } from "../../../utils/utils.ts";
-import { generatorTemplateFinder } from "../../../utils/utils.ts";
+import { genRandomNumbers } from "../../../utils/utils.ts";
+// import { generatorTemplateFinder } from "../../../utils/utils.ts";
 
 
 export class DragTextGenerator implements ContentGenerator {
@@ -31,43 +31,43 @@ export class DragTextGenerator implements ContentGenerator {
       const offset = i * 3;
 
       const templInst = structuredClone(template);
-      if (i < completeSets) {
-        const part1 = longBase[offset];
-        const part2 = longBase[offset + 1];
-        const part3 = longBase[offset + 2];
-        if (part1 && part2 && part3) {
-          templInst.textField = `${su.wrapLongestWord(part1.translation)}
+
+      const part1 = longBase[offset];
+      const part2 = longBase[offset + 1];
+      const part3 = longBase[offset + 2];
+      if (part1 && part2 && part3) {
+        templInst.textField = `${su.wrapLongestWord(part1.translation)}
 ${su.wrapLongestWord(part2.translation)}
 ${su.wrapLongestWord(part3.translation)}`;
-          ret.push(templInst);
-        }
-
-      } else {
-        const parts: TranslationPair[] = [];
-        let count = 0;
-        while (lastAvailIndexes > 0) {
-          lastAvailIndexes--;
-          const tp = longBase[offset + count];
-          if (!tp) throw new Error("bad data");
-          parts[offset + count] = tp;
-          count++;
-        }
-        const randIndexes = genRandomNumbers(remainder, 0, offset, []);
-        for (const index of randIndexes) {
-          const tp = longBase[index];
-          if (!tp) throw new Error("bad data");
-          parts[offset + count] = tp;
-          count++;
-        }
-        templInst.textField = "";
-        for (const part of parts) {
-          templInst.textField += su.wrapLongestWord(part.translation);
-          templInst.textField += "\n";
-        }
         ret.push(templInst);
-        //@todo non complete sets require filling with
-        // repeated examples
       }
+    }
+    if (remainder > 0) {
+      const offset = completeSets * 3;
+      const parts: TranslationPair[] = [];
+      let count = 0;
+      while (lastAvailIndexes > 0) {
+        lastAvailIndexes--;
+        const tp = longBase[offset + count];
+        if (!tp) throw new Error("bad data");
+        parts[offset + count] = tp;
+        count++;
+      }
+      const randIndexes = genRandomNumbers(remainder, 0, offset, []);
+      for (const index of randIndexes) {
+        const tp = longBase[index];
+        if (!tp) throw new Error("bad data");
+        parts[offset + count] = tp;
+        count++;
+      }
+      templInst.textField = "";
+      for (const part of parts) {
+        templInst.textField += su.wrapLongestWord(part.translation);
+        templInst.textField += "\n";
+      }
+      ret.push(templInst);
+      //@todo non complete sets require filling with
+      // repeated examples
     }
     return { content: ret };
   }
