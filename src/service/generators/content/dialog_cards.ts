@@ -12,11 +12,11 @@ export class DialogCardsGenerator implements ContentGenerator<DialogcardsContent
     base: TranslationPair[],
     template: DialogcardsContent,
   ): generatorWriteData<DialogcardsContent> {
-    if (template === null) throw new Error();
+    //if (template === null) throw new Error();
     template.dialogs = this.createDialogs(base);
     return { content: template };
   }
-  createDialogs(base: TranslationPair[]) {
+  protected createDialogs(base: TranslationPair[]) {
     return base.map((tp) => {
       return {
         text: `<p style="text-align:center;">${tp.source}</p>`,

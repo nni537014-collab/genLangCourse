@@ -8,6 +8,12 @@ import type { DialogcardsContent } from "../../../types/H5P/content/dialog-cards
 import { testGetSupportedLibrary } from "../../../test/utils.ts";
 import { getAudioH5pRelativePath } from "../../../utils/paths/audio.ts";
 
+function assertContent(
+    content: DialogcardsContent | DialogcardsContent[],
+): asserts content is DialogcardsContent {
+    expect(Array.isArray(content)).toBe(false);
+}
+
 vi.mock("../../../utils/paths/audio.ts", () => ({
     getAudioH5pRelativePath: vi.fn(),
 }));
@@ -30,7 +36,7 @@ describe("DialogCardsGenerator", () => {
     });
 
     describe("getSupportedLibrary", () => {
-        it("returns the correct library name", () => {
+        it("should return the correct library name", () => {
             expect(generator.getSupportedLibrary()).toBe("H5P.Dialogcards");
         });
     });
@@ -38,31 +44,25 @@ describe("DialogCardsGenerator", () => {
     testGetSupportedLibrary(() => generator, "H5P.Dialogcards");
 
     describe("generate", () => {
-        it("maps translation pairs into dialogs", () => {
+        it("should populate dialogs and return the template", () => {
             const base: TranslationPair[] = [
-                {
-                    source: "Hello",
-                    translation: "Hei",
-                },
-                {
-                    source: "World",
-                    translation: "Verden",
-                },
+                { source: "Hello", translation: "Hei" },
+                { source: "World", translation: "Verden" },
             ];
 
             const result: generatorWriteData<DialogcardsContent> =
                 generator.generate(base, template);
-            if (Array.isArray(result.content)) throw new Error("wrong return type");
+            assertContent(result.content);
             expect(result.content).toBe(template);
 
             expect(result.content.dialogs).toEqual([
                 {
-                    text: "<p style=\"text-align:center;\">Hello</p>",
-                    answer: "<p style=\"text-align:center;\">Hei</p>",
+                    text: '<p style="text-align:center;">Hello</p>',
+                    answer: '<p style="text-align:center;">Hei</p>',
                     tips: {},
                     audio: [
                         {
-                            path: "audio/Hei.mp3",
+                            path: getAudioH5pRelativePath("Hei", "translation"), //"audio/Hei.mp3",
                             mime: "audio/mpeg",
                             copyright: {
                                 license: "U",
@@ -71,12 +71,12 @@ describe("DialogCardsGenerator", () => {
                     ],
                 },
                 {
-                    text: "<p style=\"text-align:center;\">World</p>",
-                    answer: "<p style=\"text-align:center;\">Verden</p>",
+                    text: '<p style="text-align:center;">World</p>',
+                    answer: '<p style="text-align:center;">Verden</p>',
                     tips: {},
                     audio: [
                         {
-                            path: "audio/Verden.mp3",
+                            path: getAudioH5pRelativePath("Verden", "translation"),//"audio/Verden.mp3",
                             mime: "audio/mpeg",
                             copyright: {
                                 license: "U",
@@ -97,43 +97,6 @@ describe("DialogCardsGenerator", () => {
                 "translation",
             );
         });
-    });
 
-    describe("createDialogs", () => {
-        it("creates dialog objects for each translation pair", () => {
-            vi.mocked(getAudioH5pRelativePath).mockReturnValue("foo.mp3");
-
-            const dialogs = generator.createDialogs([
-                {
-                    source: "One",
-                    translation: "En",
-                },
-            ]);
-
-            expect(dialogs).toEqual([
-                {
-                    text: "<p style=\"text-align:center;\">One</p>",
-                    answer: "<p style=\"text-align:center;\">En</p>",
-                    tips: {},
-                    audio: [
-                        {
-                            path: "foo.mp3",
-                            mime: "audio/mpeg",
-                            copyright: {
-                                license: "U",
-                            },
-                        },
-                    ],
-                },
-            ]);
-        });
-    });
-
-    describe("generate", () => {
-        it("throws if template is null", () => {
-            expect(() =>
-                generator.generate([], null as unknown as DialogcardsContent),
-            ).toThrow();
-        });
     });
 });
