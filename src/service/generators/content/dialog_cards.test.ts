@@ -35,12 +35,6 @@ describe("DialogCardsGenerator", () => {
         );
     });
 
-    describe("getSupportedLibrary", () => {
-        it("should return the correct library name", () => {
-            expect(generator.getSupportedLibrary()).toBe("H5P.Dialogcards");
-        });
-    });
-
     testGetSupportedLibrary(() => generator, "H5P.Dialogcards");
 
     describe("generate", () => {
