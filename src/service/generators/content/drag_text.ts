@@ -24,11 +24,12 @@ export class DragTextGenerator implements ContentGenerator {
       base param filtered for length as it makes sense
       for this exercise
     */
-    const longBase = base.filter((tp) => tp.translation.length > 3);
+    const longBase = base.filter((tp) => tp.translation.split(" ").length > 3);
     const remainder = longBase.length % this.getNumberIncluded();
     let lastAvailIndexes = this.getNumberIncluded() - remainder;
     const completeSets = Math.floor(longBase.length / this.getNumberIncluded());
     const ret: DragTextContent[] = [];
+    if(completeSets < 1) return { content: ret };
     console.log("longbase", longBase.length, "completeSets", completeSets, "remainder", remainder, "lastAvailIndexes", lastAvailIndexes);
     for (let i = 0; i < completeSets; i++) {
       const offset = i * this.getNumberIncluded();
@@ -45,15 +46,7 @@ export class DragTextGenerator implements ContentGenerator {
         .map((p) => su.wrapLongestWord(p.translation))
         .join("\n");
       ret.push(templInst);
-//       const part1 = longBase[offset];
-//       const part2 = longBase[offset + 1];
-//       const part3 = longBase[offset + 2];
-//       if (part1 && part2 && part3) {
-//         templInst.textField = `${su.wrapLongestWord(part1.translation)}
-// ${su.wrapLongestWord(part2.translation)}
-// ${su.wrapLongestWord(part3.translation)}`;
-//         ret.push(templInst);
-//       }/
+
     }
     if (remainder > 0) {
       const templInst = structuredClone(template);
