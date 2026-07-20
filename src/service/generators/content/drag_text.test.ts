@@ -42,9 +42,11 @@ describe("DragTextGenerator", () => {
     testGetSupportedLibrary(() => generator, "H5P.DragText");
 
     describe("generate", () => {
-        it("should filter out words shorter than 4 characters", () => {
+        it("should filter out phrases with less than 4 words", () => {
             const base: TranslationPair[] = [
                 { source: "one", translation: "abc abccc abc" }, // length 3 -> skipped
+                { source: "two", translation: "abc abccc abc abc" }, // length 4 -> included
+                { source: "two", translation: "abc abccc abc abc" }, // length 4 -> included
                 { source: "two", translation: "abc abccc abc abc" }, // length 4 -> included
             ];
 
@@ -58,15 +60,18 @@ describe("DragTextGenerator", () => {
             // "abcd" wrapped twice (1 remainder + 2 random additions = 3 parts)
             const first = result.content[0];
             assertContentDefined(first);
-            expect(first.textField).toBe("*abcd*\n*abcd*\n*abcd*\n");
+            expect(first.textField).toBe("abc *abccc* abc abc\nabc *abccc* abc abc\nabc *abccc* abc abc\n");
         });
 
         it("should pack items cleanly into exact complete sets of three", () => {
             //@todo it should reject phrases shorter than a certain length
             const base: TranslationPair[] = [
-                { source: "1", translation: "word1" },
-                { source: "2", translation: "word2" },
-                { source: "3", translation: "word3" },
+                { source: "two", translation: "abc abccc abc abc" }, // length 4 -> included
+                { source: "two", translation: "abc abccc abc abc" }, // length 4 -> included
+                { source: "two", translation: "abc abccc abc abc" }, // length 4 -> included
+                { source: "two", translation: "abc abccc abc abc" }, // length 4 -> included
+                { source: "two", translation: "abc abccc abc abc" }, // length 4 -> included
+                { source: "two", translation: "abc abccc abc abc" }, // length 4 -> included
             ];
 
             const result = generator.generate(base, template);
