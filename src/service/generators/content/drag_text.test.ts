@@ -14,6 +14,9 @@ function assertContent(
 function assertContentDefined(content: DragTextContent | undefined): asserts content is DragTextContent {
     expect(content).toBeTruthy();
 }
+function assertContentNotDefined(content: DragTextContent | undefined): asserts content is DragTextContent {
+    expect(content).toBeUndefined();
+}
 // Mock the utilities used by the generator
 vi.mock("../../../utils/string.ts", () => ({
     default: {
@@ -61,6 +64,24 @@ describe("DragTextGenerator", () => {
             const first = result.content[0];
             assertContentDefined(first);
             expect(first.textField).toBe("abc *abccc* abc abc\nabc *abccc* abc abc\nabc *abccc* abc abc\n");
+        });
+
+        it("should return empty array if no complete sets are possible", () => {
+            const base: TranslationPair[] = [
+                { source: "two", translation: "abc abccc abc abc" }, // length 4 -> included
+                { source: "two", translation: "abc abccc abc abc" }, // length 4 -> included
+            ];
+
+            const result = generator.generate(base, template);
+
+            // remainder = 1, lastAvailIndexes = 2. It triggers remainder logic.
+            // Mock random index picker to select index 0 of longBase (which is "abcd")
+            // vi.mocked(genRandomNumbers).mockReturnValue([0, 0]);
+            assertContent(result.content);
+            expect(result.content).toHaveLength(0);
+            // "abcd" wrapped twice (1 remainder + 2 random additions = 3 parts)
+            const first = result.content[0];
+            assertContentNotDefined(first);
         });
 
         it("should pack items cleanly into exact complete sets of three", () => {
@@ -113,7 +134,7 @@ describe("DragTextGenerator", () => {
             expect(second.textField).toBe("abc *fourth* abc abc\nabc *abccc* abc abc\nabc *abccc* abc abc\n");
 
             // Assures random function targeted only the complete set bounds (offset 3)
-            expect(genRandomNumbers).toHaveBeenCalledWith(1, 0, 2, [3]);
+            expect(genRandomNumbers).toHaveBeenCalledWith(2, 0, 2, [3]);
         });
     });
 });

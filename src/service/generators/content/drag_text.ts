@@ -12,7 +12,7 @@ import { genRandomNumbers } from "../../../utils/utils.ts";
 
 
 export class DragTextGenerator implements ContentGenerator {
-  public getNumberIncluded(){
+  public getNumberIncluded() {
     return 3;
   }
   generate(
@@ -30,16 +30,16 @@ export class DragTextGenerator implements ContentGenerator {
     let lastAvailIndexes = this.getNumberIncluded() - remainder;
     const completeSets = Math.floor(longBase.length / this.getNumberIncluded());
     const ret: DragTextContent[] = [];
-    if(completeSets < 1) return { content: ret };
+    if (completeSets < 1) return { content: ret };
     console.log("longbase", longBase.length, "completeSets", completeSets, "remainder", remainder, "lastAvailIndexes", lastAvailIndexes);
     for (let i = 0; i < completeSets; i++) {
       const offset = i * this.getNumberIncluded();
 
       const templInst = structuredClone(template);
       const parts: TranslationPair[] = []
-      for (let j = 0; j < this.getNumberIncluded(); j++){
+      for (let j = 0; j < this.getNumberIncluded(); j++) {
         const candidate = longBase[offset + j]
-        if(!candidate) throw new Error("bad logic");
+        if (!candidate) throw new Error("bad logic");
         parts.push(candidate);
       }
       templInst.textField = "";
@@ -65,7 +65,7 @@ export class DragTextGenerator implements ContentGenerator {
         count++;
       }
       //@todo mv the -1 to make logic more clear
-      const upperLimit = offset -1;
+      const upperLimit = offset - 1;
       const randIndexes = genRandomNumbers(remainder, 0, upperLimit - 1, skip);
       for (const index of randIndexes) {
         const tp = longBase[index];
@@ -73,11 +73,9 @@ export class DragTextGenerator implements ContentGenerator {
         parts.push(tp);
         count++;
       }
-      templInst.textField = "";
-      for (const part of parts) {
-        templInst.textField += su.wrapLongestWord(part.translation);
-        templInst.textField += "\n";
-      }
+
+      templInst.textField = parts.map(part => su.wrapLongestWord(part.translation))
+        .join("\n")
       ret.push(templInst);
       //@todo non complete sets require filling with
       // repeated examples
