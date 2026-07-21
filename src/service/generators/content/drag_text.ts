@@ -1,3 +1,4 @@
+import { off } from "process";
 import type { DragTextContent } from "../../../types/H5P/content/drag-text.ts";
 import type {
   TranslationPair,
@@ -54,14 +55,18 @@ export class DragTextGenerator implements ContentGenerator {
       const offset = completeSets * this.getNumberIncluded();
       const parts: TranslationPair[] = [];
       let count = 0;
+      const skip: number[] = [];
       while (lastAvailIndexes > 0) {
         lastAvailIndexes--;
+        skip.push(offset + count);
         const tp = longBase[offset + count];
         if (!tp) throw new Error("bad data");
         parts.push(tp);
         count++;
       }
-      const randIndexes = genRandomNumbers(remainder, 0, offset, []);
+      //@todo mv the -1 to make logic more clear
+      const upperLimit = offset -1;
+      const randIndexes = genRandomNumbers(remainder, 0, upperLimit - 1, skip);
       for (const index of randIndexes) {
         const tp = longBase[index];
         if (!tp) throw new Error("bad data");

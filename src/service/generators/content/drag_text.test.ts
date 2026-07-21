@@ -77,22 +77,20 @@ describe("DragTextGenerator", () => {
             const result = generator.generate(base, template);
 
             assertContent(result.content);
-            expect(result.content).toHaveLength(1);
+            expect(result.content).toHaveLength(2);
             const first = result.content[0];
             assertContentDefined(first);
-            expect(result.content).toHaveLength(1);
-            expect(Array.isArray(result.content)).toBe(true);
-            expect(first.textField).toBe("*word1*\n*word2*\n*word3*");
+            expect(first.textField).toBe("abc *abccc* abc abc\nabc *abccc* abc abc\nabc *abccc* abc abc");
             expect(genRandomNumbers).not.toHaveBeenCalled();
         });
 
         it("should fill remainder sets using random samples from previous elements", () => {
             // 4 elements yields 1 complete set (3 items) and a remainder of 1 item
             const base: TranslationPair[] = [
-                { source: "1", translation: "word1" },
-                { source: "2", translation: "word2" },
-                { source: "3", translation: "word3" },
-                { source: "4", translation: "word4" },
+                { source: "1", translation: "abc abccc abc abc" },
+                { source: "2", translation: "abc abccc abc abc" },
+                { source: "3", translation: "abc abccc abc abc" },
+                { source: "4", translation: "abc fourth abc abc" },
             ];
 
             // Mock random index selector to pick 'word2' (index 1) to fill out the remaining slot
@@ -109,13 +107,13 @@ describe("DragTextGenerator", () => {
             expect(result.content).toHaveLength(2);
 
             // Set 1 (Complete)
-            expect(first.textField).toBe("*word1*\n*word2*\n*word3*");
+            expect(first.textField).toBe("abc *abccc* abc abc\nabc *abccc* abc abc\nabc *abccc* abc abc");
 
             // Set 2 (Remainder filled out with mocked random selection)
-            expect(second.textField).toBe("*word4*\n*word2*\n");
+            expect(second.textField).toBe("abc *fourth* abc abc\nabc *abccc* abc abc\nabc *abccc* abc abc\n");
 
             // Assures random function targeted only the complete set bounds (offset 3)
-            expect(genRandomNumbers).toHaveBeenCalledWith(1, 0, 3, []);
+            expect(genRandomNumbers).toHaveBeenCalledWith(1, 0, 2, [3]);
         });
     });
 });
